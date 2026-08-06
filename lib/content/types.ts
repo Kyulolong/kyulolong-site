@@ -51,15 +51,26 @@ export const serviceFrontmatterSchema = z.strictObject({
   relatedVideos: z.array(z.string()).default([]),
 });
 
-export const videoFrontmatterSchema = z.strictObject({
-  title: z.string().min(1),
-  series: z.enum(SERIES),
-  platform: z.array(z.enum(PLATFORMS)).min(1),
-  embedUrl: z.url(),
-  publishedAt: isoDate,
-  thumbnail: z.string().optional(),
-  relatedServices: z.array(z.string()).default([]),
-});
+export const videoFrontmatterSchema = z
+  .strictObject({
+    title: z.string().min(1),
+    series: z.enum(SERIES),
+    /**
+     * 인스타/유튜브 게시 현황. 아직 어느 쪽에도 안 올렸으면 빈 배열이다.
+     * 억지로 하나 채우게 하면 플랫폼 필터가 거짓말을 하게 된다.
+     */
+    platform: z.array(z.enum(PLATFORMS)).default([]),
+    /** iframe 으로 심을 수 있는 주소 (인스타/유튜브 임베드) */
+    embedUrl: z.url().optional(),
+    /** 임베드가 안 되는 곳이라 새 탭으로 보내야 하는 주소 */
+    externalUrl: z.url().optional(),
+    publishedAt: isoDate,
+    thumbnail: z.string().optional(),
+    relatedServices: z.array(z.string()).default([]),
+  })
+  .refine((v) => v.embedUrl || v.externalUrl, {
+    message: "embedUrl 이나 externalUrl 중 최소 하나는 있어야 합니다 (없으면 영상에 갈 곳이 없습니다)",
+  });
 
 export type ServiceFrontmatter = z.infer<typeof serviceFrontmatterSchema>;
 export type VideoFrontmatter = z.infer<typeof videoFrontmatterSchema>;
@@ -91,7 +102,10 @@ export interface Video {
   title: string;
   series: Series;
   platform: Platform[];
-  embedUrl: string;
+  /** iframe 임베드용. externalUrl 과 최소 하나는 있어야 한다. */
+  embedUrl?: string;
+  /** 임베드가 안 되는 주소 — 새 탭 링크로 그린다. */
+  externalUrl?: string;
   publishedAt: string;
   thumbnail?: string;
   relatedServices: string[];

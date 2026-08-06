@@ -9,6 +9,38 @@ function rootSegment(url: string): string | null {
   return url.split("/").filter(Boolean)[0] ?? null;
 }
 
+/**
+ * 가짜 링크가 배포되는 걸 막는다.
+ *
+ * "TODO" 만 대소문자를 가린다. todo-app 같은 정상 레포명이 걸리는 걸 피하려고
+ * 대문자 표기일 때만 자리표시자로 본다. 나머지 둘은 대소문자를 안 가린다.
+ */
+const FAKE_URL_MARKERS: { needle: string; caseSensitive: boolean }[] = [
+  { needle: "placeholder", caseSensitive: false },
+  { needle: "example.com", caseSensitive: false },
+  { needle: "TODO", caseSensitive: true },
+];
+
+function checkFakeUrl(
+  file: string,
+  field: string,
+  value: string | undefined,
+  problems: string[],
+): void {
+  if (!value) return;
+  for (const { needle, caseSensitive } of FAKE_URL_MARKERS) {
+    const haystack = caseSensitive ? value : value.toLowerCase();
+    const target = caseSensitive ? needle : needle.toLowerCase();
+    if (haystack.includes(target)) {
+      problems.push(
+        `${file} — ${field} 이 자리표시자로 보입니다 ("${needle}" 포함): ${value}\n` +
+          `    실제 주소로 바꾸거나, 아직 없으면 해당 필드를 지우세요.`,
+      );
+      return;
+    }
+  }
+}
+
 function findDuplicates(values: string[]): string[] {
   const seen = new Set<string>();
   const dupes = new Set<string>();
@@ -28,6 +60,7 @@ function findDuplicates(values: string[]): string[] {
  *   2. 참조 대상이 실제로 존재하는지
  *   3. 참조가 양쪽에 다 걸려 있는지 (한쪽만 걸리면 실패)
  *   4. 같은 대상을 중복 참조하는지
+ *   5. URL 필드가 자리표시자인지 (가짜 링크 배포 방지)
  */
 export function validateContent(): void {
   const services = getServices();
@@ -51,6 +84,12 @@ export function validateContent(): void {
         `services/${service.slug}.mdx — url "${service.url}" 의 첫 경로 "${segment}" 가 홈페이지 예약 경로입니다.`,
       );
     }
+
+    // 5. 자리표시자 링크
+    const serviceFile = `services/${service.slug}.mdx`;
+    checkFakeUrl(serviceFile, "url", service.url, problems);
+    checkFakeUrl(serviceFile, "github", service.github, problems);
+    checkFakeUrl(serviceFile, "thumbnail", service.thumbnail, problems);
 
     for (const dupe of findDuplicates(service.relatedVideos)) {
       problems.push(`services/${service.slug}.mdx — relatedVideos 에 "${dupe}" 가 중복 있습니다.`);
@@ -77,6 +116,11 @@ export function validateContent(): void {
   }
 
   for (const video of videos) {
+    const videoFile = `videos/${video.slug}.mdx`;
+    checkFakeUrl(videoFile, "embedUrl", video.embedUrl, problems);
+    checkFakeUrl(videoFile, "externalUrl", video.externalUrl, problems);
+    checkFakeUrl(videoFile, "thumbnail", video.thumbnail, problems);
+
     for (const dupe of findDuplicates(video.relatedServices)) {
       problems.push(`videos/${video.slug}.mdx — relatedServices 에 "${dupe}" 가 중복 있습니다.`);
     }

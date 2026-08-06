@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.env*
+
+# 빌드에 불필요한 잡파일
+.DS_Store
+*.log
+.gitignore
+README.md
+CLAUDE.md

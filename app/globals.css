@@ -1,26 +1,48 @@
 @import "tailwindcss";
+/* Pretendard 다이나믹 서브셋 @font-face. scripts/sync-fonts.mjs 가 생성한다. */
+@import "./pretendard.css";
+
+@theme {
+  /* 다크 베이스. 영상 썸네일이 대부분 어둡고, 네온 그린이 밝은 배경에서 눈이 아프다.
+     이름을 base 로 두면 Tailwind 의 text-base(폰트 크기)와 충돌해서 canvas 로 쓴다. */
+  --color-canvas: #0b0b0c;
+  --color-surface: #141417;
+  --color-line: #26262b;
+  --color-ink: #ededed;
+  --color-muted: #8f8f97;
+  /* 포인트 컬러는 강조에만 — CTA, 활성 필터, 링크 호버. 대면적에 깔지 않는다. */
+  --color-accent: #8fff00;
+
+  --font-sans:
+    Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic",
+    sans-serif;
+  /* 숫자·코드용 고정폭. 시스템 폰트라 추가 다운로드가 없다. */
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  /* 한글 가독성: 기본 letter-spacing 을 살짝 좁힌다 */
+  letter-spacing: -0.01em;
+}
+
+/* 키보드 포커스도 포인트 컬러로 — 활성 상태 표시는 강조 용도에 해당한다 */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

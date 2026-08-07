@@ -13,9 +13,11 @@ export { validateContent } from "./validate";
 export {
   SERIES,
   PLATFORMS,
+  SERVICE_STATUS,
   RESERVED_PATHS,
   type Series,
   type Platform,
+  type ServiceStatus,
   type Service,
   type Video,
 } from "./types";

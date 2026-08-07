@@ -3,9 +3,9 @@ import { RESERVED_PATHS } from "./types";
 
 const RESERVED = new Set<string>(RESERVED_PATHS);
 
-/** "/navigator" -> "navigator", 외부 URL 이면 null */
-function rootSegment(url: string): string | null {
-  if (!url.startsWith("/")) return null;
+/** "/navigator" -> "navigator", 외부 URL 이거나 아직 없으면 null */
+function rootSegment(url: string | undefined): string | null {
+  if (!url?.startsWith("/")) return null;
   return url.split("/").filter(Boolean)[0] ?? null;
 }
 

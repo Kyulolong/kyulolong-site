@@ -5,35 +5,40 @@ import type { Service } from "@/lib/content";
 /**
  * 카드는 소개 페이지(/services/<slug>)로 보낸다.
  * 실제 서비스(kyulolong.com/<slug>)로는 소개 페이지의 CTA 가 보낸다 — 스펙 3번.
+ *
+ * featured 를 초록 점으로 표시하지 않는다. 대표작이 서너 개면 그 점들이
+ * 그리드 전체에 흩어지는데, DESIGN.md §2 가 세는 건 개수가 아니라 흩어짐이다.
+ * featured 는 이미 '목록 맨 앞'이라는 형태로 드러나 있다.
  */
 export function ServiceCard({ service }: { service: Service }) {
   return (
     <Link
       href={`/services/${service.slug}`}
-      className="group border-line hover:border-accent/40 focus-visible:border-accent/40 block rounded-xl border p-3 transition-colors"
+      className="group border-line bg-canvas hover:shadow-lift block rounded-[24px] border p-3 transition-[transform,box-shadow] duration-200 ease-[var(--ease-calm)] hover:-translate-y-0.5"
     >
-      <Thumbnail src={service.thumbnail} label={service.title} />
+      <Thumbnail src={service.thumbnail} label={service.title} tone="service" />
 
-      <div className="px-1 pt-3.5 pb-1">
+      <div className="px-3 pt-5 pb-3">
         <div className="flex items-center gap-2">
-          {service.featured ? (
-            <span className="bg-accent size-1.5 shrink-0 rounded-full" aria-label="대표작" />
-          ) : null}
-          <h3 className="group-hover:text-accent truncate font-bold transition-colors">
+          <h3 className="truncate text-[1.0625rem] font-bold tracking-[-0.01em]">
             {service.title}
           </h3>
+          {service.status === "soon" ? (
+            <span className="bg-surface-2 text-ink-faint shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium">
+              준비 중
+            </span>
+          ) : null}
         </div>
 
-        <p className="text-muted mt-1.5 line-clamp-2 text-sm leading-relaxed break-keep">
+        <p className="text-ink-soft mt-2 line-clamp-2 text-sm leading-relaxed">
           {service.tagline}
         </p>
 
-        <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5">
-          <span className="text-muted/80 font-mono text-[11px]">{service.url}</span>
+        <div className="mt-4 flex flex-wrap items-center gap-1.5">
           {service.tags.map((tag) => (
             <span
               key={tag}
-              className="border-line text-muted rounded-full border px-2 py-0.5 text-[11px]"
+              className="bg-surface-2 text-ink-faint rounded-full px-2.5 py-1 text-[11px] font-medium"
             >
               {tag}
             </span>

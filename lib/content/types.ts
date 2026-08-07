@@ -12,6 +12,13 @@ export const PLATFORMS = ["instagram", "youtube"] as const;
 export type Platform = (typeof PLATFORMS)[number];
 
 /**
+ * 스펙 5번: 매주 늘어나는 목록이라 "다음에 만들 것"도 목록의 일부다.
+ * soon 은 아직 갈 곳이 없는 서비스 — 카드가 링크가 아니라 예고로 그려진다.
+ */
+export const SERVICE_STATUS = ["live", "soon"] as const;
+export type ServiceStatus = (typeof SERVICE_STATUS)[number];
+
+/**
  * 스펙 2번: 홈페이지가 점유하는 루트 경로.
  * 서비스 앱들은 kyulolong.com/<slug> 에 배포되므로, 서비스 슬러그가
  * 이 목록과 겹치면 실제 배포에서 경로가 충돌한다. 빌드 타임에 잡는다.
@@ -36,20 +43,30 @@ const isoDate = z
  * strictObject 를 쓰는 이유: 오타난 키를 조용히 무시하지 않고 빌드 실패로 만든다.
  * 구스펙의 relatedRepos / demo 같은 키가 남아 있으면 여기서 걸린다.
  */
-export const serviceFrontmatterSchema = z.strictObject({
-  title: z.string().min(1),
-  tagline: z.string().min(1),
-  url: z.string().min(1),
-  github: z.url().optional(),
-  stack: z.array(z.string()).default([]),
-  tags: z.array(z.string()).default([]),
-  needsAuth: z.boolean().default(false),
-  publishedAt: isoDate,
-  featured: z.boolean().default(false),
-  // 스펙 5번: 썸네일이 없어도 깨지지 않아야 한다. 없으면 UI 가 기본 블록을 만든다.
-  thumbnail: z.string().optional(),
-  relatedVideos: z.array(z.string()).default([]),
-});
+export const serviceFrontmatterSchema = z
+  .strictObject({
+    title: z.string().min(1),
+    tagline: z.string().min(1),
+    /**
+     * 아직 만들지 않은 서비스(status: soon)는 갈 곳이 없으므로 url 이 없다.
+     * live 인데 url 이 없으면 아래 refine 이 빌드 실패로 잡는다.
+     */
+    url: z.string().min(1).optional(),
+    status: z.enum(SERVICE_STATUS).default("live"),
+    github: z.url().optional(),
+    stack: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    needsAuth: z.boolean().default(false),
+    publishedAt: isoDate,
+    featured: z.boolean().default(false),
+    // 스펙 5번: 썸네일이 없어도 깨지지 않아야 한다. 없으면 UI 가 기본 블록을 만든다.
+    thumbnail: z.string().optional(),
+    relatedVideos: z.array(z.string()).default([]),
+  })
+  .refine((v) => v.status === "soon" || Boolean(v.url), {
+    message: "url 이 없습니다. 아직 만들기 전이면 status: soon 을 넣으세요",
+    path: ["url"],
+  });
 
 export const videoFrontmatterSchema = z
   .strictObject({
@@ -81,8 +98,9 @@ export interface Service {
   slug: string;
   title: string;
   tagline: string;
-  /** 같은 도메인의 경로 (예: /navigator) */
-  url: string;
+  /** 같은 도메인의 경로 (예: /navigator). status 가 soon 이면 아직 없다. */
+  url?: string;
+  status: ServiceStatus;
   github?: string;
   stack: string[];
   tags: string[];

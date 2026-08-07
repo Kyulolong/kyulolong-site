@@ -1,0 +1,24 @@
+---
+title: 모바일 프롬프터
+tagline: 셀피 화면 위에 대본을 띄우고, 찍힌 영상에는 글자가 없다
+status: soon
+stack: [Swift, SwiftUI, AVFoundation, JavaScriptCore]
+thumbnail: /services/mobile-prompt.svg
+tags: [영상, 모바일]
+needsAuth: false
+publishedAt: 2026-07-23
+featured: false
+relatedVideos: []
+---
+
+보이스 프롬프터의 아이폰 버전. 카메라 프리뷰 위에 반투명 대본을 얹고,
+목소리를 따라 대본이 내려온다. 앱 안에서 그대로 녹화까지 하는데
+**저장된 영상에는 글자가 찍히지 않는다.**
+
+하나의 카메라 세션이 마이크 버퍼를 녹화와 음성인식에 동시에 나눠준다.
+"녹화하면서 대본 따라가기"가 되는 이유가 여기에 있다.
+
+정렬 엔진은 웹 버전 코드를 **한 줄도 고치지 않고** 그대로 가져와
+아이폰 안의 자바스크립트 엔진에서 돌린다. 두 벌을 관리하면 반드시 어긋나서다.
+
+지금은 내 아이폰에만 설치해서 쓰고 있다. 배포 방법을 정하는 대로 여기에 링크가 생긴다.

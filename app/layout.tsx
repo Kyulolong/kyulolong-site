@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 /**
@@ -15,7 +17,10 @@ import "./globals.css";
  */
 
 export const metadata: Metadata = {
-  title: "규로롱",
+  title: {
+    default: "규로롱",
+    template: "%s · 규로롱",
+  },
   description:
     "인사담당 출신이 IT 서비스를 만듭니다. 만든 서비스와 소스코드, 만드는 과정을 남긴 영상을 모아둡니다.",
 };
@@ -23,7 +28,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className="h-full antialiased">
-      <body className="bg-canvas text-ink flex min-h-full flex-col">{children}</body>
+      <body className="bg-canvas text-ink flex min-h-full flex-col">
+        <SiteHeader />
+        <main className="flex-1">{children}</main>
+        <SiteFooter />
+      </body>
     </html>
   );
 }

@@ -2,40 +2,93 @@
 /* Pretendard 다이나믹 서브셋 @font-face. scripts/sync-fonts.mjs 가 생성한다. */
 @import "./pretendard.css";
 
+/**
+ * 토큰은 ~/.claude/DESIGN.md §3 의 복붙 블록을 Tailwind 이름으로 옮긴 것이다.
+ * 값이 어긋나면 서비스들끼리 얼굴이 달라진다 — 고칠 땐 DESIGN.md 를 먼저 고친다.
+ *
+ * 이 사이트는 라이트 전용이다. 누락이 아니라 선택이다 (DESIGN.md §11):
+ * 랜딩의 논지가 "누구나 열어보면 된다" 라서, 첫인상을 한 가지로 고정한다.
+ * 서비스 앱들은 각자 prefers-color-scheme 대응을 유지한다.
+ */
 @theme {
-  /* 다크 베이스. 영상 썸네일이 대부분 어둡고, 네온 그린이 밝은 배경에서 눈이 아프다.
-     이름을 base 로 두면 Tailwind 의 text-base(폰트 크기)와 충돌해서 canvas 로 쓴다. */
-  --color-canvas: #0b0b0c;
-  --color-surface: #141417;
-  --color-line: #26262b;
-  --color-ink: #ededed;
-  --color-muted: #8f8f97;
-  /* 포인트 컬러는 강조에만 — CTA, 활성 필터, 링크 호버. 대면적에 깔지 않는다. */
-  --color-accent: #8fff00;
+  /* ── 흰 종이 ─────────────────────────────
+     canvas 로 쓰는 이유: Tailwind 의 bg-* 유틸리티와 이름이 겹쳐
+     --color-bg 는 bg-bg 라는 읽기 힘든 클래스가 된다. */
+  --color-canvas: #ffffff;
+  --color-surface: #fafaf7;
+  --color-surface-2: #f5f4ef;
+  --color-line: #e8e7e0;
+  --color-line-strong: #d9d7cc;
+  --color-ink: #1a1a17; /* 17.4:1 */
+  --color-ink-soft: #55544c; /* 7.6:1 */
+  --color-ink-faint: #73726a; /* 4.8:1 — 이보다 옅게 내리지 않는다 */
+
+  /* ── 형광 한 점 ───────────────────────────
+     acid 는 배경으로만. 밝은 바탕 위 글자로 쓰면 1.27:1 이라 사라진다.
+     글자·아이콘·작은 도형·포커스링은 전부 acid-deep(6.4:1). */
+  --color-acid: #8fff00;
+  --color-acid-deep: #3d6b00;
+  --color-acid-press: #7ce600;
+  --color-acid-wash: #eaffcb;
+  --color-on-acid: #14140f; /* acid 위 14.5:1. 절대 ink 로 바꾸지 않는다 */
+
+  /* ── 파스텔 종이 (DESIGN.md §2 — 면 전용) ──
+     글자·테두리·버튼에 쓰지 않는다. 쓰는 순간 형광과 싸운다. */
+  --color-paper-lime: #f2ffdd;
+  --color-paper-sky: #e9f3ff;
+  --color-paper-peach: #fff0e6;
+  --color-paper-lilac: #f2edff;
+  --color-paper-sand: #faf3e0;
+
+  /* ── 의미색 ────────────────────────────── */
+  --color-happy-accident: #b4551f;
+  --color-caution: #8a5a00;
+
+  /* ── 따뜻한 그림자 (검정 그림자 금지) ────── */
+  --shadow-soft: 0 1px 2px rgba(60, 52, 30, 0.05);
+  --shadow-lift: 0 6px 20px -6px rgba(60, 52, 30, 0.12);
+  --shadow-float: 0 20px 48px -16px rgba(60, 52, 30, 0.16);
+
+  /* ── 모서리: 라이트는 다크보다 한 단계 더 둥글게 ── */
+  --radius-card: 16px;
+  --radius-panel: 24px;
 
   --font-sans:
     Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic",
     sans-serif;
   /* 숫자·코드용 고정폭. 시스템 폰트라 추가 다운로드가 없다. */
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* DESIGN.md §6: 튀는 스프링 금지 */
+  --ease-calm: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   background-color: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  /* 한글 가독성: 기본 letter-spacing 을 살짝 좁힌다 */
+  /* 한글 가독성 */
   letter-spacing: -0.01em;
+  word-break: keep-all;
 }
 
-/* 키보드 포커스도 포인트 컬러로 — 활성 상태 표시는 강조 용도에 해당한다 */
+/* DESIGN.md §5: 밝은 바탕에서 행간이 좁으면 눈이 미끄러진다 */
+p {
+  line-height: 1.75;
+}
+
+/**
+ * 포커스 링에 acid 를 쓰면 흰 바탕에서 1.27:1 이라 안 보인다.
+ * 다크였을 땐 acid 로 충분했지만 라이트로 뒤집으면서 같이 뒤집어야 하는 곳이다.
+ */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-acid-deep);
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {

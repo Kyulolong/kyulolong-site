@@ -18,8 +18,9 @@ export function Hero({ stats }: { stats: HeroStat[] }) {
        사이에 화면 반 개짜리 빈 칸이 생겨서, 넓은 게 아니라 끊긴 것처럼 보인다. */
     <section className="px-6 pt-20 pb-4 sm:px-8 sm:pt-28 sm:pb-6">
       <div className="mx-auto flex w-full max-w-[52rem] flex-col items-center text-center">
-        <p className="bg-paper-lime text-ink-soft inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] font-medium">
-          <span className="bg-acid-deep size-1.5 rounded-full" aria-hidden="true" />
+        {/* 알약의 파스텔 종이가 이미 브랜드를 말한다. 여기 초록 점을 또 찍으면
+            헤더 마크의 새싹과 형광이 두 군데로 흩어진다 (DESIGN.md §2). */}
+        <p className="bg-paper-lime text-ink-soft inline-flex items-center rounded-full px-4 py-1.5 text-[13px] font-medium">
           매주 한두 개씩 만들고 있습니다
         </p>
 

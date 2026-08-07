@@ -59,10 +59,7 @@ export function Thumbnail({
         />
       ) : (
         <div className="flex h-full w-full items-end p-5">
-          <span className="flex items-center gap-2.5">
-            <span className="bg-acid-deep size-2 shrink-0 rounded-full" aria-hidden="true" />
-            <span className="line-clamp-2 text-[0.9375rem] font-bold">{label}</span>
-          </span>
+          <span className="line-clamp-2 text-[0.9375rem] font-bold">{label}</span>
         </div>
       )}
     </div>

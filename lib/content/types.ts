@@ -40,6 +40,23 @@ const isoDate = z
   .regex(/^\d{4}-\d{2}-\d{2}$/, "publishedAt 는 YYYY-MM-DD 형식이어야 합니다");
 
 /**
+ * 같은 오리진의 경로에 얹힌 서비스는 **끝 슬래시까지** 찍어서 내보낸다.
+ *
+ * `/navigator` 로 들어가면 그 앱 HTML 안의 상대경로 자산(`<script src="app.js">`)이
+ * `/app.js` 로 풀려서 홈페이지에 떨어지고 404 난다. `/navigator/` 면 멀쩡하다.
+ * 엣지(Traefik)에도 끝 슬래시 리다이렉트를 걸어두지만, 홈페이지가 내보내는 링크가
+ * 처음부터 옳으면 사용자가 308 을 한 번 덜 탄다.
+ *
+ * MDX 에는 `/navigator` 라고 편하게 쓰고 여기서 채운다. 스펙 5번대로 서비스 추가는
+ * 파일 하나여야 하는데, 끝 슬래시를 매주 손으로 기억하게 만들면 언젠가 빠뜨린다.
+ */
+function withTrailingSlash(url: string): string {
+  // 외부 링크(iOS 앱 소개 등)와 쿼리·해시가 붙은 주소는 건드리지 않는다
+  if (!url.startsWith("/") || url.includes("?") || url.includes("#")) return url;
+  return url.endsWith("/") ? url : `${url}/`;
+}
+
+/**
  * strictObject 를 쓰는 이유: 오타난 키를 조용히 무시하지 않고 빌드 실패로 만든다.
  * 구스펙의 relatedRepos / demo 같은 키가 남아 있으면 여기서 걸린다.
  */
@@ -51,7 +68,7 @@ export const serviceFrontmatterSchema = z
      * 아직 만들지 않은 서비스(status: soon)는 갈 곳이 없으므로 url 이 없다.
      * live 인데 url 이 없으면 아래 refine 이 빌드 실패로 잡는다.
      */
-    url: z.string().min(1).optional(),
+    url: z.string().min(1).transform(withTrailingSlash).optional(),
     status: z.enum(SERVICE_STATUS).default("live"),
     github: z.url().optional(),
     stack: z.array(z.string()).default([]),

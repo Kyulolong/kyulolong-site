@@ -83,14 +83,22 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
             {service.status === "live" && service.url ? (
-              /* 이 페이지의 형광 한 점. 소개 페이지가 실제 서비스로 보내는 자리다 (스펙 3번). */
-              <Link
+              /*
+               * 이 페이지의 형광 한 점. 소개 페이지가 실제 서비스로 보내는 자리다 (스펙 3번).
+               *
+               * 여기만 <Link> 가 아니라 <a> 다. 목적지가 같은 오리진이긴 해도 Next 라우트가
+               * 아니라 별개 앱이라서:
+               *   1. <Link> 는 trailingSlash:false 규칙대로 href 의 끝 슬래시를 떼어낸다.
+               *      `/navigator/` 가 `/navigator` 가 되면 그 앱의 상대경로 자산이 깨진다.
+               *   2. prefetch 가 RSC 페이로드를 기대하고 남의 앱 HTML 을 받아온다 — 낭비다.
+               */
+              <a
                 href={service.url}
                 className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
               >
                 지금 써보기
                 <span aria-hidden="true">→</span>
-              </Link>
+              </a>
             ) : null}
 
             {service.github ? (

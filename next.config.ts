@@ -39,9 +39,37 @@ function configuredServices(): { slug: string; origin: string }[] {
     .map(([slug, origin]) => ({ slug, origin: normalizeOrigin(origin) }));
 }
 
+/** 서비스가 실제로 사는 호스트. 카카오 등 외부 콘솔에도 이 주소만 등록한다 */
+const CANONICAL_HOST = "kyulolong.com";
+
 const nextConfig: NextConfig = {
   // Docker runner 단계에 .next/standalone 만 복사하기 위함 (Coolify 배포)
   output: "standalone",
+
+  /**
+   * www 로 들어온 요청을 apex 로 넘긴다.
+   *
+   * 서비스들은 apex 에만 붙어 있다. Traefik 이 `kyulolong.com/navigator` 만
+   * navigator 컨테이너로 보내고, `www.kyulolong.com/navigator` 는 라우팅 규칙이
+   * 없어서 이 홈페이지로 떨어져 404 가 된다. 카카오 개발자 콘솔에 등록된 도메인도
+   * apex 하나뿐이라 www 로 들어온 사람은 지도가 통째로 안 뜬다.
+   *
+   * 두 호스트를 각각 등록해서 맞춰 나가는 것보다 창구를 하나로 접는 게 맞다.
+   * 서비스가 60개가 되면 등록해야 할 짝이 60쌍이 된다.
+   *
+   * apex 로 넘어간 뒤엔 host 가 안 맞아서 이 규칙이 다시 걸리지 않는다 — 루프 없음.
+   * `:path*` 는 0개도 허용이라 `/` 자체도 잡는다.
+   */
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: `www.${CANONICAL_HOST}` }],
+        destination: `https://${CANONICAL_HOST}/:path*`,
+        permanent: true,
+      },
+    ];
+  },
 
   /**
    * `/wave-sound` 와 그 아래 전부를 서비스 오리진으로 넘긴다.

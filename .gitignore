@@ -42,3 +42,6 @@ next-env.d.ts
 
 # 프로젝트 스펙 — 공개 repo 에 올리지 않음 (로컬 전용)
 CLAUDE.md
+
+# 아이콘 세트 다운로드 압축본 — 풀린 파일만 두면 된다
+kyulolongicon.zip

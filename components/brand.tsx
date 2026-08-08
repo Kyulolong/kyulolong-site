@@ -2,14 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 /**
- * 브랜드 마크 — 새싹을 얹은 캐릭터 (DESIGN.md §7).
+ * 브랜드 마크 — ㄱ 과 점 (docs/DESIGN.md §7).
  *
- * 예전엔 초록 점 하나였다. 점은 어디에도 안 걸리고 파비콘까지 공짜로 해결되는
- * 대신, 기억에 남는 게 색뿐이라 "형광 초록 쓰는 사이트" 이상이 되질 않았다.
- * 캐릭터는 그리는 비용이 들지만 얼굴이 남는다.
+ * 마크는 형광 도형을 어두운 외곽선이 감싼 2겹 구조다. 이게 이 마크의 핵심이라
+ * 색만 뽑아 쓰거나 외곽선을 빼면 안 된다 — #8FFF00 은 흰 바탕에서 1.27:1 이라
+ * 외곽선이 없으면 밝은 화면에서 통째로 사라진다.
  *
- * 형광은 여기서도 딱 한 곳 — 머리 위 새싹이다. 몸은 중립색이라
- * 마크가 헤더에 늘 떠 있어도 형광 예산을 갉아먹지 않는다.
+ * 헤더는 24~28px 로 작게 쓰이므로 소형 전용 버전(favicon-16px 계열)을 쓴다.
+ * 획과 점을 굵혀둔 것이라 작은 크기에서 덜 뭉갠다.
  */
 export function Brand({ href = "/" }: { href?: string }) {
   return (
@@ -20,8 +20,8 @@ export function Brand({ href = "/" }: { href?: string }) {
       <Image
         src="/brand/mark.svg"
         alt=""
-        width={28}
-        height={28}
+        width={26}
+        height={26}
         className="shrink-0"
         priority
       />

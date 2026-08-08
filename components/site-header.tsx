@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AuthStatus } from "@/components/auth-status";
 import { Brand } from "@/components/brand";
 import { INTERNAL_LINKS } from "@/lib/site-links";
 
@@ -30,6 +31,9 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          {/* 로그인은 '창구'라 헤더에 상시로 둔다. 형광은 안 쓴다 — 이 화면의
+              형광 한 점은 히어로 버튼이고, 헤더는 조용해야 한다 (DESIGN.md §8) */}
+          <AuthStatus />
         </nav>
       </div>
     </header>

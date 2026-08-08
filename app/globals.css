@@ -3,7 +3,7 @@
 @import "./pretendard.css";
 
 /**
- * 토큰은 ~/.claude/DESIGN.md §3 의 복붙 블록을 Tailwind 이름으로 옮긴 것이다.
+ * 토큰은 docs/DESIGN.md §3 의 복붙 블록을 Tailwind 이름으로 옮긴 것이다.
  * 값이 어긋나면 서비스들끼리 얼굴이 달라진다 — 고칠 땐 DESIGN.md 를 먼저 고친다.
  *
  * 이 사이트는 라이트 전용이다. 누락이 아니라 선택이다 (DESIGN.md §11):

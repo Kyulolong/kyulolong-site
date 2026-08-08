@@ -15,7 +15,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 
 /**
  * 태그별 스타일. MDX 본문에는 class 를 쓸 수 없으니 여기가 본문 디자인의 유일한 정의다.
- * 값은 ~/.claude/DESIGN.md 의 토큰을 따른다.
+ * 값은 docs/DESIGN.md 의 토큰을 따른다.
  */
 const components = {
   p: (props: ComponentPropsWithoutRef<"p">) => (

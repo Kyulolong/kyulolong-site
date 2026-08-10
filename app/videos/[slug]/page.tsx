@@ -69,17 +69,43 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
 
       <div className="mx-auto max-w-[46rem] pt-10">
         {video.embedUrl ? (
-          /* 세로 영상(릴스·쇼츠)이라 9:16 로 심는다. 폭은 화면이 좁아도 넘치지 않게 잡는다. */
-          <div className="bg-surface-2 mx-auto aspect-[9/16] w-full max-w-[22rem] overflow-hidden rounded-[24px]">
-            <iframe
-              src={video.embedUrl}
-              title={video.title}
-              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-              className="h-full w-full border-0"
-            />
-          </div>
+          /*
+           * 비율은 frontmatter 의 orientation 이 정한다.
+           * 릴스·쇼츠는 9:16 (폭은 화면이 좁아도 넘치지 않게 묶는다), 화면녹화는 16:9.
+           */
+          <>
+            <div
+              className={`bg-surface-2 mx-auto w-full overflow-hidden rounded-[24px] ${
+                video.orientation === "landscape"
+                  ? "aspect-video"
+                  : "aspect-[9/16] max-w-[22rem]"
+              }`}
+            >
+              <iframe
+                src={video.embedUrl}
+                title={video.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+                className="h-full w-full border-0"
+              />
+            </div>
+
+            {/* 임베드가 막히거나 화면이 좁을 때를 위한 탈출구. 형광은 쓰지 않는다. */}
+            {video.externalUrl ? (
+              <p className="mt-4 text-center">
+                <a
+                  href={video.externalUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-ink-faint hover:text-ink inline-flex items-center gap-1.5 text-sm transition-colors"
+                >
+                  원본에서 보기
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </p>
+            ) : null}
+          </>
         ) : video.externalUrl ? (
           /* 임베드가 막힌 곳이라 새 탭으로 보낸다. 이 페이지의 형광 한 점. */
           <a

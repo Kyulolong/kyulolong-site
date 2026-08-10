@@ -12,6 +12,13 @@ export const PLATFORMS = ["instagram", "youtube"] as const;
 export type Platform = (typeof PLATFORMS)[number];
 
 /**
+ * 임베드 플레이어의 방향. 릴스·쇼츠가 기본이라 portrait 이 디폴트다.
+ * 화면녹화(퍼플즈 싱크 등)는 가로라 landscape 를 명시한다.
+ */
+export const ORIENTATIONS = ["portrait", "landscape"] as const;
+export type Orientation = (typeof ORIENTATIONS)[number];
+
+/**
  * 스펙 5번: 매주 늘어나는 목록이라 "다음에 만들 것"도 목록의 일부다.
  * soon 은 아직 갈 곳이 없는 서비스 — 카드가 링크가 아니라 예고로 그려진다.
  */
@@ -94,10 +101,15 @@ export const videoFrontmatterSchema = z
      * 억지로 하나 채우게 하면 플랫폼 필터가 거짓말을 하게 된다.
      */
     platform: z.array(z.enum(PLATFORMS)).default([]),
-    /** iframe 으로 심을 수 있는 주소 (인스타/유튜브 임베드) */
+    /** iframe 으로 심을 수 있는 주소 (인스타/유튜브/퍼플즈 임베드) */
     embedUrl: z.url().optional(),
-    /** 임베드가 안 되는 곳이라 새 탭으로 보내야 하는 주소 */
+    /**
+     * 원본이 올라가 있는 주소. embedUrl 이 없으면 새 탭 CTA 가 되고,
+     * 둘 다 있으면 임베드 아래 "원본 보기" 링크로 남는다.
+     */
     externalUrl: z.url().optional(),
+    /** 임베드 비율. 릴스·쇼츠는 세로, 화면녹화는 가로. */
+    orientation: z.enum(ORIENTATIONS).default("portrait"),
     publishedAt: isoDate,
     thumbnail: z.string().optional(),
     relatedServices: z.array(z.string()).default([]),
@@ -139,8 +151,10 @@ export interface Video {
   platform: Platform[];
   /** iframe 임베드용. externalUrl 과 최소 하나는 있어야 한다. */
   embedUrl?: string;
-  /** 임베드가 안 되는 주소 — 새 탭 링크로 그린다. */
+  /** 원본 주소 — 임베드가 없으면 새 탭 CTA, 있으면 그 아래 보조 링크. */
   externalUrl?: string;
+  /** 임베드 비율 (기본 portrait — 이 채널은 릴스·쇼츠가 기본이다) */
+  orientation: Orientation;
   publishedAt: string;
   thumbnail?: string;
   relatedServices: string[];

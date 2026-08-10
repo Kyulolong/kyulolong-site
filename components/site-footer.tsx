@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Brand } from "@/components/brand";
+import { VisitorCount } from "@/components/visitor-count";
 import { INTERNAL_LINKS, SOCIAL_LINKS } from "@/lib/site-links";
 
 const NAV = [
@@ -49,9 +50,13 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <p className="text-ink-faint mt-14 font-mono text-xs tracking-[0.06em] opacity-70">
-          kyulolong.com
-        </p>
+        {/* 방문자 수는 없을 수도 있다. 없으면 이 줄은 예전 그대로 보인다. */}
+        <div className="mt-14 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+          <p className="text-ink-faint font-mono text-xs tracking-[0.06em] opacity-70">
+            kyulolong.com
+          </p>
+          <VisitorCount />
+        </div>
       </div>
     </footer>
   );

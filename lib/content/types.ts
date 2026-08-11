@@ -100,24 +100,32 @@ export const serviceFrontmatterSchema = z
      */
     prompt: z.string().optional(),
     /**
-     * 이 서비스를 만들면서 써본 개념 하나 (스펙 6번).
+     * 이 서비스를 만들면서 써본 개념 (스펙 6번).
      *
      * buildTime·prompt 와 같은 자리에 있는 필드다 — 결과물만 걸어두면
      * "역시 되는 사람은 되네"로 끝나므로, 가져갈 수 있는 것을 같이 준다.
      * 프롬프트가 '어떻게 시켰나'라면 이건 '무엇을 알고 있으면 되나'다.
      *
-     * 하나만 적는다. 셋을 적으면 목록이 되고, 목록은 아무도 안 읽는다.
-     * 검색해서 더 알아볼 수 있게 통용되는 이름으로 적을 것 (full 에 원어).
+     * ⚠️ 최대 3개는 **상한이지 목표가 아니다.** 칸이 셋이면 사람은 셋을 채우고,
+     * 그 순간 "가져갈 것 하나"가 기능 목록이 된다. 기본은 하나, 정말 갈래가
+     * 둘일 때 둘. 셋은 어지간해서는 쓰지 말 것.
+     *
+     * 첫 번째가 대표다 — 훑고 지나가는 사람은 그 하나만 읽는다.
+     * 검색해서 더 알아볼 수 있게 통용되는 이름으로 적는다 (full 에 원어).
      */
     concept: z
-      .strictObject({
-        /** 개념 이름. 예: BYOK */
-        name: z.string().min(1),
-        /** 원어·풀이. 검색 단서가 된다. 예: Bring Your Own Key */
-        full: z.string().min(1).optional(),
-        /** 이 서비스에서 그게 무엇이었는지 두세 문장 */
-        summary: z.string().min(1),
-      })
+      .array(
+        z.strictObject({
+          /** 개념 이름. 예: BYOK */
+          name: z.string().min(1),
+          /** 원어·풀이. 검색 단서가 된다. 예: Bring Your Own Key */
+          full: z.string().min(1).optional(),
+          /** 이 서비스에서 그게 무엇이었는지 두세 문장 */
+          summary: z.string().min(1),
+        }),
+      )
+      .min(1)
+      .max(3, "개념은 3개까지입니다. 넷째가 있다면 그건 본문에 쓸 얘기입니다")
       .optional(),
     publishedAt: isoDate,
     featured: z.boolean().default(false),
@@ -214,8 +222,11 @@ export interface Service {
   buildTime?: string;
   /** 다시 만든다면 AI 에게 넘길 프롬프트 전문 */
   prompt?: string;
-  /** 만들면서 써본 개념 하나 — 프롬프트가 '어떻게'라면 이건 '무엇을 알면 되나'다 */
-  concept?: { name: string; full?: string; summary: string };
+  /**
+   * 만들면서 써본 개념 — 프롬프트가 '어떻게'라면 이건 '무엇을 알면 되나'다.
+   * 1~3개, 첫 번째가 대표. 기본은 하나다 (스키마 주석 참고).
+   */
+  concept?: { name: string; full?: string; summary: string }[];
   publishedAt: string;
   featured: boolean;
   thumbnail?: string;

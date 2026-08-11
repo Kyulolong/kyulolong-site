@@ -181,24 +181,35 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
             형광은 쓰지 않는다 — 이 페이지의 한 점은 "지금 써보기" 다.
           */}
-          {service.concept ? (
+          {service.concept?.length ? (
             <section className="bg-paper-lilac mt-10 rounded-[20px] px-6 py-6 sm:px-7">
               <h2 className="text-ink-faint font-mono text-xs tracking-[0.12em] uppercase">
                 concept
               </h2>
-              <p className="mt-2.5 flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                <strong className="text-lg font-bold tracking-[-0.01em]">
-                  {service.concept.name}
-                </strong>
-                {/* 원어를 같이 적는 이유는 검색 단서다. 여기서 처음 본 사람이
-                    이 이름으로 찾아 나갈 수 있어야 '가져다 쓰라'가 성립한다. */}
-                {service.concept.full ? (
-                  <span className="text-ink-faint text-sm">{service.concept.full}</span>
-                ) : null}
-              </p>
-              <p className="text-ink-soft mt-2 max-w-[52ch] text-[0.9375rem] leading-relaxed">
-                {service.concept.summary}
-              </p>
+              {/* 여러 개여도 판은 하나다. 개념마다 상자를 만들면 세 덩어리가 되고,
+                  세 덩어리는 "가져갈 것"이 아니라 기능 목록으로 읽힌다. */}
+              <ul className="mt-2.5">
+                {service.concept.map((concept) => (
+                  <li
+                    key={concept.name}
+                    className="border-line/70 mt-5 border-t pt-5 first:mt-0 first:border-t-0 first:pt-0"
+                  >
+                    <p className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                      <strong className="text-lg font-bold tracking-[-0.01em]">
+                        {concept.name}
+                      </strong>
+                      {/* 원어를 같이 적는 이유는 검색 단서다. 여기서 처음 본 사람이
+                          이 이름으로 찾아 나갈 수 있어야 '가져다 쓰라'가 성립한다. */}
+                      {concept.full ? (
+                        <span className="text-ink-faint text-sm">{concept.full}</span>
+                      ) : null}
+                    </p>
+                    <p className="text-ink-soft mt-2 max-w-[52ch] text-[0.9375rem] leading-relaxed">
+                      {concept.summary}
+                    </p>
+                  </li>
+                ))}
+              </ul>
             </section>
           ) : null}
 

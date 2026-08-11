@@ -1,0 +1,41 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display: block;" viewBox="0 0 2048 1331" width="1280" height="832" preserveAspectRatio="none">
+  <path fill="rgb(255,255,255)" d="M 0 0 L 2048 0 L 2048 1331 L 0 1331 L 0 0 z"/>
+
+  <!-- 창 하나 = 오리진 하나. 안에 든 카드가 전부 같은 도메인의 경로다. -->
+  <rect x="340" y="300" width="1368" height="740" rx="48"
+        fill="rgb(250,243,224)" stroke="rgb(26,26,23)" stroke-width="16"/>
+  <line x1="340" y1="420" x2="1708" y2="420" stroke="rgb(26,26,23)" stroke-width="16"/>
+
+  <circle cx="400" cy="360" r="18" fill="rgb(26,26,23)"/>
+  <circle cx="456" cy="360" r="18" fill="rgb(26,26,23)"/>
+  <circle cx="512" cy="360" r="18" fill="rgb(26,26,23)"/>
+
+  <!-- 주소창: 도메인 한 덩어리 뒤에 경로가 붙는다 -->
+  <rect x="590" y="328" width="960" height="64" rx="32"
+        fill="rgb(255,255,255)" stroke="rgb(26,26,23)" stroke-width="10"/>
+  <rect x="634" y="350" width="250" height="20" rx="10" fill="rgb(115,114,106)"/>
+  <path d="M 930 380 L 962 344 L 984 344 L 952 380 z" fill="rgb(26,26,23)"/>
+  <rect x="1010" y="350" width="180" height="20" rx="10" fill="rgb(217,215,204)"/>
+
+  <!-- 카드 넷. 왼쪽 위가 지금 보고 있는 것이다 — 이 그림의 형광 한 점. -->
+  <rect x="392" y="468" width="610" height="240" rx="24"
+        fill="rgb(143,255,0)" stroke="rgb(26,26,23)" stroke-width="13"/>
+
+  <rect x="1046" y="468" width="610" height="240" rx="24"
+        fill="rgb(255,255,255)" stroke="rgb(26,26,23)" stroke-width="13"/>
+  <rect x="1084" y="506" width="160" height="110" rx="14" fill="rgb(217,215,204)"/>
+  <rect x="1278" y="524" width="290" height="20" rx="10" fill="rgb(217,215,204)"/>
+  <rect x="1278" y="566" width="190" height="20" rx="10" fill="rgb(217,215,204)"/>
+
+  <rect x="392" y="752" width="610" height="240" rx="24"
+        fill="rgb(255,255,255)" stroke="rgb(26,26,23)" stroke-width="13"/>
+  <rect x="430" y="790" width="160" height="110" rx="14" fill="rgb(217,215,204)"/>
+  <rect x="624" y="808" width="290" height="20" rx="10" fill="rgb(217,215,204)"/>
+  <rect x="624" y="850" width="220" height="20" rx="10" fill="rgb(217,215,204)"/>
+
+  <rect x="1046" y="752" width="610" height="240" rx="24"
+        fill="rgb(255,255,255)" stroke="rgb(26,26,23)" stroke-width="13"/>
+  <rect x="1084" y="790" width="160" height="110" rx="14" fill="rgb(217,215,204)"/>
+  <rect x="1278" y="808" width="290" height="20" rx="10" fill="rgb(217,215,204)"/>
+  <rect x="1278" y="850" width="160" height="20" rx="10" fill="rgb(217,215,204)"/>
+</svg>

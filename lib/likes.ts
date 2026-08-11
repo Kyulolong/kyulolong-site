@@ -115,9 +115,14 @@ export function orderServicesForHome(
    * 그 말이 흐려진다. 지금은 퍼플즈가 publishedAt 이 제일 최신이라, 거르지
    * 않으면 '최신작 고정' 자리를 매일 팀 프로젝트가 차지하게 된다.
    * 목록에서 빠지는 건 아니고 /services 아래쪽 섹션에 그대로 있다.
+   *
+   * 이 사이트 자신(url 이 "/")도 세우지 않는다. 첫 자리가 최신작 고정이라
+   * 올린 날 대문의 첫 카드가 대문 자신을 가리키게 되는데, "다음에 뭘 볼까"를
+   * 고르는 자리에 지금 보고 있는 페이지를 세울 이유가 없다. 이것도 목록에서
+   * 빠지는 게 아니라 /services 에 그대로 있다.
    */
   return newestThenLiked(
-    services.filter((s) => !s.team),
+    services.filter((s) => !s.team && s.url !== "/"),
     counts,
   );
 }

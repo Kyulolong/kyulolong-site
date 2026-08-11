@@ -119,10 +119,24 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
           ) : null}
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
-            {service.status === "live" && service.url ? (
+            {/*
+             * 이 페이지의 형광 한 점. 소개 페이지가 실제 서비스로 보내는 자리다 (스펙 3번).
+             *
+             * 이 사이트 자신(url 이 "/")만 다르게 그린다. "지금 써보기" 를 눌렀는데
+             * 랜딩으로 가면 약속이 어긋난다 — 이미 쓰고 있기 때문이다. 문구도 링크
+             * 방식도 바꾼다: 목적지가 남의 앱이 아니라 이 앱의 라우트라서 여기서는
+             * <Link> 가 맞다 (prefetch 도 실제로 이득이고, 뗄 끝 슬래시도 없다).
+             */}
+            {service.status === "live" && service.url === "/" ? (
+              <Link
+                href="/"
+                className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
+              >
+                <span aria-hidden="true">←</span>
+                처음으로 돌아가기
+              </Link>
+            ) : service.status === "live" && service.url ? (
               /*
-               * 이 페이지의 형광 한 점. 소개 페이지가 실제 서비스로 보내는 자리다 (스펙 3번).
-               *
                * 여기만 <Link> 가 아니라 <a> 다. 목적지가 같은 오리진이긴 해도 Next 라우트가
                * 아니라 별개 앱이라서:
                *   1. <Link> 는 trailingSlash:false 규칙대로 href 의 끝 슬래시를 떼어낸다.

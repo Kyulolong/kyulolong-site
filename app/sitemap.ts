@@ -54,8 +54,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
 
     // 실제로 도는 앱들. 아직 주소가 없는 것(status: soon)과 외부 스토어 링크는 뺀다.
+    // 이 사이트 자신(url 이 "/")도 뺀다 — 여기서 세는 건 '별도 컨테이너에 도는
+    // 남의 앱'이고, 루트는 이미 맨 위에 한 번 실려 있다. 안 빼면 같은 주소가
+    // changeFrequency·priority 만 다른 채로 두 번 나간다.
     ...services
-      .filter((s) => s.status === "live" && s.url?.startsWith("/"))
+      .filter((s) => s.status === "live" && s.url?.startsWith("/") && s.url !== "/")
       .map((service) => ({
         url: absoluteUrl(service.url as string),
         lastModified: service.publishedAt,

@@ -1,0 +1,29 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display: block;" viewBox="0 0 2048 1331" width="1280" height="832" preserveAspectRatio="none">
+  <path fill="rgb(255,255,255)" d="M 0 0 L 2048 0 L 2048 1331 L 0 1331 L 0 0 z"/>
+
+  <!-- 부채꼴로 편 카드. 뒤에서부터 그려서 가운데가 맨 위로 온다. -->
+  <g stroke="rgb(26,26,23)" stroke-width="16">
+    <rect x="834" y="470" width="380" height="560" rx="30" fill="rgb(250,243,224)"
+          transform="rotate(-34 1024 1130)"/>
+    <rect x="834" y="470" width="380" height="560" rx="30" fill="rgb(255,255,255)"
+          transform="rotate(-17 1024 1130)"/>
+    <rect x="834" y="470" width="380" height="560" rx="30" fill="rgb(250,243,224)"
+          transform="rotate(34 1024 1130)"/>
+    <rect x="834" y="470" width="380" height="560" rx="30" fill="rgb(255,255,255)"
+          transform="rotate(17 1024 1130)"/>
+
+    <!-- 가운데 한 장만 뒤집혀 있다 — 이 그림의 형광 한 점 -->
+    <rect x="834" y="470" width="380" height="560" rx="30" fill="rgb(143,255,0)"/>
+  </g>
+
+  <!-- 뒤집힌 카드의 무늬 -->
+  <circle cx="1024" cy="750" r="86" fill="none" stroke="rgb(26,26,23)" stroke-width="16"/>
+  <circle cx="1024" cy="750" r="26" fill="rgb(26,26,23)"/>
+
+  <!-- 반짝임 -->
+  <g fill="rgb(26,26,23)">
+    <path d="M 596 302 C 610 372 632 394 702 408 C 632 422 610 444 596 514 C 582 444 560 422 490 408 C 560 394 582 372 596 302 z"/>
+    <path d="M 1486 236 C 1496 286 1512 302 1562 312 C 1512 322 1496 338 1486 388 C 1476 338 1460 322 1410 312 C 1460 302 1476 286 1486 236 z"/>
+    <path d="M 1656 594 C 1663 630 1675 642 1711 649 C 1675 656 1663 668 1656 704 C 1649 668 1637 656 1601 649 C 1637 642 1649 630 1656 594 z"/>
+  </g>
+</svg>

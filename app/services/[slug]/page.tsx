@@ -171,6 +171,37 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             </p>
           ) : null}
 
+          {/*
+            만들면서 써본 개념 하나.
+
+            본문보다 위에 둔다. 본문은 "내가 뭘 만들었나" 이고 이건 "당신이 뭘
+            가져갈 수 있나" 라서, 스크롤을 끝까지 내리지 않는 사람도 만나야 한다.
+            프롬프트 블록은 본문 아래에 있는데, 그건 이미 여기를 읽고 마음이
+            움직인 사람이 찾아 내려가는 것이다.
+
+            형광은 쓰지 않는다 — 이 페이지의 한 점은 "지금 써보기" 다.
+          */}
+          {service.concept ? (
+            <section className="bg-paper-lilac mt-10 rounded-[20px] px-6 py-6 sm:px-7">
+              <h2 className="text-ink-faint font-mono text-xs tracking-[0.12em] uppercase">
+                concept
+              </h2>
+              <p className="mt-2.5 flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                <strong className="text-lg font-bold tracking-[-0.01em]">
+                  {service.concept.name}
+                </strong>
+                {/* 원어를 같이 적는 이유는 검색 단서다. 여기서 처음 본 사람이
+                    이 이름으로 찾아 나갈 수 있어야 '가져다 쓰라'가 성립한다. */}
+                {service.concept.full ? (
+                  <span className="text-ink-faint text-sm">{service.concept.full}</span>
+                ) : null}
+              </p>
+              <p className="text-ink-soft mt-2 max-w-[52ch] text-[0.9375rem] leading-relaxed">
+                {service.concept.summary}
+              </p>
+            </section>
+          ) : null}
+
           {service.body ? <Prose body={service.body} className="mt-12" /> : null}
 
           {service.prompt ? (

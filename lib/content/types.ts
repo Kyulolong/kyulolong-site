@@ -99,6 +99,26 @@ export const serviceFrontmatterSchema = z
      * YAML 블록 스칼라(`prompt: |`)로 여러 줄을 그대로 적는다.
      */
     prompt: z.string().optional(),
+    /**
+     * 이 서비스를 만들면서 써본 개념 하나 (스펙 6번).
+     *
+     * buildTime·prompt 와 같은 자리에 있는 필드다 — 결과물만 걸어두면
+     * "역시 되는 사람은 되네"로 끝나므로, 가져갈 수 있는 것을 같이 준다.
+     * 프롬프트가 '어떻게 시켰나'라면 이건 '무엇을 알고 있으면 되나'다.
+     *
+     * 하나만 적는다. 셋을 적으면 목록이 되고, 목록은 아무도 안 읽는다.
+     * 검색해서 더 알아볼 수 있게 통용되는 이름으로 적을 것 (full 에 원어).
+     */
+    concept: z
+      .strictObject({
+        /** 개념 이름. 예: BYOK */
+        name: z.string().min(1),
+        /** 원어·풀이. 검색 단서가 된다. 예: Bring Your Own Key */
+        full: z.string().min(1).optional(),
+        /** 이 서비스에서 그게 무엇이었는지 두세 문장 */
+        summary: z.string().min(1),
+      })
+      .optional(),
     publishedAt: isoDate,
     featured: z.boolean().default(false),
     // 스펙 5번: 썸네일이 없어도 깨지지 않아야 한다. 없으면 UI 가 기본 블록을 만든다.
@@ -194,6 +214,8 @@ export interface Service {
   buildTime?: string;
   /** 다시 만든다면 AI 에게 넘길 프롬프트 전문 */
   prompt?: string;
+  /** 만들면서 써본 개념 하나 — 프롬프트가 '어떻게'라면 이건 '무엇을 알면 되나'다 */
+  concept?: { name: string; full?: string; summary: string };
   publishedAt: string;
   featured: boolean;
   thumbnail?: string;

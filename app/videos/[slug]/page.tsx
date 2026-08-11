@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/json-ld";
 import { Prose } from "@/components/prose";
 import { ServiceCard } from "@/components/service-card";
 import { formatDate } from "@/components/video-card";
 import { getRelatedServices, getVideo, getVideos } from "@/lib/content";
+import { pageMetadata, shareableImage, summarize, videoJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return getVideos().map((video) => ({ slug: video.slug }));
@@ -16,7 +18,15 @@ export async function generateMetadata({
   const { slug } = await params;
   const video = getVideo(slug);
   if (!video) return {};
-  return { title: video.title, description: `${video.series} · ${formatDate(video.publishedAt)}` };
+
+  return pageMetadata({
+    title: video.title,
+    // 본문 첫 문단이 그 편의 요약이다. 없으면 시리즈·날짜로 떨어진다.
+    description: summarize(video.body) ?? `${video.series} · ${formatDate(video.publishedAt)}`,
+    path: `/videos/${video.slug}`,
+    image: shareableImage(video.thumbnail),
+    publishedAt: video.publishedAt,
+  });
 }
 
 const PLATFORM_LABEL: Record<string, string> = {
@@ -33,6 +43,11 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
 
   return (
     <article className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
+      {/* 영상 리치 결과의 조건은 제목·설명·업로드일·썸네일이다. 썸네일을 핫링크하지
+          않고 public/videos 에 받아두는 이유가 여기서도 산다 — 인스타 CDN 주소는
+          며칠 뒤 만료돼서 구조화 데이터가 조용히 깨진 주소를 가리키게 된다. */}
+      <JsonLd data={videoJsonLd(video)} />
+
       <div className="pt-10">
         <Link
           href="/videos"
@@ -44,6 +59,10 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
 
       <header className="mx-auto max-w-[46rem] pt-8">
         <div className="text-ink-faint flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+          {/* 회차는 시리즈 필터 링크 밖에 둔다. 링크가 가리키는 건 시리즈지 회차가 아니다. */}
+          {video.episode ? (
+            <span className="font-mono tabular-nums">ep{video.episode}</span>
+          ) : null}
           <Link
             href={`/videos?series=${encodeURIComponent(video.series)}`}
             className="hover:text-ink transition-colors"
@@ -92,17 +111,32 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
             </div>
 
             {/* 임베드가 막히거나 화면이 좁을 때를 위한 탈출구. 형광은 쓰지 않는다. */}
-            {video.externalUrl ? (
-              <p className="mt-4 text-center">
-                <a
-                  href={video.externalUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="text-ink-faint hover:text-ink inline-flex items-center gap-1.5 text-sm transition-colors"
-                >
-                  원본에서 보기
-                  <span aria-hidden="true">↗</span>
-                </a>
+            {video.externalUrl || video.processUrl ? (
+              <p className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                {video.externalUrl ? (
+                  <a
+                    href={video.externalUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="text-ink-faint hover:text-ink inline-flex items-center gap-1.5 text-sm transition-colors"
+                  >
+                    원본에서 보기
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ) : null}
+                {/* 릴스는 1분짜리 편집본이라 막힌 데가 전부 잘려 있다.
+                    안 자른 게 따로 있다는 걸 여기서 한 번 말해준다. */}
+                {video.processUrl ? (
+                  <a
+                    href={video.processUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="text-ink-faint hover:text-ink inline-flex items-center gap-1.5 text-sm transition-colors"
+                  >
+                    자르지 않은 작업 화면
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ) : null}
               </p>
             ) : null}
           </>

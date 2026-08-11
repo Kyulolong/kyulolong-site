@@ -99,11 +99,38 @@ function byFeaturedThenRecent<T extends { featured?: boolean; publishedAt: strin
 let servicesCache: Service[] | null = null;
 let videosCache: Video[] | null = null;
 
+/**
+ * 작업 번호를 매긴다 — 인스타 썸네일의 `#5` 와 같은 번호.
+ *
+ * publishedAt 오름차순, 즉 **만든 순서**다. 목록의 기본 정렬(추천순)과는 별개라
+ * 어떻게 정렬해도 번호는 그대로 따라다닌다.
+ *
+ * 팀으로 만든 것은 세지 않는다. 이 번호가 세는 건 혼자 만든 줄이고,
+ * 그게 이 채널의 논지라서다 (스펙 4번).
+ *
+ * ⚠️ 과거 날짜로 서비스를 하나 끼워 넣으면 그 뒤 번호가 전부 밀린다.
+ * 이미 인스타에 `#5` 로 올린 편과 어긋나므로, 새로 올리는 건 늘 최신 날짜여야 한다.
+ */
+function assignSeq(services: Omit<Service, "seq">[]): Service[] {
+  const order = new Map<string, number>();
+  let n = 0;
+
+  for (const s of [...services].sort(
+    (a, b) => a.publishedAt.localeCompare(b.publishedAt) || a.slug.localeCompare(b.slug),
+  )) {
+    if (s.team) continue;
+    order.set(s.slug, (n += 1));
+  }
+
+  return services.map((s) => ({ ...s, seq: order.get(s.slug) }));
+}
+
 export function getServices(): Service[] {
   if (!servicesCache) {
-    servicesCache = readCollection(SERVICES_DIR, serviceFrontmatterSchema, "services")
-      .map(({ slug, data, body }) => ({ slug, ...data, body }))
-      .sort(byFeaturedThenRecent);
+    const parsed = readCollection(SERVICES_DIR, serviceFrontmatterSchema, "services").map(
+      ({ slug, data, body }) => ({ slug, ...data, body }),
+    );
+    servicesCache = assignSeq(parsed).sort(byFeaturedThenRecent);
   }
   return servicesCache;
 }

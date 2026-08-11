@@ -81,6 +81,24 @@ export const serviceFrontmatterSchema = z
     stack: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
     needsAuth: z.boolean().default(false),
+    /**
+     * 팀으로 만든 것. 기본값이 false 인 이유는 이 채널의 논지가
+     * "혼자서 이만큼 된다"라서다 — 팀 산출물을 같은 줄에 세우면 그 논지가 흐려진다.
+     * 목록에서 빼지는 않고 뱃지로 구분만 한다.
+     */
+    team: z.boolean().default(false),
+    /**
+     * MVP 가 나오기까지 걸린 시간 ("2시간" 처럼 사람이 읽는 문자열).
+     * 보는 사람이 "나도 해볼 만한가"를 계산하는 유일한 숫자라 눈에 띄는 자리에 그린다.
+     * 팀 프로젝트(team: true)는 혼자 만든 것과 비교가 안 되므로 비워둔다.
+     */
+    buildTime: z.string().optional(),
+    /**
+     * 이 서비스를 다시 만든다면 AI 에게 넘길 프롬프트 전문.
+     * 결과물만 보여주면 "역시 되는 사람은 되네"로 끝나서, 시작점을 같이 준다.
+     * YAML 블록 스칼라(`prompt: |`)로 여러 줄을 그대로 적는다.
+     */
+    prompt: z.string().optional(),
     publishedAt: isoDate,
     featured: z.boolean().default(false),
     // 스펙 5번: 썸네일이 없어도 깨지지 않아야 한다. 없으면 UI 가 기본 블록을 만든다.
@@ -97,6 +115,11 @@ export const videoFrontmatterSchema = z
     title: z.string().min(1),
     series: z.enum(SERIES),
     /**
+     * 시리즈 회차. 아카이브를 연재물로 읽히게 만드는 유일한 장치라
+     * "이게 되네?" 편에는 되도록 붙인다. 번호가 없는 편도 있을 수 있어 optional.
+     */
+    episode: z.number().int().positive().optional(),
+    /**
      * 인스타/유튜브 게시 현황. 아직 어느 쪽에도 안 올렸으면 빈 배열이다.
      * 억지로 하나 채우게 하면 플랫폼 필터가 거짓말을 하게 된다.
      */
@@ -108,6 +131,14 @@ export const videoFrontmatterSchema = z
      * 둘 다 있으면 임베드 아래 "원본 보기" 링크로 남는다.
      */
     externalUrl: z.url().optional(),
+    /**
+     * 자르지 않은 작업 원본 (퍼플즈 싱크).
+     *
+     * 릴스는 1분짜리 편집본이라 "어디서 막혔는지"가 다 잘려 나간다. 그 원본이
+     * 따로 있다는 게 이 채널이 다른 계정과 갈리는 지점이라(스펙 7번 브랜드),
+     * externalUrl 과 같은 칸에 두지 않고 별도 필드로 세운다.
+     */
+    processUrl: z.url().optional(),
     /** 임베드 비율. 릴스·쇼츠는 세로, 화면녹화는 가로. */
     orientation: z.enum(ORIENTATIONS).default("portrait"),
     publishedAt: isoDate,
@@ -135,6 +166,19 @@ export interface Service {
   tags: string[];
   /** 로그인 시 기록이 저장되는 서비스인지 (통합 계정은 홈페이지 범위 밖) */
   needsAuth: boolean;
+  /**
+   * 작업 번호 — 몇 번째로 만든 것인가. 인스타 썸네일의 `#5` 와 같은 번호다.
+   *
+   * frontmatter 에 없다. publishedAt 오름차순으로 로더가 매긴다 (loader.ts).
+   * 팀으로 만든 것은 이 줄을 세지 않으므로 번호가 없다.
+   */
+  seq?: number;
+  /** 팀으로 만든 것. 뱃지로만 구분하고 목록에서 빼지는 않는다. */
+  team: boolean;
+  /** MVP 까지 걸린 시간 ("2시간"). 팀 프로젝트는 비운다. */
+  buildTime?: string;
+  /** 다시 만든다면 AI 에게 넘길 프롬프트 전문 */
+  prompt?: string;
   publishedAt: string;
   featured: boolean;
   thumbnail?: string;
@@ -148,11 +192,15 @@ export interface Video {
   slug: string;
   title: string;
   series: Series;
+  /** 시리즈 회차. 아카이브를 연재물로 읽히게 한다. */
+  episode?: number;
   platform: Platform[];
   /** iframe 임베드용. externalUrl 과 최소 하나는 있어야 한다. */
   embedUrl?: string;
   /** 원본 주소 — 임베드가 없으면 새 탭 CTA, 있으면 그 아래 보조 링크. */
   externalUrl?: string;
+  /** 자르지 않은 작업 원본 (퍼플즈 싱크) */
+  processUrl?: string;
   /** 임베드 비율 (기본 portrait — 이 채널은 릴스·쇼츠가 기본이다) */
   orientation: Orientation;
   publishedAt: string;
@@ -166,9 +214,10 @@ export interface Video {
  * 한쪽만 고치는 실수를 막는다.
  */
 type AssertEqual<A, B> = [A] extends [B] ? ([B] extends [A] ? true : never) : never;
+// seq 는 frontmatter 가 아니라 로더가 계산해서 붙이므로 비교에서 뺀다.
 const _serviceMatches: AssertEqual<
   ServiceFrontmatter,
-  Omit<Service, "slug" | "body">
+  Omit<Service, "slug" | "body" | "seq">
 > = true;
 const _videoMatches: AssertEqual<
   VideoFrontmatter,

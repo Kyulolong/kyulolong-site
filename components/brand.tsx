@@ -23,7 +23,7 @@ export function Brand({ href = "/" }: { href?: string }) {
         width={26}
         height={26}
         className="shrink-0"
-        priority
+        loading="eager"
       />
       규로롱
     </Link>

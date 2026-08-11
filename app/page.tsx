@@ -1,10 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Hero } from "@/components/hero";
+import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
 import { ServiceCard } from "@/components/service-card";
 import { VideoCard } from "@/components/video-card";
 import { filterServices, filterVideos, validateContent } from "@/lib/content";
-import { INTERNAL_LINKS, SOCIAL_LINKS } from "@/lib/site-links";
+import { SITE_DESCRIPTION, pageMetadata, siteJsonLd } from "@/lib/seo";
+import { INSTAGRAM_URL, INTERNAL_LINKS, SOCIAL_LINKS } from "@/lib/site-links";
+
+/** 제목은 레이아웃의 기본값(SITE_TITLE)을 그대로 쓴다 — 랜딩이 곧 사이트다. */
+export const metadata: Metadata = pageMetadata({
+  description: SITE_DESCRIPTION,
+  path: "/",
+});
 
 export default function Home() {
   // 빌드 스크립트에서도 돌지만 렌더 경로에서도 한 번 더 막는다.
@@ -18,17 +27,13 @@ export default function Home() {
   const services = allServices.slice(0, 4);
   const videos = allVideos.slice(0, 3);
 
-  // "만든 서비스"로 쓰면 아래 섹션 제목의 개수(준비 중 포함)와 숫자가 어긋나 보인다.
-  // 여기 숫자는 '지금 열리는 것'만 센다.
-  const stats = [
-    { label: "지금 쓸 수 있는 서비스", value: allServices.filter((s) => s.status === "live").length },
-    { label: "열어둔 소스", value: allServices.filter((s) => s.github).length },
-    { label: "남긴 영상", value: allVideos.length },
-  ];
-
   return (
     <>
-      <Hero stats={stats} />
+      {/* 검색엔진이 이 사이트와 사람을 하나로 묶어 읽게 한다.
+          인스타·깃허브·퍼플즈를 sameAs 로 걸어야 세 채널이 한 사람으로 인식된다. */}
+      <JsonLd data={siteJsonLd(SOCIAL_LINKS.map((link) => link.href))} />
+
+      <Hero />
 
       <section className="mx-auto w-full max-w-[1120px] px-6 py-16 sm:px-8 sm:py-20">
         <SectionHeading
@@ -39,9 +44,10 @@ export default function Home() {
         />
         {services.length > 0 ? (
           <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {services.map((service) => (
+            {/* 히어로 바로 아래 2열 그리드 — 첫 행 두 장이 LCP 후보다 */}
+            {services.map((service, i) => (
               <li key={service.slug}>
-                <ServiceCard service={service} />
+                <ServiceCard service={service} eager={i < 2} />
               </li>
             ))}
           </ul>
@@ -55,12 +61,16 @@ export default function Home() {
         <div className="bg-paper-sand rounded-[28px] px-8 py-14 sm:px-14 sm:py-20">
           <div className="max-w-[42rem]">
             <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] leading-[1.2] font-extrabold tracking-[-0.03em] text-balance">
-              가져다 마음껏 만드세요
+              0부터 시작하지 마세요
             </h2>
             <p className="text-ink-soft mt-5 text-lg text-pretty">
-              소스코드를 여는 건 홍보가 아니라 논지입니다. 개발을 안 배운 사람도
-              이만큼은 만들 수 있다는 걸, 말로 하는 것보다 코드를 그냥 보여주는 게 빠릅니다.
-              마음에 드는 게 있으면 통째로 복사해 가셔도 됩니다.
+              코드는 이제 AI가 짜줍니다. 그래서 어려운 건 만드는 일이 아니라
+              <strong className="text-ink font-semibold"> 뭘 만들지 정하는 일</strong>입니다.
+              그건 아직 사람 몫이고, 솔직히 제일 재미있는 부분이기도 합니다.
+            </p>
+            <p className="text-ink-soft mt-4 text-lg text-pretty">
+              그래서 만든 것마다 소스코드와 <strong className="text-ink font-semibold">쓴 프롬프트를 통째로</strong> 열어뒀습니다.
+              빈 화면 앞에서 시작하지 마시고, 여기서 하나 집어다 당신 것으로 바꾸세요.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {SOCIAL_LINKS.map((link) => (
@@ -83,7 +93,7 @@ export default function Home() {
       <section className="mx-auto w-full max-w-[1120px] px-6 py-16 sm:px-8 sm:py-20">
         <SectionHeading
           title="만드는 과정"
-          description="완성본만 올리면 '역시 되는 사람은 되네'로 끝납니다. 막힌 데도 같이 남깁니다."
+          description="저는 가르치는 사람이 아닙니다. 만드는 과정을 공유합니다."
           href={INTERNAL_LINKS.videos}
           meta={String(allVideos.length)}
         />
@@ -100,14 +110,48 @@ export default function Home() {
         )}
       </section>
 
-      <section className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
+      {/* 다음에 뭘 만들지를 방문자에게 넘기는 자리. 팔로우할 이유이자 다시 올
+          이유라서 /about 배너보다 위에 둔다. 형광은 히어로가 이미 가져갔으므로
+          여기 버튼은 잉크로 세운다 (DESIGN.md §2). */}
+      <section className="mx-auto w-full max-w-[1120px] px-6 py-4 sm:px-8">
+        <div className="bg-paper-lime rounded-[28px] px-8 py-14 sm:px-14 sm:py-20">
+          <div className="max-w-[42rem]">
+            <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] leading-[1.2] font-extrabold tracking-[-0.03em] text-balance">
+              만들어줬으면 하는 거 있으세요?
+            </h2>
+            <p className="text-ink-soft mt-5 text-lg text-pretty">
+              인스타 DM으로 보내주세요. 기획서일 필요 없고 한 줄이면 됩니다.
+              &ldquo;이런 게 있으면 좋겠는데&rdquo; 정도로 충분해요.
+            </p>
+            <p className="text-ink-soft mt-4 text-lg text-pretty">
+              만들 만하면 만들고, 만드는 과정을 그대로 올립니다. 아이디어 주신 분은
+              원하시면 같이 올려드립니다. 혼자 60개를 짜내는 것보다 이쪽이 훨씬 나은 게
+              나올 것 같아서요.
+            </p>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="bg-ink text-canvas mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-85"
+            >
+              인스타 DM으로 보내기
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-[1120px] px-6 py-4 sm:px-8">
         <div className="border-line flex flex-wrap items-center justify-between gap-6 rounded-[28px] border px-8 py-10 sm:px-12">
           <div>
             <h2 className="text-xl font-bold tracking-[-0.02em]">
-              인사담당자가 왜 서비스를 만드나
+              인사담당자가 어떻게 여기까지 왔나
             </h2>
+            {/* 두 문장을 같은 축(못했다)으로 묶는다. 앞뒤 주제가 갈리면
+                예고편이 아니라 두 개의 짧은 알림처럼 읽힌다. */}
             <p className="text-ink-soft mt-2 max-w-[38rem]">
-              열 몇 해 동안 사람 뽑는 일을 했습니다. 그 이야기는 따로 적어뒀습니다.
+              대기업에서 인사 시스템을 기획했지만 코드는 한 줄도 못 짰습니다.
+              1년 전까지도 에러가 뜨면 읽지 못하고 통째로 복사해서 AI한테 붙여넣었고요.
             </p>
           </div>
           <Link

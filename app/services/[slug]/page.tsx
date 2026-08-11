@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/json-ld";
+import { PromptBlock } from "@/components/prompt-block";
 import { Prose } from "@/components/prose";
 import { VideoCard } from "@/components/video-card";
 import { getRelatedVideos, getService, getServices } from "@/lib/content";
+import { pageMetadata, serviceJsonLd, shareableImage } from "@/lib/seo";
 
 export function generateStaticParams() {
   return getServices().map((service) => ({ slug: service.slug }));
@@ -16,7 +19,22 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  return { title: service.title, description: service.tagline };
+
+  /**
+   * 설명은 tagline + 만든 시간이다. 목록에 60개가 쌓이면 검색 결과에서 서로
+   * 구분되는 건 이 한 줄뿐이고, "2시간 만에" 는 이 채널에서 제일 눈에 띄는 사실이다.
+   */
+  const description = service.buildTime
+    ? `${service.tagline} · ${service.buildTime} 만에 만들었고 소스코드와 프롬프트를 같이 열어뒀습니다.`
+    : service.tagline;
+
+  return pageMetadata({
+    title: service.title,
+    description,
+    path: `/services/${service.slug}`,
+    image: shareableImage(service.thumbnail),
+    publishedAt: service.publishedAt,
+  });
 }
 
 /**
@@ -41,6 +59,10 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
   return (
     <article className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
+      {/* 아직 주소가 없는 것(status: soon)은 "쓸 수 있는 소프트웨어"가 아니라서 빼둔다.
+          구조화 데이터에는 페이지에 실제로 있는 사실만 적는다 (lib/seo.ts). */}
+      {service.status === "live" ? <JsonLd data={serviceJsonLd(service)} /> : null}
+
       <div className="pt-10">
         <Link
           href="/services"
@@ -53,13 +75,23 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       {/* 제목이 이미지 아래에 있으면 큰 그림 하나를 지나야 여기가 뭔지 알 수 있다.
           이름을 먼저 대고, 그 다음에 그림을 보여준다. */}
       <header className="max-w-[46rem] pt-8">
-        <div className="flex flex-wrap items-center gap-2.5">
+        {service.seq ? (
+          <p className="text-ink-faint font-mono text-sm tabular-nums">
+            #{service.seq} · 혼자 만든 것
+          </p>
+        ) : null}
+        <div className="mt-1 flex flex-wrap items-center gap-2.5">
           <h1 className="text-[clamp(2rem,5vw,2.75rem)] leading-[1.15] font-extrabold tracking-[-0.03em]">
             {service.title}
           </h1>
           {service.status === "soon" ? (
             <span className="bg-surface-2 text-ink-faint rounded-full px-2.5 py-1 text-xs font-medium">
               준비 중
+            </span>
+          ) : null}
+          {service.team ? (
+            <span className="bg-paper-sky text-ink-soft rounded-full px-2.5 py-1 text-xs font-medium">
+              팀으로 만든 것
             </span>
           ) : null}
         </div>
@@ -76,7 +108,9 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                 fill
                 sizes="(min-width: 1024px) 46rem, 100vw"
                 className="object-cover mix-blend-multiply"
-                priority
+                /* 이 페이지에서 LCP 후보가 이것 하나뿐이라 head 에 박아 미리 받는다.
+                   목록의 카드들과 다른 처리인 이유는 Thumbnail 의 eager 주석에 있다. */
+                preload
               />
             </div>
           ) : null}
@@ -122,11 +156,15 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
           {service.needsAuth ? (
             <p className="text-ink-faint mt-6 text-sm">
-              로그인 없이도 전부 쓸 수 있어요. 로그인하면 저장한 것들이 다음에도 남아 있습니다.
+              로그인 없이도 전부 볼 수 있어요. 로그인하면 저장한 것들이 다음에도 남아 있습니다.
             </p>
           ) : null}
 
           {service.body ? <Prose body={service.body} className="mt-12" /> : null}
+
+          {service.prompt ? (
+            <PromptBlock prompt={service.prompt} title={service.title} />
+          ) : null}
         </div>
 
         <aside>
@@ -139,6 +177,15 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                 {service.publishedAt.replaceAll("-", ".")}
               </time>
             </MetaRow>
+            {service.buildTime ? (
+              <MetaRow label="만든 시간">
+                <span className="font-mono tabular-nums">{service.buildTime}</span>
+                <span className="text-ink-faint"> (첫 버전)</span>
+              </MetaRow>
+            ) : null}
+            {service.team ? (
+              <MetaRow label="만든 사람">팀 (혼자 만든 게 아닙니다)</MetaRow>
+            ) : null}
             {service.url ? (
               <MetaRow label="주소">
                 <span className="font-mono text-sm">{service.url}</span>

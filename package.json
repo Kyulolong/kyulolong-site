@@ -7,7 +7,9 @@
     "build": "npm run validate:content && next build",
     "start": "next start",
     "lint": "eslint",
-    "validate:content": "tsx scripts/validate-content.ts"
+    "validate:content": "tsx scripts/validate-content.ts",
+    "thumbs": "tsx scripts/fetch-thumbnails.ts",
+    "og": "tsx scripts/make-og.tsx"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.2",

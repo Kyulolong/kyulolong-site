@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { Analytics } from "@/components/analytics";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import {
+  OG_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+} from "@/lib/seo";
 import "./globals.css";
 
 /**
@@ -17,13 +24,38 @@ import "./globals.css";
  * globals.css 가 import 한다.
  */
 
+/**
+ * 사이트 공통 메타데이터.
+ *
+ * metadataBase 가 없으면 Next 는 og:image 를 절대 주소로 만들지 못하고
+ * (카톡·슬랙은 상대경로 이미지를 못 받는다) canonical 도 경로로만 나간다.
+ *
+ * canonical 과 og:url 은 **여기 두지 않는다.** 자식이 alternates 를 정의하지
+ * 않으면 부모 것을 그대로 물려받으므로, 루트에 "/" 를 박으면 15개 페이지가
+ * 전부 랜딩을 canonical 로 가리키게 된다. 페이지별로 pageMetadata() 가 채운다.
+ */
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "규로롱",
-    template: "%s · 규로롱",
+    default: SITE_TITLE,
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "인사담당 출신이 IT 서비스를 만듭니다. 만든 서비스와 소스코드, 만드는 과정을 남긴 영상을 모아둡니다.",
+  description: SITE_DESCRIPTION,
+  // 페이지가 openGraph 를 정의하지 않았을 때의 최소한. 실제로는 각 페이지가 채운다.
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "ko_KR",
+    title: { absolute: SITE_TITLE },
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: { absolute: SITE_TITLE },
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE.url],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

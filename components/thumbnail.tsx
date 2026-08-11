@@ -21,6 +21,16 @@ interface ThumbnailProps {
   eyebrow?: string;
   tone?: keyof typeof TONE;
   sizes?: string;
+  /**
+   * 첫 화면에 들어가는 카드만 켠다 (목록 첫 행). next/image 기본값이 lazy 라
+   * 켜지 않으면 LCP 가 되는 이미지를 브라우저가 늦게 받는다.
+   *
+   * 목록 전체에 켜면 안 된다 — 60개짜리 목록이 한꺼번에 요청을 날려서
+   * 정작 첫 화면 이미지의 대역폭을 뺏는다. 지금보다 나빠지는 종류의 최적화다.
+   * preload 를 쓰지 않는 것도 같은 이유다: 그리드가 1~3열로 바뀌므로
+   * 뷰포트마다 LCP 후보가 달라서 head 에 못 박을 이미지가 하나로 정해지지 않는다.
+   */
+  eager?: boolean;
 }
 
 /**
@@ -33,6 +43,7 @@ export function Thumbnail({
   eyebrow,
   tone = "service",
   sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
+  eager = false,
 }: ThumbnailProps) {
   return (
     <div
@@ -56,6 +67,7 @@ export function Thumbnail({
           fill
           sizes={sizes}
           className="object-cover mix-blend-multiply"
+          loading={eager ? "eager" : "lazy"}
         />
       ) : (
         <div className="flex h-full w-full items-end p-5">

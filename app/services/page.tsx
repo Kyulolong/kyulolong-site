@@ -3,14 +3,23 @@ import { FilterBar, type FilterOption } from "@/components/filter-bar";
 import { PageHeader } from "@/components/page-header";
 import { ServiceCard } from "@/components/service-card";
 import { filterServices, getAllTags, type SortOrder } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+/**
+ * canonical 은 쿼리 없는 /services 하나다. ?tag=지도 · ?sort=recent 는
+ * 같은 목록을 걸러 보여줄 뿐이라, 조합마다 다른 문서로 세어지면
+ * (태그 8개 × 정렬 3개) 같은 카드 목록이 24벌로 갈린다.
+ */
+export const metadata: Metadata = pageMetadata({
   title: "만든 서비스",
-  description: "인사담당 출신이 만든 서비스 목록. 전부 로그인 없이 바로 열립니다.",
-};
+  description:
+    "인사담당 출신이 AI한테 시켜서 만든 서비스 목록. 소스코드와 쓴 프롬프트를 같이 열어뒀고, 전부 로그인 없이 바로 열립니다.",
+  path: "/services",
+});
 
 const SORTS: { value: SortOrder; label: string }[] = [
-  { value: "featured", label: "대표작 먼저" },
+  // "대표작 먼저"는 대표작만 보여준다고 읽힌다. 실제로는 위로 올릴 뿐 전부 나온다.
+  { value: "featured", label: "추천순" },
   { value: "recent", label: "최신순" },
   { value: "oldest", label: "오래된순" },
 ];
@@ -73,9 +82,10 @@ export default async function ServicesPage({ searchParams }: PageProps<"/service
 
       {services.length > 0 ? (
         <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service) => (
+          {services.map((service, i) => (
             <li key={service.slug}>
-              <ServiceCard service={service} />
+              {/* 최대 3열이므로 첫 행은 세 장 */}
+              <ServiceCard service={service} eager={i < 3} />
             </li>
           ))}
         </ul>

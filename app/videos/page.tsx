@@ -3,11 +3,15 @@ import { FilterBar, type FilterOption } from "@/components/filter-bar";
 import { PageHeader } from "@/components/page-header";
 import { VideoCard } from "@/components/video-card";
 import { SERIES, filterVideos } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "영상",
-  description: "만드는 과정을 남긴 인스타 릴스·유튜브 쇼츠 아카이브.",
-};
+/** ?series=… 는 같은 목록을 거른 것이라 canonical 은 /videos 하나다 (/services 와 같은 이유). */
+export const metadata: Metadata = pageMetadata({
+  title: "만드는 과정",
+  description:
+    "서비스를 만드는 과정을 그대로 남긴 인스타 릴스·유튜브 쇼츠 아카이브. 되는 장면만이 아니라 막힌 데도 같이 있습니다.",
+  path: "/videos",
+});
 
 export default async function VideosPage({ searchParams }: PageProps<"/videos">) {
   const params = await searchParams;
@@ -33,7 +37,7 @@ export default async function VideosPage({ searchParams }: PageProps<"/videos">)
       <PageHeader
         eyebrow="videos"
         title="만드는 과정"
-        description="완성본만 올리면 '역시 되는 사람은 되네'로 끝납니다. 막혔던 데도 같이 남깁니다."
+        description="저는 가르치는 사람이 아닙니다. 만드는 과정을 공유합니다."
       />
 
       <div className="border-line mb-10 border-y py-5">
@@ -42,9 +46,10 @@ export default async function VideosPage({ searchParams }: PageProps<"/videos">)
 
       {videos.length > 0 ? (
         <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {videos.map((video) => (
+          {videos.map((video, i) => (
             <li key={video.slug}>
-              <VideoCard video={video} />
+              {/* 최대 3열이므로 첫 행은 세 장 */}
+              <VideoCard video={video} eager={i < 3} />
             </li>
           ))}
         </ul>

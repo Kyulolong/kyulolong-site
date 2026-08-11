@@ -119,6 +119,7 @@ export function validateContent(): void {
     const videoFile = `videos/${video.slug}.mdx`;
     checkFakeUrl(videoFile, "embedUrl", video.embedUrl, problems);
     checkFakeUrl(videoFile, "externalUrl", video.externalUrl, problems);
+    checkFakeUrl(videoFile, "processUrl", video.processUrl, problems);
     checkFakeUrl(videoFile, "thumbnail", video.thumbnail, problems);
 
     for (const dupe of findDuplicates(video.relatedServices)) {

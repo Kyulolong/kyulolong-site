@@ -12,7 +12,22 @@ const PLATFORM_LABEL: Record<string, string> = {
   youtube: "유튜브",
 };
 
-export function VideoCard({ video }: { video: Video }) {
+/**
+ * "ep3 · 이게 되네?" — 회차가 붙으면 아카이브가 연재물로 읽힌다.
+ * 회차 없는 편도 있어서 시리즈명만 남는 경우를 기본으로 둔다.
+ */
+export function seriesLabel(video: Video): string {
+  return video.episode ? `ep${video.episode} · ${video.series}` : video.series;
+}
+
+export function VideoCard({
+  video,
+  eager = false,
+}: {
+  video: Video;
+  /** 목록 첫 행에서만 켠다 — Thumbnail 의 eager 주석 참고 */
+  eager?: boolean;
+}) {
   return (
     <Link
       href={`/videos/${video.slug}`}
@@ -21,8 +36,9 @@ export function VideoCard({ video }: { video: Video }) {
       <Thumbnail
         src={video.thumbnail}
         label={video.title}
-        eyebrow={video.series}
+        eyebrow={seriesLabel(video)}
         tone="video"
+        eager={eager}
       />
 
       <div className="px-3 pt-5 pb-3">

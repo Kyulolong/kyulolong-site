@@ -103,6 +103,21 @@ export const serviceFrontmatterSchema = z
     featured: z.boolean().default(false),
     // 스펙 5번: 썸네일이 없어도 깨지지 않아야 한다. 없으면 UI 가 기본 블록을 만든다.
     thumbnail: z.string().optional(),
+    /**
+     * 공유 카드 전용 이미지 (1200x630 안팎의 png/jpg).
+     *
+     * thumbnail 로 겸할 수 없어서 따로 둔다. 썸네일은 목록 격자에 들어가는 SVG
+     * 일러스트이고 공유 카드는 가로로 긴 래스터다 — 카톡·슬랙·X 는 SVG 를 og:image 로
+     * 받지 않는다. 썸네일을 png 로 바꾸면 사이트 그림이 같이 바뀐다.
+     *
+     * 대개 그 서비스 앱이 자기 것을 이미 갖고 있다 (/wave-sound/og.png 처럼).
+     * 여기서 그걸 가리키면 앱과 소개 페이지가 같은 얼굴을 쓴다. 대신 그 앱에 파일이
+     * 올라가기 전에 값을 적으면 카드가 빈칸이 되므로, 배포를 확인하고 적을 것.
+     *
+     * 비우면 shareableImage() 가 thumbnail 로 내려가고, 그것도 SVG 면 기본 카드가 뜬다.
+     * withTrailingSlash 를 태우지 않는다 — 디렉터리가 아니라 파일이다.
+     */
+    ogImage: z.string().optional(),
     relatedVideos: z.array(z.string()).default([]),
   })
   .refine((v) => v.status === "soon" || Boolean(v.url), {
@@ -132,7 +147,7 @@ export const videoFrontmatterSchema = z
      */
     externalUrl: z.url().optional(),
     /**
-     * 자르지 않은 작업 원본 (퍼플즈 싱크).
+     * 작업 과정 원본 (퍼플즈 싱크).
      *
      * 릴스는 1분짜리 편집본이라 "어디서 막혔는지"가 다 잘려 나간다. 그 원본이
      * 따로 있다는 게 이 채널이 다른 계정과 갈리는 지점이라(스펙 7번 브랜드),
@@ -182,6 +197,8 @@ export interface Service {
   publishedAt: string;
   featured: boolean;
   thumbnail?: string;
+  /** 공유 카드 전용 래스터 이미지. 없으면 thumbnail → 사이트 기본 카드 순으로 내려간다. */
+  ogImage?: string;
   relatedVideos: string[];
   /** frontmatter 아래 MDX 본문 */
   body: string;
@@ -199,7 +216,7 @@ export interface Video {
   embedUrl?: string;
   /** 원본 주소 — 임베드가 없으면 새 탭 CTA, 있으면 그 아래 보조 링크. */
   externalUrl?: string;
-  /** 자르지 않은 작업 원본 (퍼플즈 싱크) */
+  /** 작업 과정 원본 (퍼플즈 싱크) */
   processUrl?: string;
   /** 임베드 비율 (기본 portrait — 이 채널은 릴스·쇼츠가 기본이다) */
   orientation: Orientation;

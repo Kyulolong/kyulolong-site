@@ -107,7 +107,15 @@ export function pageMetadata({
   // 제목이 없으면 사이트 기본 제목을 그대로 쓴다. 그냥 문자열로 주면 레이아웃의
   // 템플릿("%s · 규로롱")이 한 번 더 걸려 "규로롱 — 이게 되네? · 규로롱" 이 된다.
   const shareTitle = title ?? { absolute: SITE_TITLE };
-  const images = image ? [{ url: image }] : [OG_IMAGE];
+  /**
+   * 페이지 전용 이미지에도 alt 를 붙인다. 기본 카드(OG_IMAGE)는 alt 를 갖고 있어서,
+   * 안 붙이면 전용 이미지를 쓰는 페이지만 스크린리더에서 설명이 사라진다.
+   * 크기(width/height)는 적지 않는다 — 페이지마다 다를 수 있고, 모르는 숫자를 적느니
+   * 플랫폼이 직접 재게 두는 편이 맞다.
+   */
+  const images = image
+    ? [{ url: image, alt: typeof shareTitle === "string" ? shareTitle : SITE_TITLE }]
+    : [OG_IMAGE];
 
   const shared = {
     title: shareTitle,

@@ -32,7 +32,9 @@ export async function generateMetadata({
     title: service.title,
     description,
     path: `/services/${service.slug}`,
-    image: shareableImage(service.thumbnail),
+    // 서비스 전용 공유 카드가 있으면 그걸 쓰고, 없으면 예전대로 썸네일 →
+    // (SVG 라 걸리면) 사이트 기본 카드 순으로 내려간다.
+    image: shareableImage(service.ogImage ?? service.thumbnail),
     publishedAt: service.publishedAt,
   });
 }

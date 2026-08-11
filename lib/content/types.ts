@@ -1,11 +1,13 @@
 import { z } from "zod";
 
-/** 스펙 6번: 영상 시리즈 세 축 */
-export const SERIES = [
-  "이게 되네?",
-  "이렇게 살아도 되네?",
-  "커리어 인사이트",
-] as const;
+/**
+ * 스펙 6번: 영상 시리즈.
+ *
+ * 여기 적힌 것이 곧 /videos 의 필터 칩이다 — 편이 하나도 없는 축도 칩으로
+ * 그려져서 "0" 이 붙는다. 안 만들기로 한 축은 목록에서 뺀다. 만들 마음이
+ * 있을 때 한 줄 다시 넣으면 되고, 그 전까지 대문에 빈칸을 세워둘 이유가 없다.
+ */
+export const SERIES = ["이게 되네?", "커리어 인사이트"] as const;
 export type Series = (typeof SERIES)[number];
 
 export const PLATFORMS = ["instagram", "youtube"] as const;

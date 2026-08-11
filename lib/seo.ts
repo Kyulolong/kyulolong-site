@@ -199,6 +199,14 @@ export function serviceJsonLd(service: Service): Record<string, unknown> {
     mainEntityOfPage: absoluteUrl(`/services/${service.slug}`),
     applicationCategory: "UtilitiesApplication",
     ...(selfHosted ? { operatingSystem: "Web" } : {}),
+    /**
+     * 공유 카드와 같은 그림을 쓴다. SVG 썸네일은 shareableImage 가 걸러내므로
+     * (검색엔진도 SVG 를 대표 이미지로 잘 안 받는다) 래스터가 있을 때만 적는다.
+     */
+    ...(() => {
+      const image = shareableImage(service.ogImage ?? service.thumbnail);
+      return image ? { image: absoluteUrl(image) } : {};
+    })(),
     datePublished: service.publishedAt,
     inLanguage: "ko-KR",
     /**

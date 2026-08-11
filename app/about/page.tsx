@@ -28,7 +28,8 @@ export default function AboutPage() {
             규로롱입니다. 삼성SDS에서 5년 동안 글로벌 인사담당자로 근무했습니다. 
             해외 채용과 37개국이 사용하는 인사 시스템을 기획하고 운영했는데, 
             <strong className="text-ink font-bold"> 코드는 한 줄도 못 짰습니다.</strong> 기획서를
-            넘기면 개발팀이 만들고, 저는 그게 어떻게 만들어지는지 몰랐습니다.
+            넘기면 개발팀이 만들고, 저는 그게 어떻게 만들어지는지 몰랐습니다. 이후 주재원 통합 플랫폼을 만드는 스타트업에 합류했지만 여전히 개발은 못 했습니다.
+            이후 AI가 코드를 짜주는 시대가 왔습니다. 이제는 제가 직접 서비스를 만들 수 있습니다.
           </p>
           <p>
             지금은 팀임팩트라는 회사를 창업해 <strong className="text-ink font-bold">퍼플즈</strong>를
@@ -52,7 +53,7 @@ export default function AboutPage() {
             제가 모르는 사람이 제가 만든 걸 쓰고 있다는 게, 아직도 제일 이상하고 좋습니다.
           </p>
           <p>
-            코드는 이제 좀 읽습니다. 1년 전까지는 못 읽어서 에러가 뜨면 통째로 복사해
+            코드는 이제 좀 읽습니다. 얼마 전까지는 못 읽어서 에러가 뜨면 통째로 복사해
             AI한테 붙여넣었습니다. 그렇게 몇 달 하니까 눈에 익더군요.
             <strong className="text-ink font-bold"> 순서가 반대였습니다.</strong> 배우고 나서 만든 게 아니라,
             만들다 보니 조금씩 읽히기 시작했습니다.
@@ -82,7 +83,7 @@ export default function AboutPage() {
               <li>
                 <strong className="text-ink font-bold">1.</strong> 주변 사람 또는 내가 불편해했던 걸 쭉 적는다.
                 (아이랑 다녀온 첫 휴가에서 아내가 &ldquo;휴가 다녀온 것 같지가 않다&rdquo;고 했습니다 →
-                바다 소리 앱이 됐습니다)
+                쉼, 바다 앱이 됐습니다)
               </li>
               <li>
                 <strong className="text-ink font-bold">2.</strong> 말이 안 되는 엉뚱한 생각도 같이 적는다. 거르지 않는다.
@@ -148,7 +149,7 @@ export default function AboutPage() {
             <li>
               <h3 className="font-bold">3. 요청받아 만든다</h3>
               <p className="text-ink-soft mt-2">
-                만들어줬으면 하는 게 있으면 인스타 DM으로 보내주세요. 기획서일 필요 없고
+                만들어보고 싶은 게 있으면 인스타 DM으로 보내주세요. 기획서일 필요 없고
                 한 줄이면 됩니다. 만들 만하면 만들고 과정을 그대로 올립니다.
                 혼자 짜내는 것보다 이쪽이 훨씬 나은 게 나오더군요.
               </p>
@@ -168,18 +169,20 @@ export default function AboutPage() {
         <section className="mt-14">
           <h2 className="text-2xl font-bold tracking-[-0.02em]">여기서 안 하는 것</h2>
           <p className="text-ink-soft mt-4 text-[1.0625rem]">
-            수익 얘기는 안 합니다. 강의도 안 팝니다. 툴 추천도 안 받습니다.
-            만든 것과 만든 방법, 그리고 저의 생각만 올립니다.
+            수익 얘기는 안 합니다. 강의도 안 팝니다.
+            만든 것과 만든 방법, 그리고 저의 생각을 올립니다.
           </p>
         </section>
 
         <section className="mt-14">
           <h2 className="text-2xl font-bold tracking-[-0.02em]">앞으로</h2>
           <p className="text-ink-soft mt-4 text-[1.0625rem]">
-            요즘은 다들 경력직만 뽑습니다. 신입이 성장할 자리가 없어졌습니다.
-            사람 뽑는 일을 오래 한 사람으로서 이게 제일 마음에 걸립니다.
-            언젠가 그 자리를 만드는 걸 만들어보고 싶은데, 아직 뭘 만들어야 할지는 모르겠습니다.
-            일단 매주 하나씩 만들면서 찾는 중입니다.
+            &ldquo;기존의 커리어 공식이 무너진 시대, 그다음의 성장을 실험합니다.&rdquo;
+          </p>
+          <p className="text-ink-soft mt-4 text-[1.0625rem]">
+            채용 현장에서 연차와 상관없이 모두가 겪는 성장의 한계를 조금 일찍 보았습니다.
+            AI를 활용해 새로운 가치를 만드는 실험, 기존의 커리어와 일하는 방식을 재정의하는
+            시도, 매주 하나의 결과물을 만들며 그 과정을 기록합니다
           </p>
         </section>
 

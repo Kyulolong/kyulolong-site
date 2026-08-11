@@ -6,6 +6,7 @@ import { SectionHeading } from "@/components/section-heading";
 import { ServiceCard } from "@/components/service-card";
 import { VideoCard } from "@/components/video-card";
 import { filterServices, filterVideos, validateContent } from "@/lib/content";
+import { getLikeCounts, orderServicesForHome, orderVideosForHome } from "@/lib/likes";
 import { SITE_DESCRIPTION, pageMetadata, siteJsonLd } from "@/lib/seo";
 import { INSTAGRAM_URL, INTERNAL_LINKS, SOCIAL_LINKS } from "@/lib/site-links";
 
@@ -15,7 +16,27 @@ export const metadata: Metadata = pageMetadata({
   path: "/",
 });
 
-export default function Home() {
+/**
+ * 하루에 한 번만 다시 굽는다.
+ *
+ * 이 페이지는 사이트에서 유일하게 서버가 Supabase 를 부르는 자리다 —
+ * 카드 순서를 좋아요로 정하려면 렌더 시점에 숫자를 알아야 해서다.
+ * DB 를 홈페이지의 필수 경로에 넣지 않는다는 규칙(CLAUDE.md 11번)을
+ * 아래 셋으로 지킨다.
+ *
+ *   1. 방문자 요청은 DB 를 건드리지 않는다. 미리 구워둔 HTML 이 그대로 나간다.
+ *   2. Supabase 가 죽어 있으면 getLikeCounts 가 빈 값을 주고, 순서는 원래
+ *      기본 정렬(추천 우선 + 최신순)로 떨어진다. 대문은 산다.
+ *   3. 다시 굽다 실패해도 Next 는 직전에 구운 페이지를 계속 내보낸다.
+ *
+ * 하루면 충분한 이유: 좋아요는 카드의 숫자로 즉시 보인다(클라이언트가 따로
+ * 읽는다). 여기서 정하는 건 '순서' 하나뿐이고, 그게 몇 시간 늦게 반영되는 걸
+ * 알아채는 사람은 없다.
+ */
+export const revalidate = 86400;
+const DAY = 86400;
+
+export default async function Home() {
   // 빌드 스크립트에서도 돌지만 렌더 경로에서도 한 번 더 막는다.
   // 깨진 참조를 그린 채로 배포되는 일이 없어야 한다.
   validateContent();
@@ -23,9 +44,10 @@ export default function Home() {
   const allServices = filterServices();
   const allVideos = filterVideos({ sort: "recent" });
 
-  // featured 우선 + 최신순은 filterServices 의 기본 정렬이다.
-  const services = allServices.slice(0, 4);
-  const videos = allVideos.slice(0, 3);
+  // 서비스도 영상도 첫 자리는 최신 것 고정, 나머지는 좋아요순 (lib/likes.ts).
+  const likes = await getLikeCounts(DAY);
+  const services = orderServicesForHome(allServices, likes.service).slice(0, 4);
+  const videos = orderVideosForHome(allVideos, likes.video).slice(0, 3);
 
   return (
     <>
@@ -47,7 +69,7 @@ export default function Home() {
             {/* 히어로 바로 아래 2열 그리드 — 첫 행 두 장이 LCP 후보다 */}
             {services.map((service, i) => (
               <li key={service.slug}>
-                <ServiceCard service={service} eager={i < 2} />
+                <ServiceCard service={service} eager={i < 2} likes={likes.service[service.slug]} />
               </li>
             ))}
           </ul>
@@ -101,7 +123,7 @@ export default function Home() {
           <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {videos.map((video) => (
               <li key={video.slug}>
-                <VideoCard video={video} />
+                <VideoCard video={video} likes={likes.video[video.slug]} />
               </li>
             ))}
           </ul>
@@ -117,15 +139,15 @@ export default function Home() {
         <div className="bg-paper-lime rounded-[28px] px-8 py-14 sm:px-14 sm:py-20">
           <div className="max-w-[42rem]">
             <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] leading-[1.2] font-extrabold tracking-[-0.03em] text-balance">
-              만들어줬으면 하는 거 있으세요?
+              만들어보고 싶은 게 있으세요?
             </h2>
             <p className="text-ink-soft mt-5 text-lg text-pretty">
-              인스타 DM으로 보내주세요. 기획서일 필요 없고 한 줄이면 됩니다.
+              인스타 DM으로 보내주세요. 기획서일 필요 없고 한 줄이면 됩니다. 만들고 싶은 이유도 알려주신다면 더 좋겠죠.
               &ldquo;이런 게 있으면 좋겠는데&rdquo; 정도로 충분해요.
             </p>
             <p className="text-ink-soft mt-4 text-lg text-pretty">
-              만들 만하면 만들고, 만드는 과정을 그대로 올립니다. 아이디어 주신 분은
-              원하시면 같이 올려드립니다. 혼자 60개를 짜내는 것보다 이쪽이 훨씬 나은 게
+              최대한 만들어 보겠습니다. 만드는 과정을 공유합니다. 아이디어 보낸 분은
+              거기서부터 작업을 시작하세요. 혼자 60개를 짜내는 것보다 이쪽이 훨씬 나은 게
               나올 것 같아서요.
             </p>
             <a
@@ -151,7 +173,7 @@ export default function Home() {
                 예고편이 아니라 두 개의 짧은 알림처럼 읽힌다. */}
             <p className="text-ink-soft mt-2 max-w-[38rem]">
               대기업에서 인사 시스템을 기획했지만 코드는 한 줄도 못 짰습니다.
-              1년 전까지도 에러가 뜨면 읽지 못하고 통째로 복사해서 AI한테 붙여넣었고요.
+              얼마 전까지도 에러가 뜨면 읽지 못하고 통째로 복사해서 AI한테 붙여넣었고요.
             </p>
           </div>
           <Link

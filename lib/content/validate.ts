@@ -90,6 +90,9 @@ export function validateContent(): void {
     checkFakeUrl(serviceFile, "url", service.url, problems);
     checkFakeUrl(serviceFile, "github", service.github, problems);
     checkFakeUrl(serviceFile, "thumbnail", service.thumbnail, problems);
+    // ogImage 는 대개 남의 컨테이너에 있는 파일이라(예: /prompt/og.png) 존재를
+    // 확인할 수 없다. 적어도 자리표시자 주소가 박힌 채 나가는 건 여기서 잡는다.
+    checkFakeUrl(serviceFile, "ogImage", service.ogImage, problems);
 
     for (const dupe of findDuplicates(service.relatedVideos)) {
       problems.push(`services/${service.slug}.mdx — relatedVideos 에 "${dupe}" 가 중복 있습니다.`);

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/json-ld";
+import { LikeButton } from "@/components/like-button";
 import { PromptBlock } from "@/components/prompt-block";
 import { Prose } from "@/components/prose";
 import { VideoCard } from "@/components/video-card";
@@ -148,6 +149,14 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                 <span aria-hidden="true">↗</span>
               </a>
             ) : null}
+
+            {/* 써보고 나서 누르는 자리라 CTA 옆에 둔다. 형광은 "지금 써보기" 가
+                이미 가져갔으므로 여기는 테두리만 있는 버튼이다 (DESIGN.md §2). */}
+            <LikeButton
+              kind="service"
+              slug={service.slug}
+              className="border-line text-ink-faint hover:bg-surface-2 !gap-2 border !px-5 !py-3 !text-sm"
+            />
           </div>
 
           {service.status === "soon" ? (

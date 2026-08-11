@@ -22,36 +22,12 @@ import { SITE_HOST } from "./lib/seo";
  *
  * 예: SERVICE_WAVE_SOUND_ORIGIN=http://127.0.0.1:8899
  */
-interface ServiceProxy {
-  origin: string | undefined;
-  /**
-   * 서비스가 자기 경로를 알고 있는지 (Next 의 basePath 처럼).
-   *
-   * 대부분의 서비스는 자기가 루트에 있다고 믿는다. 그런 앱에는 프리픽스를 떼고
-   * 넘겨야 한다 — `/wave-sound/app.js` 를 컨테이너는 `/app.js` 로 받는다.
-   *
-   * 그런데 서브경로에 얹힌 Next 앱은 반대다. basePath 를 켜면 앱이 자기 자산을
-   * `/kfood-bingo/_next/...` 로 내보내고, 그 주소로 다시 들어온 요청도
-   * `/kfood-bingo/` 가 붙은 채로 받기를 기대한다. 프리픽스를 떼면 자기 자산을
-   * 자기가 404 로 돌려준다 — HTML 은 뜨는데 JS 가 하나도 안 붙는, 제일
-   * 알아채기 어려운 고장이다.
-   *
-   * ⚠️ Traefik 설정도 이 값과 짝이 맞아야 한다. keepPrefix 인 서비스에
-   *    stripprefix 미들웨어를 걸면 위와 똑같이 깨진다.
-   */
-  keepPrefix?: boolean;
-}
-
-const SERVICE_ORIGINS: Record<string, ServiceProxy> = {
-  "wave-sound": { origin: process.env.SERVICE_WAVE_SOUND_ORIGIN },
-  prompt: { origin: process.env.SERVICE_PROMPT_ORIGIN },
-  storyboard: { origin: process.env.SERVICE_STORYBOARD_ORIGIN },
-  navigator: { origin: process.env.SERVICE_NAVIGATOR_ORIGIN },
-  "kfood-bingo": {
-    origin: process.env.SERVICE_KFOOD_BINGO_ORIGIN,
-    // next.config.ts 에 basePath: "/kfood-bingo" 가 있다
-    keepPrefix: true,
-  },
+const SERVICE_ORIGINS: Record<string, string | undefined> = {
+  "wave-sound": process.env.SERVICE_WAVE_SOUND_ORIGIN,
+  prompt: process.env.SERVICE_PROMPT_ORIGIN,
+  storyboard: process.env.SERVICE_STORYBOARD_ORIGIN,
+  navigator: process.env.SERVICE_NAVIGATOR_ORIGIN,
+  "kfood-bingo": process.env.SERVICE_KFOOD_BINGO_ORIGIN,
 };
 
 /** 끝 슬래시를 떼서 destination 이 `//` 로 겹치지 않게 한다 */
@@ -59,16 +35,10 @@ function normalizeOrigin(origin: string): string {
   return origin.replace(/\/+$/, "");
 }
 
-function configuredServices(): { slug: string; origin: string; keepPrefix: boolean }[] {
+function configuredServices(): { slug: string; origin: string }[] {
   return Object.entries(SERVICE_ORIGINS)
-    .filter((entry): entry is [string, ServiceProxy & { origin: string }] =>
-      Boolean(entry[1].origin),
-    )
-    .map(([slug, service]) => ({
-      slug,
-      origin: normalizeOrigin(service.origin),
-      keepPrefix: service.keepPrefix === true,
-    }));
+    .filter((entry): entry is [string, string] => Boolean(entry[1]))
+    .map(([slug, origin]) => ({ slug, origin: normalizeOrigin(origin) }));
 }
 
 /**
@@ -120,9 +90,9 @@ const nextConfig: NextConfig = {
    * 자신을 가리켜 무한 루프가 된다. (한 번 밟았다)
    */
   async rewrites() {
-    return configuredServices().map(({ slug, origin, keepPrefix }) => ({
+    return configuredServices().map(({ slug, origin }) => ({
       source: `/${slug}/:path*`,
-      destination: keepPrefix ? `${origin}/${slug}/:path*` : `${origin}/:path*`,
+      destination: `${origin}/:path*`,
     }));
   },
 };

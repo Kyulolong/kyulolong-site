@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FilterBar, type FilterOption } from "@/components/filter-bar";
+import { FilterBar, FilterRail, type FilterOption } from "@/components/filter-bar";
 import { PageHeader } from "@/components/page-header";
 import { ServiceCard } from "@/components/service-card";
 import { filterServices, getAllTags, type SortOrder } from "@/lib/content";
@@ -79,10 +79,12 @@ export default async function ServicesPage({ searchParams }: PageProps<"/service
         description="쓰다가 불편했던 걸 하나씩 만들었습니다. 로그인도 결제도 없고, 주소만 알면 그냥 열립니다."
       />
 
-      <div className="border-line mb-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-y py-5">
-        <FilterBar label="태그" options={tagOptions} />
-        <FilterBar label="정렬" options={sortOptions} />
-      </div>
+      <FilterRail>
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+          <FilterBar label="태그" options={tagOptions} />
+          <FilterBar label="정렬" options={sortOptions} />
+        </div>
+      </FilterRail>
 
       {solo.length > 0 ? (
         <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

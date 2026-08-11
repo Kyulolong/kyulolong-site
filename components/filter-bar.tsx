@@ -1,4 +1,26 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
+
+/**
+ * 필터 줄이 놓이는 자리. 헤더 바로 밑에 세워 둔다.
+ *
+ * 그냥 흘려보내면 스크롤할 때 이 줄이 GNB(sticky, z-50) 의 반투명 띠 아래로
+ * 반쯤 잠겨서, 칩이 위아래로 잘린 채 지나간다. 목록이 길어질수록(스펙 5번)
+ * 필터는 스크롤 도중에 다시 찾게 되는 것이라, 지나가게 두는 대신 붙여 세운다.
+ *
+ * top 을 1px 올려 헤더의 아래 선과 이 줄의 위 선을 겹친다 — 안 그러면 붙는
+ * 순간 1px 선이 두 줄로 보인다. z-40 은 헤더보다 낮다: 겹치면 헤더가 위다.
+ *
+ * ⚠️ 모바일에서는 세우지 않는다. 태그가 열 개를 넘으면 칩이 서너 줄까지
+ * 감기는데, 그 높이가 화면 위에 상시로 박히면 정작 목록을 볼 자리가 없어진다.
+ */
+export function FilterRail({ children }: { children: ReactNode }) {
+  return (
+    <div className="border-line bg-canvas/95 mb-10 border-y py-5 md:sticky md:top-[calc(4rem-1px)] md:z-40 md:backdrop-blur-md">
+      {children}
+    </div>
+  );
+}
 
 export interface FilterOption {
   label: string;

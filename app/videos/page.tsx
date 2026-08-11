@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FilterBar, type FilterOption } from "@/components/filter-bar";
+import { FilterBar, FilterRail, type FilterOption } from "@/components/filter-bar";
 import { PageHeader } from "@/components/page-header";
 import { VideoCard } from "@/components/video-card";
 import { SERIES, filterVideos } from "@/lib/content";
@@ -40,9 +40,9 @@ export default async function VideosPage({ searchParams }: PageProps<"/videos">)
         description="저는 가르치는 사람이 아닙니다. 만드는 과정을 공유합니다."
       />
 
-      <div className="border-line mb-10 border-y py-5">
+      <FilterRail>
         <FilterBar label="시리즈" options={options} />
-      </div>
+      </FilterRail>
 
       {videos.length > 0 ? (
         <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

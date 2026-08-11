@@ -11,13 +11,17 @@
  * 게다가 런타임에 남의 CDN 을 부르면 그쪽이 흔들릴 때 목록이 같이 흔들린다 —
  * 스펙 11번이 DB 를 필수 경로에서 뺀 것과 같은 이유다.
  *
- * ── 소스별로 방법이 갈린다
+ * ── 어디서 가져오나: processUrl(작업 과정)이 먼저다
  *
- *   유튜브   i.ytimg.com 규칙이라 파싱이 필요 없다
+ * 카드에 거는 그림은 **인스타 커버가 아니라 작업하던 화면**이다. 커버는 릴스를
+ * 열게 만드는 그림이고, 이 목록에서 필요한 건 "이 사람이 뭘 하고 있었나"다.
+ * 그래서 processUrl 이 있으면 그쪽 og:image 를 먼저 본다.
+ *
  *   퍼플즈   og:image 가 공개 스토리지를 가리켜서 그대로 받아진다
+ *   유튜브   i.ytimg.com 규칙이라 파싱이 필요 없다
  *   인스타   로그인 벽 + 서명 만료. **여기서는 못 가져온다.**
- *            직접 만든 커버 이미지를 public/videos/<slug>.jpg 로 넣고
- *            MDX 에 thumbnail 한 줄 적는 게 빠르고 화질도 낫다.
+ *            processUrl 이 없는 편은 직접 만든 이미지를
+ *            public/videos/<slug>.jpg 로 넣고 MDX 에 thumbnail 한 줄 적는다.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -109,9 +113,11 @@ async function download(url: string, slug: string): Promise<string | null> {
 async function resolveCandidates(
   data: Record<string, unknown>,
 ): Promise<string[]> {
+  // 작업 과정이 먼저다 (맨 위 주석). 인스타 편도 processUrl 만 있으면 여기서 받아진다.
+  const process = typeof data.processUrl === "string" ? data.processUrl : undefined;
   const external = typeof data.externalUrl === "string" ? data.externalUrl : undefined;
   const embed = typeof data.embedUrl === "string" ? data.embedUrl : undefined;
-  const page = external ?? embed;
+  const page = process ?? external ?? embed;
   if (!page) return [];
 
   const yt = youtubeId(page);

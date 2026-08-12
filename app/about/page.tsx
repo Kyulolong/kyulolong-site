@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { pageMetadata } from "@/lib/seo";
@@ -20,6 +21,43 @@ export default function AboutPage() {
           title="이게 되네?"
           description="인문학을 전공했습니다. AI한테 시켜서 매주 서비스 하나씩 만듭니다. 어떻게 여기까지 왔는지, 얼마가 드는지 적어뒀습니다."
         />
+
+        {/*
+          이 사이트에서 유일한 사진이다.
+
+          여기 실린 그림은 전부 만들어낸 것(서비스 일러스트)이거나 화면 캡처라,
+          "사람이 있다"를 말하는 자리가 한 곳도 없었다. 인스타에서 얼굴을 보고
+          넘어오는 채널인데 홈페이지에는 얼굴이 없으면 두 채널이 남처럼 갈린다.
+
+          캡션이 사진을 아래 본문·서비스 목록과 묶는다. 풍경 사진 한 장은
+          장식이지만, "이 휴가가 저 앱이 됐다"가 붙는 순간 증거가 된다.
+        */}
+        <figure className="mb-14">
+          <div className="bg-surface-2 relative aspect-[3/2] w-full overflow-hidden rounded-[24px]">
+            <Image
+              src="/kyulolong.jpg"
+              alt="광안대교 아래 배 위에서 아기띠로 아기를 안고 바다를 보고 있는 규로롱"
+              fill
+              sizes="(min-width: 768px) 46rem, 100vw"
+              /* 세로 사진을 가로로 자른다. 얼굴(위쪽)과 아기(아래쪽)를 한 화면에
+                 담으려면 정가운데가 아니라 조금 위를 중심으로 잡아야 한다. */
+              className="object-cover object-[50%_44%]"
+              /* 이 페이지의 LCP 다 — 첫 화면에 들어오는 유일한 이미지라 미리 받는다 */
+              preload
+            />
+          </div>
+          <figcaption className="text-ink-faint mt-3.5 text-sm">
+            광안대교 아래. 이 휴가에서 아내가 &ldquo;휴가 다녀온 것 같지가 않다&rdquo;고
+            했고, 그 말이{" "}
+            <Link
+              href="/services/wave-sound"
+              className="text-ink-soft hover:text-ink decoration-line-strong hover:decoration-ink underline underline-offset-4 transition-colors"
+            >
+              쉼, 바다
+            </Link>
+            가 됐습니다.
+          </figcaption>
+        </figure>
 
         <div className="text-ink-soft space-y-6 pb-4 text-[1.0625rem]">
           {/* 경력은 '일찍, 짧게, 자랑 없이'. 나중에 알려져서 배신감이 되는 것보다
@@ -159,10 +197,9 @@ export default function AboutPage() {
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noreferrer noopener"
-            className="bg-ink text-canvas mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-85"
+            className="bg-ink text-canvas mt-8 inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-85"
           >
             아이디어 보내기
-            <span aria-hidden="true">↗</span>
           </a>
         </section>
 
@@ -200,10 +237,9 @@ export default function AboutPage() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href={INTERNAL_LINKS.services}
-              className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
+              className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
             >
               만든 것 보기
-              <span aria-hidden="true">→</span>
             </Link>
             {SOCIAL_LINKS.map((link) => (
               <a
@@ -211,10 +247,9 @@ export default function AboutPage() {
                 href={link.href}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="border-line-strong text-ink hover:bg-surface-2 inline-flex items-center gap-2 rounded-full border px-6 py-3 text-[0.9375rem] font-medium transition-colors"
+                className="border-line-strong text-ink hover:bg-surface-2 inline-flex items-center rounded-full border px-6 py-3 text-[0.9375rem] font-medium transition-colors"
               >
                 {link.label}
-                <span aria-hidden="true">↗</span>
               </a>
             ))}
           </div>

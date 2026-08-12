@@ -129,6 +129,27 @@ export const serviceFrontmatterSchema = z
       .min(1)
       .max(3, "개념은 3개까지입니다. 넷째가 있다면 그건 본문에 쓸 얘기입니다")
       .optional(),
+    /**
+     * 만들면서 보고 따라 한 곳 (영상·글·문서).
+     *
+     * buildTime·prompt·concept 과 같은 줄에 선 필드다. 그 셋이 "얼마나 걸리나 ·
+     * 어떻게 시키나 · 무엇을 알고 있으면 되나"에 답한다면, 이건 **"그건 어디서
+     * 봤나"**에 답한다. 혼자 알아낸 것처럼 적어두면 "역시 되는 사람은 되네"로
+     * 끝나는 게 이 채널의 전제라, 출처를 지우지 않는 쪽이 논지에 맞다.
+     *
+     * 제목은 손으로 적는다. 링크만 있으면 목록이 주소 셋으로 보이고, 무엇을
+     * 참고했는지는 눌러봐야 알게 된다. 원문 제목 그대로 적을 것 — 번역하면
+     * 그 제목으로 검색해서 찾아갈 수 없다.
+     */
+    references: z
+      .array(
+        z.strictObject({
+          /** 원문 제목 그대로 */
+          title: z.string().min(1),
+          url: z.url(),
+        }),
+      )
+      .default([]),
     publishedAt: isoDate,
     featured: z.boolean().default(false),
     // 스펙 5번: 썸네일이 없어도 깨지지 않아야 한다. 없으면 UI 가 기본 블록을 만든다.
@@ -229,6 +250,8 @@ export interface Service {
    * 1~3개, 첫 번째가 대표. 기본은 하나다 (스키마 주석 참고).
    */
   concept?: { name: string; full?: string; summary: string }[];
+  /** 만들면서 보고 따라 한 곳 — '그건 어디서 봤나'에 답한다 (스키마 주석 참고) */
+  references: { title: string; url: string }[];
   publishedAt: string;
   featured: boolean;
   thumbnail?: string;

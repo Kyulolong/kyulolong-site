@@ -302,6 +302,35 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                 <span className="text-ink-faint">아직 정리 중</span>
               )}
             </MetaRow>
+
+            {/*
+             * 보고 따라 한 곳. INFO 의 마지막 줄인 것은 순서가 곧 우선순위라서다 —
+             * 훑는 사람에게 필요한 건 언제·얼마나·어디서고, 출처는 "이건 어떻게
+             * 알았지"까지 온 사람이 찾는다.
+             *
+             * 제목을 그대로 거는 이유는 링크 셋이 나란히 있으면 무엇을 참고했는지가
+             * 눌러봐야 보이기 때문이다. 줄바꿈이 나므로 items-baseline 정렬을
+             * 쓰는 MetaRow 안에서도 첫 줄이 라벨과 맞는다.
+             */}
+            {service.references.length > 0 ? (
+              <MetaRow label="참고">
+                <ul className="flex flex-col gap-2">
+                  {service.references.map((ref) => (
+                    <li key={ref.url}>
+                      <a
+                        href={ref.url}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="text-ink-soft hover:text-ink text-sm underline decoration-[var(--color-line-strong)] underline-offset-4 transition-colors"
+                      >
+                        {ref.title}
+                        <span aria-hidden="true"> ↗</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </MetaRow>
+            ) : null}
           </dl>
         </aside>
       </div>

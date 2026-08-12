@@ -17,6 +17,15 @@ export const INSTAGRAM_URL = "https://www.instagram.com/kyulolong/";
 export const PERPLZ_PROFILE_URL =
   "https://perplz.com/user/05120996-33fb-49fe-9e5e-539291d2ef81";
 
+/**
+ * 비즈니스 문의 창구. 팀임팩트(퍼플즈를 만드는 회사) 주소다.
+ *
+ * SOCIAL_LINKS 에 넣지 않는다 — 저쪽은 "만드는 걸 구경할 수 있는 곳"이고
+ * 이건 "일 얘기를 걸 수 있는 곳"이라, 같은 줄에 세우면 둘 다 흐려진다.
+ * 아이디어 제보는 여전히 인스타 DM 이다 (about 의 규칙 3번).
+ */
+export const BUSINESS_EMAIL = "kyulolong@teaminpact.com";
+
 export const SOCIAL_LINKS = [
   { label: "인스타그램", href: INSTAGRAM_URL },
   { label: "깃허브", href: "https://github.com/Kyulolong" },

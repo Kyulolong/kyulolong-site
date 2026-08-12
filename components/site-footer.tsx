@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Brand } from "@/components/brand";
 import { VisitorCount } from "@/components/visitor-count";
-import { INTERNAL_LINKS, SOCIAL_LINKS } from "@/lib/site-links";
+import { BUSINESS_EMAIL, INTERNAL_LINKS, SOCIAL_LINKS } from "@/lib/site-links";
 
 const NAV = [
   { label: "서비스", href: INTERNAL_LINKS.services },
@@ -18,6 +18,19 @@ export function SiteFooter() {
             <Brand />
             <p className="text-ink-faint mt-3 max-w-[26rem] text-sm">
               만든 서비스와 소스코드, 만드는 과정을 남긴 영상을 모아둡니다.
+            </p>
+
+            {/* 라벨을 붙여 두는 이유: 주소만 있으면 "만들어달라" 요청도 여기로 온다.
+                그건 인스타 DM 이 받는다 (/about 의 규칙 3번). 주소는 고정폭으로
+                적는다 — 눈으로 옮겨 적는 문자열이라 l·1·I 가 갈려야 한다. */}
+            <p className="text-ink-faint mt-4 text-sm">
+              비즈니스 문의{" "}
+              <a
+                href={`mailto:${BUSINESS_EMAIL}`}
+                className="text-ink-soft hover:text-ink decoration-line-strong hover:decoration-ink font-mono underline underline-offset-4 transition-colors"
+              >
+                {BUSINESS_EMAIL}
+              </a>
             </p>
           </div>
 

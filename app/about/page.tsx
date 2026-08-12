@@ -47,7 +47,7 @@ export default function AboutPage() {
             />
           </div>
           <figcaption className="text-ink-faint mt-3.5 text-sm">
-            광안대교 아래. 이 휴가에서 아내가 &ldquo;휴가 다녀온 것 같지가 않다&rdquo;고
+            광안대교 아래. 아이와 다녀온 첫 휴가에서 아내가 &ldquo;휴가 다녀온 것 같지가 않다&rdquo;고
             했고, 그 말이{" "}
             <Link
               href="/services/wave-sound"
@@ -132,8 +132,6 @@ export default function AboutPage() {
             <ol className="text-ink-soft ml-1 space-y-3">
               <li>
                 <strong className="text-ink font-bold">1.</strong> 주변 사람 또는 내가 불편해했던 걸 쭉 적는다.
-                (아이랑 다녀온 첫 휴가에서 아내가 &ldquo;휴가 다녀온 것 같지가 않다&rdquo;고 했습니다 →
-                쉼, 바다 앱이 됐습니다)
               </li>
               <li>
                 <strong className="text-ink font-bold">2.</strong> 말이 안 되는 엉뚱한 생각도 같이 적는다. 거르지 않는다.

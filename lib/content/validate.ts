@@ -41,6 +41,47 @@ function checkFakeUrl(
   }
 }
 
+/**
+ * processUrl 의 퍼플즈 주소가 **임베드로 바뀔 수 있는 형식인지** 본다.
+ *
+ * app/videos/[slug]/page.tsx 의 perplzEmbedUrl() 은 `perplz.com/sync/<해시>` 하나만
+ * `perplz.com/embed/sync/<해시>` 로 바꾼다. 정규식이라 네트워크를 안 타고, 안 걸리면
+ * undefined 를 줘서 **iframe 없이 링크 한 줄만 남는다. 빌드는 그대로 통과한다.**
+ * 인스타 CDN 만료를 두고 한 얘기와 같은 종류다 — 실패가 눈에 안 띄어서 더 나쁘다.
+ *
+ * 하필 퍼플즈 공유 다이얼로그가 주는 주소 셋 중 **둘이 여기에 안 걸린다.**
+ *
+ *   공유 링크    https://perplz.com/s/EmYLdzGU            ← 안 걸림
+ *   임베드 링크  https://perplz.com/embed/sync/PwG4kMBJ   ← 안 걸림
+ *   주소창       https://perplz.com/sync/PwG4kMBJ         ← 이것만 맞다
+ *
+ * 받아주는 쪽으로 고칠 수가 없다. 단축코드(`EmYLdzGU`)와 싱크 해시(`PwG4kMBJ`)는
+ * 서로 다른 네임스페이스라(short_links 테이블 vs video id 의 hashid) 문자열만 보고는
+ * 변환이 안 되고 퍼플즈 DB 를 거쳐야 한다. 그래서 받는 대신 빌드에서 막는다.
+ *
+ * 단축링크는 한 가지가 더 있다: `/s/<code>` 는 **클릭을 기록한 뒤** 리다이렉트하므로,
+ * npm run thumbs 가 그 주소를 긁을 때마다 퍼플즈의 공유 카운트가 올라간다.
+ */
+const PERPLZ_URL = /^https?:\/\/(?:www\.)?perplz\.com\//;
+const PERPLZ_EMBEDDABLE = /^https:\/\/perplz\.com\/sync\/[\w-]+\/?$/;
+
+function checkPerplzProcessUrl(file: string, value: string | undefined, problems: string[]): void {
+  if (!value || !PERPLZ_URL.test(value) || PERPLZ_EMBEDDABLE.test(value)) return;
+
+  // 임베드 주소는 `/embed` 만 떼면 되므로 고칠 주소를 바로 적어준다.
+  const hash = value.match(/\/embed\/sync\/([\w-]+)/)?.[1];
+  const hint = hash
+    ? `    "임베드 링크" 를 넣으셨습니다. /embed 를 뺀 https://perplz.com/sync/${hash} 로 바꾸세요.`
+    : `    "공유 링크"(/s/…) 는 단축코드라 임베드 주소로 바꿀 수 없습니다. 그 링크를 브라우저에서\n` +
+      `    열면 주소창에 정본이 뜹니다 — https://perplz.com/sync/<해시> 를 적으세요.`;
+
+  problems.push(
+    `${file} — processUrl 이 임베드로 바뀌지 않는 형식입니다: ${value}\n` +
+      hint +
+      `\n    (그대로 두면 빌드는 통과하지만 작업 과정 영상이 안 뜨고 썸네일도 안 받아집니다.)`,
+  );
+}
+
 function findDuplicates(values: string[]): string[] {
   const seen = new Set<string>();
   const dupes = new Set<string>();
@@ -61,6 +102,7 @@ function findDuplicates(values: string[]): string[] {
  *   3. 참조가 양쪽에 다 걸려 있는지 (한쪽만 걸리면 실패)
  *   4. 같은 대상을 중복 참조하는지
  *   5. URL 필드가 자리표시자인지 (가짜 링크 배포 방지)
+ *   6. processUrl 의 퍼플즈 주소가 임베드로 바뀔 수 있는 형식인지
  */
 export function validateContent(): void {
   const services = getServices();
@@ -124,6 +166,8 @@ export function validateContent(): void {
     checkFakeUrl(videoFile, "externalUrl", video.externalUrl, problems);
     checkFakeUrl(videoFile, "processUrl", video.processUrl, problems);
     checkFakeUrl(videoFile, "thumbnail", video.thumbnail, problems);
+    // 6. 퍼플즈 주소가 임베드로 바뀔 수 있는 형식인지
+    checkPerplzProcessUrl(videoFile, video.processUrl, problems);
 
     for (const dupe of findDuplicates(video.relatedServices)) {
       problems.push(`videos/${video.slug}.mdx — relatedServices 에 "${dupe}" 가 중복 있습니다.`);

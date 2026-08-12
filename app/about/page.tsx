@@ -81,7 +81,19 @@ export default function AboutPage() {
             무엇보다 <strong className="text-ink font-bold">왜 그렇게 결정했는지가 안 남았습니다.</strong>{" "}
             회의를 녹화하고 내용을 추출하는 도구를 찾다가 마땅한 게 없어서 그냥 만들어봤는데,
             사서 쓰려던 것들보다 나았습니다. &ldquo;이게 되네?&rdquo; 그때 처음 이 말이 나왔습니다.
-            제일 마지막에 급하게 붙인 그 기능이 지금 퍼플즈의 간판이 됐습니다.
+            제일 마지막에 급하게 붙인 그 기능이 지금 퍼플즈의 간판이 됐습니다.{" "}
+            {/* 이 문단이 하는 말("결정이 안 남는다 → 만들었다 → 사서 쓰려던 것보다 나았다")의
+                증거. 링크를 punchline 앞에 끼우면 "이게 되네?" 가 죽으므로 문단 맨 끝에 둔다.
+                자랑이 아니라 실물이라는 걸 알리려고 잘된 회의 대신 그냥 회의 하나를 건다. */}
+            <a
+              href="https://perplz.com/s/EmYLdzGU"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-ink decoration-line-strong hover:decoration-ink underline underline-offset-4 transition-colors"
+            >
+              그걸로 남긴 회의 하나
+            </a>
+            를 그대로 열어뒀습니다 — 워크스페이스 기능을 넣을지 정하던 자리입니다.
           </p>
           <p>
             그러고 나서 제 채널을 만들기로 했습니다. 그런데 첫 영상을 찍는데 시선 처리가 어려워

@@ -77,26 +77,35 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
       {/* 제목이 이미지 아래에 있으면 큰 그림 하나를 지나야 여기가 뭔지 알 수 있다.
           이름을 먼저 대고, 그 다음에 그림을 보여준다. */}
+      {/* 작업 번호를 제목과 같은 선 위에 크게 세운다 — 목록 카드와 같은 처리라
+          `07` 을 누르고 들어온 사람이 `07` 에 도착한다 (components/service-card.tsx).
+          "혼자 만든 것"은 아래 INFO 의 '만든 사람' 줄이 대신 말한다. */}
       <header className="max-w-[46rem] pt-8">
-        {service.seq ? (
-          <p className="text-ink-faint font-mono text-sm tabular-nums">
-            #{service.seq} · 혼자 만든 것
-          </p>
-        ) : null}
-        <div className="mt-1 flex flex-wrap items-center gap-2.5">
-          <h1 className="text-[clamp(2rem,5vw,2.75rem)] leading-[1.15] font-extrabold tracking-[-0.03em]">
-            {service.title}
-          </h1>
-          {service.status === "soon" ? (
-            <span className="bg-surface-2 text-ink-faint rounded-full px-2.5 py-1 text-xs font-medium">
-              준비 중
+        <div className="flex items-baseline gap-4 sm:gap-5">
+          {service.seq ? (
+            <span
+              className="text-ink-faint shrink-0 font-mono text-[clamp(2rem,5vw,2.75rem)] leading-none font-bold tabular-nums"
+              aria-label={`작업 ${service.seq}번`}
+            >
+              {String(service.seq).padStart(2, "0")}
             </span>
           ) : null}
-          {service.team ? (
-            <span className="bg-paper-sky text-ink-soft rounded-full px-2.5 py-1 text-xs font-medium">
-              팀으로 만든 것
-            </span>
-          ) : null}
+          <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
+            <h1 className="text-[clamp(2rem,5vw,2.75rem)] leading-[1.15] font-extrabold tracking-[-0.03em]">
+              {service.title}
+            </h1>
+            {/* 상태 뱃지는 액션이 아니라서 알약을 쓰지 않는다 (DESIGN.md §6) */}
+            {service.status === "soon" ? (
+              <span className="bg-surface-2 text-ink-faint rounded-[5px] px-2 py-0.5 text-xs font-medium">
+                준비 중
+              </span>
+            ) : null}
+            {service.team ? (
+              <span className="bg-paper-sky text-ink-soft rounded-[5px] px-2 py-0.5 text-xs font-medium">
+                팀으로 만든 것
+              </span>
+            ) : null}
+          </div>
         </div>
         <p className="text-ink-soft mt-4 max-w-[46ch] text-lg text-pretty">{service.tagline}</p>
       </header>
@@ -130,9 +139,8 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             {service.status === "live" && service.url === "/" ? (
               <Link
                 href="/"
-                className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
+                className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
               >
-                <span aria-hidden="true">←</span>
                 처음으로 돌아가기
               </Link>
             ) : service.status === "live" && service.url ? (
@@ -157,10 +165,9 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                 href={service.url}
                 target="_blank"
                 rel="noopener"
-                className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
+                className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
               >
                 지금 써보기
-                <span aria-hidden="true">→</span>
               </a>
             ) : null}
 
@@ -169,10 +176,9 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                 href={service.github}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="border-line-strong text-ink hover:bg-surface-2 inline-flex items-center gap-2 rounded-full border px-6 py-3 text-[0.9375rem] font-medium transition-colors"
+                className="border-line-strong text-ink hover:bg-surface-2 inline-flex items-center rounded-full border px-6 py-3 text-[0.9375rem] font-medium transition-colors"
               >
                 소스코드 보기
-                <span aria-hidden="true">↗</span>
               </a>
             ) : null}
 
@@ -181,7 +187,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             <LikeButton
               kind="service"
               slug={service.slug}
-              className="border-line text-ink-faint hover:bg-surface-2 !gap-2 border !px-5 !py-3 !text-sm"
+              className="border-line text-ink-faint hover:bg-surface-2 !gap-2 border !px-5 !py-3 !text-sm !rounded-full"
             />
           </div>
 
@@ -262,9 +268,11 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                 <span className="text-ink-faint"> (첫 버전)</span>
               </MetaRow>
             ) : null}
-            {service.team ? (
-              <MetaRow label="만든 사람">팀 (혼자 만든 게 아닙니다)</MetaRow>
-            ) : null}
+            {/* 제목 옆의 큰 번호가 '몇 번째'만 말하므로 '혼자'는 여기서 말한다.
+                이 채널의 논지가 그것이라(CLAUDE.md 4번) 빠뜨릴 줄이 아니다. */}
+            <MetaRow label="만든 사람">
+              {service.team ? "팀 (혼자 만든 게 아닙니다)" : "혼자"}
+            </MetaRow>
             {service.url ? (
               <MetaRow label="주소">
                 <span className="font-mono text-sm">{service.url}</span>
@@ -280,7 +288,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                     <Link
                       key={tag}
                       href={`/services?tag=${encodeURIComponent(tag)}`}
-                      className="bg-surface-2 text-ink-soft hover:bg-line rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors"
+                      className="bg-surface-2 text-ink-soft hover:bg-line rounded-[6px] px-2 py-1 text-[11px] font-medium transition-colors"
                     >
                       {tag}
                     </Link>
@@ -324,7 +332,6 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                         className="text-ink-soft hover:text-ink text-sm underline decoration-[var(--color-line-strong)] underline-offset-4 transition-colors"
                       >
                         {ref.title}
-                        <span aria-hidden="true"> ↗</span>
                       </a>
                     </li>
                   ))}

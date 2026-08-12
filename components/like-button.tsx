@@ -209,7 +209,7 @@ export function LikeButton({
       aria-pressed={isLiked}
       aria-label={isLiked ? "좋아요 취소" : "좋아요"}
       title={isLiked ? "좋아요 취소" : "좋아요"}
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] transition-colors ${
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-[6px] px-2 py-1 text-[11px] transition-colors ${
         isLiked ? "text-acid-deep" : "text-ink-faint hover:text-ink-soft"
       } ${className}`}
     >

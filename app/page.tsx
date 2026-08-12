@@ -101,10 +101,9 @@ export default async function Home() {
                   href={link.href}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="bg-canvas text-ink hover:bg-surface-2 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors"
+                  className="bg-canvas text-ink hover:bg-surface-2 inline-flex items-center rounded-full px-5 py-2.5 text-sm font-medium transition-colors"
                 >
                   {link.label}
-                  <span aria-hidden="true">↗</span>
                 </a>
               ))}
             </div>
@@ -154,10 +153,9 @@ export default async function Home() {
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noreferrer noopener"
-              className="bg-ink text-canvas mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-85"
+              className="bg-ink text-canvas mt-8 inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-85"
             >
               인스타 DM으로 보내기
-              <span aria-hidden="true">↗</span>
             </a>
           </div>
         </div>
@@ -178,10 +176,9 @@ export default async function Home() {
           </div>
           <Link
             href={INTERNAL_LINKS.about}
-            className="border-line-strong text-ink hover:bg-surface-2 inline-flex shrink-0 items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-colors"
+            className="border-line-strong text-ink hover:bg-surface-2 inline-flex shrink-0 items-center rounded-full border px-5 py-2.5 text-sm font-medium transition-colors"
           >
             읽어보기
-            <span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>

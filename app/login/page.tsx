@@ -144,9 +144,9 @@ export default function LoginPage() {
             onClick={() => {
               window.location.href = readReturnTo();
             }}
-            className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
+            className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
           >
-            돌아가기 <span aria-hidden="true">→</span>
+            돌아가기
           </button>
           <button
             onClick={async () => {
@@ -233,7 +233,7 @@ export default function LoginPage() {
                 rel="noreferrer noopener"
                 className="underline underline-offset-4"
               >
-                퍼플즈 ↗
+                퍼플즈
               </a>
               를 쓰신다면 같은 닉네임으로 넣어주세요. 알아보기 좋아요.
             </span>

@@ -37,58 +37,80 @@ export function ServiceCard({
           eager={eager}
         />
 
-        <div className="px-3 pt-5">
-          <div className="flex items-center gap-2">
-            {/* 인스타 썸네일의 `#5` 와 같은 번호. 목록이 60개가 돼도 "몇 번째"가
-                보이면 아카이브가 아니라 쌓여가는 연재물로 읽힌다. */}
-            {service.seq ? (
-              <span className="text-ink-faint shrink-0 font-mono text-sm tabular-nums">
-                #{service.seq}
-              </span>
-            ) : null}
-            <h3 className="truncate text-[1.0625rem] font-bold tracking-[-0.01em]">
-              {service.title}
-            </h3>
-            {service.status === "soon" ? (
-              <span className="bg-surface-2 text-ink-faint shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium">
-                준비 중
-              </span>
-            ) : null}
-            {service.team ? (
-              <span className="bg-paper-sky text-ink-soft shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium">
-                팀
-              </span>
-            ) : null}
-          </div>
+        {/*
+          작업 번호를 제목 왼쪽에 큰 고정폭으로 세운다.
 
-          <p className="text-ink-soft mt-2 line-clamp-2 text-sm leading-relaxed">
-            {service.tagline}
-          </p>
+          인스타 썸네일에 박는 `#5` 와 같은 번호다. 회색 11px 로 두면 그냥
+          부가정보인데, 이 크기로 세우면 목록이 카드 모음이 아니라 **번호가
+          붙어 쌓여가는 연재물**로 읽힌다. 60개가 됐을 때 남는 건 개별 카드가
+          아니라 이 번호들이 만드는 세로줄이다.
+
+          두 자리로 채우는 이유(`07`)는 그래야 열이 흔들리지 않아서다 —
+          한 자리와 두 자리가 섞이면 제목의 왼쪽 끝이 카드마다 어긋난다.
+          items-baseline 이라 큰 숫자와 제목이 같은 선 위에 앉는다.
+        */}
+        <div className="flex items-baseline gap-3 px-3 pt-5">
+          {service.seq ? (
+            <span
+              className="text-ink-faint w-8 shrink-0 font-mono text-[1.5rem] leading-none font-bold tabular-nums"
+              aria-label={`작업 ${service.seq}번`}
+            >
+              {String(service.seq).padStart(2, "0")}
+            </span>
+          ) : null}
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <h3 className="truncate text-[1.0625rem] font-bold tracking-[-0.01em]">
+                {service.title}
+              </h3>
+              {/* 상태 뱃지는 액션이 아니라서 알약을 쓰지 않는다 (DESIGN.md §6) */}
+              {service.status === "soon" ? (
+                <span className="bg-surface-2 text-ink-faint shrink-0 rounded-[5px] px-1.5 py-0.5 text-[11px] font-medium">
+                  준비 중
+                </span>
+              ) : null}
+              {service.team ? (
+                <span className="bg-paper-sky text-ink-soft shrink-0 rounded-[5px] px-1.5 py-0.5 text-[11px] font-medium">
+                  팀
+                </span>
+              ) : null}
+            </div>
+
+            <p className="text-ink-soft mt-2 line-clamp-2 text-sm leading-relaxed">
+              {service.tagline}
+            </p>
+          </div>
         </div>
       </Link>
 
       {/* 태그 줄과 좋아요를 한 줄에 둔다. 좋아요를 위해 줄을 하나 더 만들면
-          카드가 60장일 때 목록 전체가 그만큼 길어진다. */}
-      <div className="flex items-center justify-between gap-2 px-3 pt-4 pb-3">
-        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-          {/* 걸린 시간을 태그보다 앞에 세운다. 목록에서 "나도 해볼 만한가"를
-              판단하게 만드는 건 태그가 아니라 이 숫자다. */}
+          카드가 60장일 때 목록 전체가 그만큼 길어진다.
+
+          태그에 칩을 씌우지 않는다 (DESIGN.md §6) — 카드 하나에 상자가 서너 개면
+          그리드 전체가 알갱이로 뒤덮이고, 정작 못 누르는 라벨이라 눌러보게 된다.
+          걸린 시간을 맨 앞에 세우는 건 그대로다: 목록에서 "나도 해볼 만한가"를
+          판단하게 만드는 건 태그가 아니라 이 숫자다. */}
+      <div className="flex items-center justify-between gap-3 px-3 pt-4 pb-2">
+        <p className="text-ink-faint flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[11px]">
           {service.buildTime ? (
-            <span className="text-ink-soft border-line rounded-full border px-2.5 py-1 font-mono text-[11px] tabular-nums">
+            <span className="text-ink-soft font-mono font-medium tabular-nums">
               {service.buildTime}
             </span>
           ) : null}
-          {service.tags.map((tag) => (
-            <span
-              key={tag}
-              className="bg-surface-2 text-ink-faint rounded-full px-2.5 py-1 text-[11px] font-medium"
-            >
+          {service.tags.map((tag, i) => (
+            <span key={tag} className="flex items-center gap-x-2">
+              {i > 0 || service.buildTime ? (
+                <span aria-hidden="true" className="text-line-strong">
+                  ·
+                </span>
+              ) : null}
               {tag}
             </span>
           ))}
-        </div>
+        </p>
 
-        <LikeButton kind="service" slug={service.slug} initialCount={likes} className="-mr-1.5" />
+        <LikeButton kind="service" slug={service.slug} initialCount={likes} className="-mr-1" />
       </div>
     </div>
   );

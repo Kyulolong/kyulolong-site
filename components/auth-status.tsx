@@ -47,7 +47,7 @@ export function AuthStatus() {
   return (
     <Link
       href={shown.href}
-      className="text-ink-soft hover:bg-surface-2 hover:text-ink ml-1 max-w-[9rem] truncate rounded-full px-3.5 py-2 text-sm font-medium transition-colors"
+      className="text-ink-faint hover:text-ink max-w-[9rem] truncate text-sm font-medium transition-colors"
     >
       {shown.label}
     </Link>

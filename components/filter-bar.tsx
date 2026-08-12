@@ -46,6 +46,9 @@ interface FilterBarProps {
  * 선택된 칩에 형광을 쓰지 않는다 (DESIGN.md §2). 태그가 열 개인 화면에서
  * 선택 칩을 형광으로 칠하면 형광이 열 개가 될 수 있는 구조가 된다.
  * 선택됨 = ink 배경 + canvas 글씨.
+ *
+ * 알약이 아니라 각진 칩이다 (DESIGN.md §6). 알약은 버튼의 모양이고, 열 개가
+ * 나란히 선 이 줄까지 알약이면 화면에서 "누르는 큰 것"이 무엇인지 흐려진다.
  */
 export function FilterBar({ label, options }: FilterBarProps) {
   return (
@@ -57,8 +60,8 @@ export function FilterBar({ label, options }: FilterBarProps) {
           aria-current={option.active ? "true" : undefined}
           className={
             option.active
-              ? "bg-ink text-canvas inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium"
-              : "bg-surface-2 text-ink-soft hover:bg-line inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors"
+              ? "bg-ink text-canvas inline-flex items-center gap-1.5 rounded-[6px] px-3 py-1.5 text-[13px] font-medium"
+              : "bg-surface-2 text-ink-soft hover:bg-line inline-flex items-center gap-1.5 rounded-[6px] px-3 py-1.5 text-[13px] font-medium transition-colors"
           }
         >
           {option.label}

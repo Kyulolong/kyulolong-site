@@ -137,10 +137,9 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
                   href={video.externalUrl}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-ink-faint hover:text-ink inline-flex items-center gap-1.5 text-sm transition-colors"
+                  className="text-ink-faint hover:text-ink text-sm underline decoration-[var(--color-line-strong)] underline-offset-4 transition-colors"
                 >
                   원본에서 보기
-                  <span aria-hidden="true">↗</span>
                 </a>
               </p>
             ) : null}
@@ -154,9 +153,8 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
             className="bg-paper-sky hover:shadow-lift flex flex-col items-center gap-5 rounded-[24px] px-8 py-16 text-center transition-shadow"
           >
             <span className="text-ink-soft text-sm">이 영상은 다른 곳에 올라가 있어요</span>
-            <span className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors">
+            <span className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors">
               영상 보러 가기
-              <span aria-hidden="true">↗</span>
             </span>
           </a>
         ) : null}
@@ -167,7 +165,7 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
           <LikeButton
             kind="video"
             slug={video.slug}
-            className="border-line text-ink-faint hover:bg-surface-2 !gap-2 border !px-4 !py-2 !text-[13px]"
+            className="border-line text-ink-faint hover:bg-surface-2 !gap-2 border !px-4 !py-2 !text-[13px] !rounded-full"
           />
         </p>
 
@@ -212,10 +210,9 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
                 href={video.processUrl}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="text-ink-faint hover:text-ink inline-flex items-center gap-1.5 text-sm transition-colors"
+                className="text-ink-faint hover:text-ink text-sm underline decoration-[var(--color-line-strong)] underline-offset-4 transition-colors"
               >
                 퍼플즈에서 보기
-                <span aria-hidden="true">↗</span>
               </a>
             </p>
           </section>

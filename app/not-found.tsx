@@ -17,14 +17,13 @@ export default function NotFound() {
       <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
         <Link
           href="/services"
-          className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
+          className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
         >
           만든 서비스 보기
-          <span aria-hidden="true">→</span>
         </Link>
         <Link
           href="/"
-          className="border-line-strong text-ink hover:bg-surface-2 inline-flex items-center gap-2 rounded-full border px-6 py-3 text-[0.9375rem] font-medium transition-colors"
+          className="border-line-strong text-ink hover:bg-surface-2 inline-flex items-center rounded-full border px-6 py-3 text-[0.9375rem] font-medium transition-colors"
         >
           첫 화면으로
         </Link>

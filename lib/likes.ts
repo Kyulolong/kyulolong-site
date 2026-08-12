@@ -86,21 +86,29 @@ export async function getLikeCounts(revalidate?: number): Promise<LikeCounts> {
  * 좋아요를 못 읽었을 때(Supabase 다운)는 counts 가 비어서 전부 동수가 되고,
  * 결과적으로 지금과 같은 기본 정렬이 된다 — 순서가 이상해지는 게 아니라
  * 원래 순서로 돌아간다.
+ *
+ * @param canPin 첫 자리에 설 자격. 목록에서 빼는 게 아니라 **고정석에만** 거는
+ *   조건이라, 자격이 없는 것도 뒤쪽 자리에는 좋아요순으로 그대로 들어온다.
  */
 function newestThenLiked<T extends { slug: string; publishedAt: string }>(
   items: T[],
   counts: Record<string, number>,
+  canPin: (item: T) => boolean = () => true,
 ): T[] {
   if (items.length === 0) return [];
 
-  const newest = items.reduce((a, b) => (b.publishedAt.localeCompare(a.publishedAt) > 0 ? b : a));
+  const pinnable = items.filter(canPin);
+  // 세울 게 하나도 없으면(전부 준비 중) 고정석을 비우고 통째로 좋아요순으로 간다
+  const newest = pinnable.length
+    ? pinnable.reduce((a, b) => (b.publishedAt.localeCompare(a.publishedAt) > 0 ? b : a))
+    : null;
 
   const rest = items
-    .filter((item) => item.slug !== newest.slug)
+    .filter((item) => item.slug !== newest?.slug)
     // 들어온 순서를 tiebreak 로 쓰려면 안정 정렬이어야 한다. Array#sort 는 안정이다.
     .sort((a, b) => (counts[b.slug] ?? 0) - (counts[a.slug] ?? 0));
 
-  return [newest, ...rest];
+  return newest ? [newest, ...rest] : rest;
 }
 
 export function orderServicesForHome(
@@ -116,14 +124,27 @@ export function orderServicesForHome(
    * 않으면 '최신작 고정' 자리를 매일 팀 프로젝트가 차지하게 된다.
    * 목록에서 빠지는 건 아니고 /services 아래쪽 섹션에 그대로 있다.
    *
-   * 이 사이트 자신(url 이 "/")도 세우지 않는다. 첫 자리가 최신작 고정이라
-   * 올린 날 대문의 첫 카드가 대문 자신을 가리키게 되는데, "다음에 뭘 볼까"를
-   * 고르는 자리에 지금 보고 있는 페이지를 세울 이유가 없다. 이것도 목록에서
-   * 빠지는 게 아니라 /services 에 그대로 있다.
+   * ⚠️ **아직 못 여는 것(status: soon)은 첫 자리에 세우지 않는다.**
+   * 그 자리가 말하는 건 "이번 주에 올린 것"인데, 준비 중인 카드는 눌러 들어가도
+   * "아직 열어드릴 수 있는 주소가 없어요"로 끝난다. 대문에서 가장 먼저 닿는
+   * 카드가 막다른 길이면 바로 위 섹션의 "전부 로그인 없이 바로 열립니다"가
+   * 첫 클릭에서 깨진다. 날짜만 보던 때 실제로 밟았다 — 트릭(2026-08-14, soon)이
+   * 주소가 없는 채로 대문 첫 카드를 차지했다.
+   *
+   * 목록에서 빼는 게 아니라 **고정석에서만** 뺀다. 준비 중인 것도 뒷자리에는
+   * 좋아요순으로 들어온다. 다음에 뭐가 오는지는 대문에 보일 만한 정보다.
+   *
+   * 이 사이트 자신(url 이 "/")은 예전에 여기서 걸렀는데 지금은 세운다.
+   * 카드가 가리키는 곳이 대문이 아니라 소개 페이지(/services/kyulolong-site)라
+   * 지금 보고 있는 페이지로 돌려보내는 게 아니고, 거기에는 이 레포의
+   * 프롬프트·소스·걸린 시간이 있다 — 아직 안 본 문서다. 이 채널의 논지가
+   * "가져다 마음껏 만들어라"라(CLAUDE.md 4번) 채널 자신의 소스를 여는 편이
+   * 그 논지에 더 맞는다.
    */
   return newestThenLiked(
-    services.filter((s) => !s.team && s.url !== "/"),
+    services.filter((s) => !s.team),
     counts,
+    (s) => s.status === "live",
   );
 }
 

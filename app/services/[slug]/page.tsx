@@ -142,9 +142,21 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                *   1. <Link> 는 trailingSlash:false 규칙대로 href 의 끝 슬래시를 떼어낸다.
                *      `/navigator/` 가 `/navigator` 가 되면 그 앱의 상대경로 자산이 깨진다.
                *   2. prefetch 가 RSC 페이로드를 기대하고 남의 앱 HTML 을 받아온다 — 낭비다.
+               *
+               * 새 창으로 연다. 소개 페이지는 읽던 자리로 돌아올 것이 남아 있는 문서라
+               * (개념·프롬프트·연결된 영상) 같은 탭에서 앱으로 넘어가면 뒤로가기를
+               * 눌러야 그게 돌아온다. 게다가 목적지가 별개 앱이라 뒤로가기가 앱 내부
+               * 히스토리에 먼저 걸리는 일이 있다.
+               *
+               * rel 에 noreferrer 는 넣지 않는다 — 소스코드 버튼과 다른 점이다.
+               * 목적지가 같은 오리진의 내 앱이라 리퍼러를 지우면 그 앱에서
+               * "홈페이지를 타고 들어왔다"를 셀 수 없게 된다. noopener 만으로
+               * window.opener 는 이미 끊긴다.
                */
               <a
                 href={service.url}
+                target="_blank"
+                rel="noopener"
                 className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center gap-2 rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors"
               >
                 지금 써보기

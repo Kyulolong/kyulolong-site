@@ -56,6 +56,20 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [OG_IMAGE.url],
   },
+  /**
+   * 검색엔진 소유 확인. `other` 로 넣는 이유는 Next 가 이름을 아는 것이
+   * google·yahoo·yandex·me 넷뿐이라 네이버는 직접 적어야 하기 때문이다.
+   *
+   * 루트에 두면 모든 페이지의 <head> 에 실린다. 네이버·구글 다 루트 하나만
+   * 읽지만, 확인용 태그를 특정 페이지에만 두면 그 페이지가 지워질 때
+   * 소유 확인이 조용히 풀린다. 12번의 robots·sitemap 과 같은 이유로 여기 둔다.
+   */
+  verification: {
+    other: {
+      "naver-site-verification":
+        "2ea81debcd5bc6b8389fd68b612c1e009959092f",
+    },
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

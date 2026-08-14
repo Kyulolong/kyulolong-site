@@ -8,7 +8,7 @@ import { INSTAGRAM_URL, INTERNAL_LINKS, SOCIAL_LINKS } from "@/lib/site-links";
 export const metadata: Metadata = pageMetadata({
   title: "소개",
   description:
-    "인사담당자가 코드 한 줄 못 짜다가 AI한테 시켜서 매주 하나씩 만들기까지. 어떻게 여기까지 왔는지, 얼마가 드는지 적어뒀습니다.",
+    "인사담당자가 코드 한 줄 못 짜다가 AI한테 시켜서 매주 하나씩 만들기까지. 어떻게 여기까지 왔는지 적어뒀습니다.",
   path: "/about",
 });
 
@@ -19,7 +19,7 @@ export default function AboutPage() {
         <PageHeader
           eyebrow="about"
           title="이게 되네?"
-          description="코드 한 줄 못 짰습니다. 지금은 매주 서비스 하나씩 만듭니다. 드는 건 AI 구독 하나와 서버비 월 2만원이 전부입니다."
+          description="코드 한 줄 못 짰습니다. 지금은 매주 새로운 서비스를 만듭니다."
         />
 
         {/*
@@ -30,7 +30,7 @@ export default function AboutPage() {
           넘어오는 채널인데 홈페이지에는 얼굴이 없으면 두 채널이 남처럼 갈린다.
 
           캡션이 사진을 아래 본문·서비스 목록과 묶는다. 풍경 사진 한 장은
-          장식이지만, "이 휴가가 저 앱이 됐다"가 붙는 순간 증거가 된다.
+          장식이지만, "이 한마디가 저 앱이 됐다"가 붙는 순간 증거가 된다.
         */}
         <figure className="mb-14">
           <div className="bg-surface-2 relative aspect-[3/2] w-full overflow-hidden rounded-[24px]">
@@ -47,7 +47,7 @@ export default function AboutPage() {
             />
           </div>
           <figcaption className="text-ink-faint mt-3.5 text-sm">
-            광안대교 아래. 아이와 다녀온 첫 휴가에서 아내가 &ldquo;휴가 다녀온 것 같지가 않다&rdquo;고
+            광안대교 아래. 아이와 다녀온 첫 휴가에서 아내가 &ldquo;조용히 바다소리를 듣고 싶어요&rdquo;라고
             했고, 그 말이{" "}
             <Link
               href="/services/wave-sound"
@@ -60,31 +60,55 @@ export default function AboutPage() {
         </figure>
 
         <div className="text-ink-soft space-y-6 pb-4 text-[1.0625rem]">
-          {/* 경력은 '일찍, 짧게, 자랑 없이'. 나중에 알려져서 배신감이 되는 것보다
-              먼저 말하고 그 대신 못 하는 것도 같이 적는 편이 낫다. */}
+          {/* 문을 여는 숫자. "나도 답이 없다"가 이 페이지의 톤이라 통계 → 내 위치 →
+              모르겠다 순으로 연다. 출처 링크는 지우지 않는다 — references 를 원문
+              그대로 적는 것과 같은 이유다. (원문은 Z세대 전망치: "18 jobs across
+              six different careers", Google Career Dreamer 발표문) */}
           <p>
-            규로롱입니다. 삼성SDS에서 5년 동안 글로벌 인사담당자로 근무했습니다. 
-            해외 채용과 37개국이 사용하는 인사 시스템을 기획하고 운영했는데, 
-            <strong className="text-ink font-bold"> 코드는 한 줄도 못 짰습니다.</strong> 기획서를
-            넘기면 개발팀이 만들고, 저는 그게 어떻게 만들어지는지 몰랐습니다. 이후 주재원 통합 플랫폼을 만드는 스타트업에 합류했지만 여전히 개발은 못 했습니다.
-            AI가 코드를 짜주는 시대가 왔습니다. 이제는 제가 직접 서비스를 만들 수 있습니다.
+            <a
+              href="https://blog.google/company-news/outreach-and-initiatives/grow-with-google/a-new-experiment-to-help-people-explore-more-career-possibilities/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-ink decoration-line-strong hover:decoration-ink underline underline-offset-4 transition-colors"
+            >
+              평생 6번의 커리어, 18개의 직업
+            </a>
+            . 지금 세대가 겪게 될 숫자입니다. 저는 일곱 개쯤 지났습니다.{" "}
+            <strong className="text-ink font-bold">
+              남은 열한 개가 무엇일지, 저도 모릅니다.
+            </strong>
+          </p>
+          {/* 경력은 짧게, 자랑 없이 — 못 했던 것(코드)을 같이 적는다. */}
+          <p>
+            사람 냄새나는 서비스를, 10년 경력 인사담당자의 시선으로 만듭니다.
+            해외인사팀에서 5년, 천 명 단위의 채용과 37개국이 사용하는 GHR 시스템
+            개발에 참여했지만 <strong className="text-ink font-bold">코드는 한 줄도 못 짰습니다.</strong>{" "}
+            기획서를 넘기면 개발팀이 만들었고, 저는 그게 어떻게 만들어지는지 몰랐습니다.
+            그 뒤로 플랫폼 기획, 영업, 개발, 창업까지 — 한 우물을 판 적이 없습니다.
+            깊게 파는 분들은 이미 충분하고, 저는 다양한 걸 적용하는 쪽이 재밌었습니다.
+            한 분야의 최고는 아니지만, 옮겨 다닌 시간이 전부 재료가 되더군요.
           </p>
           <p>
-            지금은 팀임팩트라는 회사를 창업해 <strong className="text-ink font-bold">퍼플즈</strong>를
-            만들고 있습니다. 같이 일할 사람을 찾는 비용을 0에 가깝게 만들어보려는 서비스입니다.
+            지금은{" "}
+            <a
+              href="https://perplz.com"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="decoration-line-strong hover:decoration-ink underline underline-offset-4 transition-colors"
+            >
+              <strong className="text-ink font-bold">퍼플즈</strong>
+            </a>
+            를 만들고 있습니다. 같이 일할 사람을 찾는 비용을 0에 가깝게 만들어보려는 서비스입니다.
             제가 동료를 찾는 데 3년을 썼거든요. 개발에서 막히는 건 이제 AI가 거의 다 풀어주는데,
             같이 할 사람을 찾는 건 아무도 안 풀어주더군요.
-            (퍼플즈는 팀으로 만듭니다. 여기 올린 나머지는 전부 혼자 만든 것들입니다.)
           </p>
+          {/* 링크는 자랑이 아니라 실물 — 잘된 회의 대신 그냥 회의 하나를 건다.
+              punchline("이게 되네?") 앞에 끼우면 그 말이 죽으므로 문단 맨 끝에 둔다. */}
           <p>
-            퍼플즈를 만들면서 회의가 정말 많았습니다. 회의록 쓰고 할 일 정리하는 데 시간이 다 갔고,
-            무엇보다 <strong className="text-ink font-bold">왜 그렇게 결정했는지가 안 남았습니다.</strong>{" "}
-            회의를 녹화하고 내용을 추출하는 도구를 찾다가 마땅한 게 없어서 그냥 만들어봤는데,
-            사서 쓰려던 것들보다 나았습니다. &ldquo;이게 되네?&rdquo; 그때 처음 이 말이 나왔습니다.
-            제일 마지막에 급하게 붙인 그 기능이 지금 퍼플즈의 간판이 됐습니다.{" "}
-            {/* 이 문단이 하는 말("결정이 안 남는다 → 만들었다 → 사서 쓰려던 것보다 나았다")의
-                증거. 링크를 punchline 앞에 끼우면 "이게 되네?" 가 죽으므로 문단 맨 끝에 둔다.
-                자랑이 아니라 실물이라는 걸 알리려고 잘된 회의 대신 그냥 회의 하나를 건다. */}
+            퍼플즈를 만드는 회의에서 왜 그렇게 결정했는지가 안 남길래 녹화 도구를
+            만들었습니다. 시중 서비스보다 나았습니다. &ldquo;이게 되네?&rdquo; 그 말이
+            처음 나온 날입니다. 제일 마지막에 급하게 붙인 그 기능이 지금 퍼플즈의 간판이
+            됐고,{" "}
             <a
               href="https://perplz.com/s/EmYLdzGU"
               target="_blank"
@@ -93,167 +117,35 @@ export default function AboutPage() {
             >
               그걸로 남긴 회의 하나
             </a>
-            를 그대로 열어뒀습니다 — 워크스페이스 기능을 넣을지 정하던 자리입니다.
-          </p>
-          {/* "왜 이걸 하는지"의 본체. 예전엔 맨 아래 「앞으로」 섹션에 추상어로 적혀 있어
-              훑는 사람에게 닿지 않았다. 두 가지를 지킨다 — 남들이 막힌다고 진단하는 대신
-              나도 답이 없다고 말할 것, 동기(브랜딩)를 미화하지 않고 먼저 말할 것.
-              경력을 '일찍, 짧게, 자랑 없이' 적은 것과 같은 이유다.
-              강의가 아니라 물건을 만드는 이유도 여기 있다 — 아래 「여기서 안 하는 것」의
-              "강의도 안 팝니다"는 선언이 아니라 이 문단들의 결론이다. */}
-          <p>
-            &ldquo;이게 되네?&rdquo; 뒤로 질문 하나가 머리에서 안 나갑니다. 저 같은
-            비전공자도 상상만 하면 구현이 되는 시대가 왔습니다. 그런데 하드스킬을 AI가
-            이만큼 해주면, 사람에게 남는 &lsquo;일&rsquo;은 뭘까요. 커리어는 이제 뭘로
-            쌓일까요.{" "}
-            <strong className="text-ink font-bold">경력은 10년차가 됐는데, 모르겠습니다.</strong>{" "}
-            답을 아는 사람도 아직 못 봤습니다.
+            를 그대로 열어뒀습니다.
           </p>
           <p>
-            이 채널은 그 질문을 붙들고 시작했습니다 — 라고 적으면 근사하겠지만,{" "}
-            <strong className="text-ink font-bold">솔직히 절반은 저를 알리려고 만들었습니다.</strong>{" "}
-            퍼플즈 만드는 사람이 어떤 사람인지 보여줄 자리가 필요했고, 이왕이면 퍼플즈도
-            같이 알려지면 좋고요.
+            그 감탄의 경험을 공유하고 싶어 SNS를 시작했습니다. 첫 영상은 시선 처리가 안 돼
+            테이크를 15번 갔고, 그날 밤 프롬프터를 만들었습니다. 지금은 앱스토어에 있고,
+            아나운서 준비하시는 분들이 연습 촬영에 쓰고 있습니다.{" "}
+            <strong className="text-ink font-bold">
+              다양한 사람들이 제가 만든 걸 쓰고 있다는 게 제일 설레고 좋습니다.
+            </strong>
           </p>
           <p>
-            다만 뭘로 알려질지는 고를 수 있었습니다. AI가 나온 뒤로 강의 영상은
-            쏟아지는데, 막상 생활에 도움이 되는 물건은 잘 안 보였습니다.{" "}
-            <strong className="text-ink font-bold">그래서 직접 만들어서 쓰기로 했습니다.</strong>{" "}
-            가르치는 대신 매주 하나씩 만들며, 걸린 시간과 시킨 말과 소스코드까지 전부
-            열어둡니다. 답이 나오면, 그것도 여기에 올리겠습니다.
+            MVP(초기 버전) 만드는 데 한두 시간, AI 구독과 서버비는 월 3만원 들었습니다. 소스코드와
+            프롬프트는 전부 공유합니다.{" "}
+            <strong className="text-ink font-bold">빈 화면 앞에서 시작하지 마세요.</strong>{" "}
+            하나 집어다 취향에 따라 바꾸는 게 훨씬 빠릅니다. 직접 만든 게 눈앞에서 돌아갈
+            때의 즐거움을 겪어보시면 좋겠습니다.
           </p>
+          {/* "강의도 안 팝니다"에 이유를 붙인다 — 강의는 이미 쏟아지니 나는 물건을
+              만들어 쓴다. 선언이 아니라 결론으로 읽히게. */}
           <p>
-            그렇게 시작한 채널은 첫 영상부터 막혔습니다. 시선 처리가 어려워
-            테이크를 15번 갔습니다. 대본을 보면 눈이 자꾸 내려가고, 안 보면 말이 막혔습니다.
-            그날 밤에 프롬프터를 만들었습니다. 지금은 앱스토어에 올라가 있고,
-            아나운서·쇼호스트 준비하시는 분들 단톡방에서 연습 촬영할 때 잘 쓰고 있다는 얘기를 들었습니다.
-            제가 모르는 사람이 제가 만든 걸 쓰고 있다는 게, 아직도 제일 이상하고 좋습니다.
-          </p>
-          <p>
-            코드는 이제 좀 읽습니다. 얼마 전까지는 못 읽어서 에러가 뜨면 통째로 복사해
-            AI한테 붙여넣었습니다. 그렇게 몇 달 하니까 눈에 익더군요.
-            <strong className="text-ink font-bold"> 순서가 반대였습니다.</strong> 배우고 나서 만든 게 아니라,
-            만들다 보니 조금씩 읽히기 시작했습니다.
+            수익 얘기는 안 합니다. 강의도 안 팝니다. AI 강의는 이미 쏟아지는데 생활에
+            도움이 되는 서비스는 잘 안 보여서, 직접 만들고 그 과정을
+            공유합니다. 더 많은 과정이 궁금하면 퍼플즈에 놀러와 주세요.
           </p>
           <p className="text-ink-faint text-[0.9375rem]">
-            채널 이름은 &lsquo;뾰로롱&rsquo;에서 왔습니다. 될 리 없다고 생각한 게 그냥 되어버릴 때
-            나는 소리 같아서요.
+            채널 이름은 &lsquo;뾰로롱&rsquo;에서 왔습니다. 될 리 없다고 생각한 게
+            되어버릴 때 나는 소리 같아서요.
           </p>
         </div>
-
-        {/* 이 사이트가 취준생·주니어에게 하고 싶은 말의 본체. 규칙보다 위에 둔다. */}
-        <section className="bg-paper-sand mt-14 rounded-[28px] px-8 py-12 sm:px-12">
-          <h2 className="text-2xl font-bold tracking-[-0.02em]">
-            이제 어려운 건 만드는 일이 아닙니다
-          </h2>
-          <div className="text-ink-soft mt-6 space-y-5 text-[1.0625rem]">
-            <p>
-              코드는 AI가 짜줍니다. 그래서 남는 건{" "}
-              <strong className="text-ink font-bold">뭘 만들지 정하는 일</strong>인데, 이건 아직
-              아무도 대신 해주지 않습니다. 경력이 몇 년인지도 별로 상관이 없습니다.
-              불편한 걸 알아채는 눈은 오래 다닌 사람이 더 밝지도 않더군요.
-            </p>
-            <p>
-              그래서 저는 이렇게 시작합니다.
-            </p>
-            <ol className="text-ink-soft ml-1 space-y-3">
-              <li>
-                <strong className="text-ink font-bold">1.</strong> 주변 사람 또는 내가 불편해했던 걸 쭉 적는다.
-              </li>
-              <li>
-                <strong className="text-ink font-bold">2.</strong> 말이 안 되는 엉뚱한 생각도 같이 적는다. 거르지 않는다.
-              </li>
-              <li>
-                <strong className="text-ink font-bold">3.</strong> 그중에 소프트웨어로 풀 만한 게 있는지 본다.
-              </li>
-              <li>
-                <strong className="text-ink font-bold">4.</strong> 무료 AI한테 &ldquo;너라면 이거 어떻게 풀래?&rdquo;라고 물어본다.
-              </li>
-            </ol>
-            <p>
-              여기 올린 것들은 소스코드와 만들 때 쓴 프롬프트를 같이 열어뒀습니다.
-              <strong className="text-ink font-bold"> 빈 화면 앞에서 시작하지 마세요.</strong> 하나 집어다
-              바꾸는 게 처음부터 짜는 것보다 훨씬 빠릅니다.
-            </p>
-          </div>
-        </section>
-
-        <section className="mt-14">
-          <h2 className="text-2xl font-bold tracking-[-0.02em]">얼마나 드나</h2>
-          <dl className="mt-6 space-y-5">
-            <div>
-              <dt className="font-bold">한두 시간</dt>
-              <dd className="text-ink-soft mt-1">
-                하나 만드는 데 걸리는 시간입니다. 제일 오래 걸린 건 코딩이 아니라 초기 세팅이었습니다 —
-                깃허브 연결하고 AI 붙이는 데 하루종일 걸리기도 했습니다. 그건 한 번만 하면 됩니다.
-                {/* 검색어를 그대로 적는다. "유튜브 보고 따라하면 된다" 까지만 말하면 뭘 검색해야
-                    할지를 몰라서 실행이 안 된다 — references 를 원문 제목 그대로 적는 것과 같은
-                    이유다. 세팅을 여기서 가르치지 않는 건 "저는 가르치는 사람이 아닙니다"(/videos)
-                    를 지키는 것이기도 하다. */}
-                방법은 여기 적지 않겠습니다. 유튜브에 &ldquo;깃허브 초기 세팅&rdquo;,{" "}
-                &ldquo;클로드 코드 설치&rdquo; 정도만 검색해도 저보다 훨씬 잘 가르치는 분들
-                영상이 많습니다.
-              </dd>
-            </div>
-            <div>
-              <dt className="font-bold">Claude Code Pro 하나</dt>
-              <dd className="text-ink-soft mt-1">
-                저는 쓰다 보니 사용량이 늘어서 Max까지 왔는데, 여기 올린 것들은 전부
-                Pro 사용량 안에서 만들어졌습니다. 시작하는 데 Max는 필요 없습니다.
-              </dd>
-            </div>
-            <div>
-              <dt className="font-bold">월 2만원</dt>
-              <dd className="text-ink-soft mt-1">
-                서버비입니다. Contabo를 씁니다. 여기 있는 걸 전부 한 대에 올려두고 쓰는 값입니다.
-              </dd>
-            </div>
-          </dl>
-        </section>
-
-        <section className="bg-paper-lime mt-14 rounded-[28px] px-8 py-12 sm:px-12">
-          <h2 className="text-2xl font-bold tracking-[-0.02em]">이 사이트의 규칙 세 가지</h2>
-          <ol className="mt-8 space-y-7">
-            <li>
-              <h3 className="font-bold">1. 로그인 없이 전부 열린다</h3>
-              <p className="text-ink-soft mt-2">
-                가입해야 볼 수 있는 건 하나도 없습니다. 편의가 아니라 이 사이트의 논지입니다.
-                직접 써보지 않으면 &lsquo;만드는 과정&rsquo;은 아직 끝나지 않았습니다.
-              </p>
-            </li>
-            <li>
-              <h3 className="font-bold">2. 소스코드와 프롬프트를 같이 연다</h3>
-              <p className="text-ink-soft mt-2">
-                결과물만 보여주면 자랑처럼 끝납니다. 어떻게 시켰는지가
-                사실 더 쓸모 있는 정보라서 프롬프트를 같이 둡니다. 가져다 마음껏 쓰셔도 됩니다.
-              </p>
-            </li>
-            <li>
-              <h3 className="font-bold">3. 요청받아 만든다</h3>
-              <p className="text-ink-soft mt-2">
-                만들어보고 싶은 게 있으면 인스타 DM으로 보내주세요. 기획서일 필요 없고
-                한 줄이면 됩니다. 만들 만하면 만들고 과정을 그대로 올립니다.
-                혼자 짜내는 것보다 이쪽이 훨씬 나은 게 나오더군요.
-              </p>
-            </li>
-          </ol>
-          <a
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="bg-ink text-canvas mt-8 inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-85"
-          >
-            아이디어 보내기
-          </a>
-        </section>
-
-        <section className="mt-14">
-          <h2 className="text-2xl font-bold tracking-[-0.02em]">여기서 안 하는 것</h2>
-          <p className="text-ink-soft mt-4 text-[1.0625rem]">
-            수익 얘기는 안 합니다. 강의도 안 팝니다.
-            만든 것과 만든 방법, 그리고 저의 생각을 올립니다.
-          </p>
-        </section>
 
         <section className="mt-14 pb-4">
           <h2 className="text-xl font-bold tracking-[-0.02em]">어디서 볼 수 있나</h2>
@@ -265,6 +157,20 @@ export default function AboutPage() {
           <p className="text-ink-faint mt-2 text-[0.9375rem]">
             재밌는 영상은 인스타에, 코드는 깃허브에, 작업 과정은
             퍼플즈 제 프로필에 그대로 쌓입니다.
+          </p>
+          {/* 규칙 박스가 빠지면서 "요청받아 만든다"의 창구도 같이 사라졌다.
+              이 채널의 유일한 쌍방향 장치라 한 줄로 남긴다. */}
+          <p className="text-ink-soft mt-3">
+            만들어보고 싶은 게 있으면{" "}
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-ink decoration-line-strong hover:decoration-ink underline underline-offset-4 transition-colors"
+            >
+              인스타 DM
+            </a>
+            으로 한 줄 보내주세요. 과정과 함께 찾아갈게요.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link

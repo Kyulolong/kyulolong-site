@@ -39,7 +39,7 @@ export const OG_IMAGE = {
   url: "/og.png",
   width: 1200,
   height: 630,
-  alt: "규로롱 — 이게 되네? 인사담당자가 AI한테 시켜서 1시간",
+  alt: "규로롱 — 이게 되네? 인사담당자가 · 요청 한 번에 · 앱스토어까지",
 } as const;
 
 /**

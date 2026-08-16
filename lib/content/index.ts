@@ -93,3 +93,30 @@ export function getRelatedServices(video: Video): Service[] {
     .map((slug) => getService(slug))
     .filter((s): s is Service => s !== undefined);
 }
+
+/**
+ * 앱스토어에 올라간 앱인지. `url` 하나만 보고 판별한다.
+ *
+ * 히어로가 "앱스토어까지"를 약속하는데(components/hero.tsx) 그 근거가 목록에
+ * 하나도 안 보였다 — 카드는 `url` 을 쓰지 않아서 아홉 장이 전부 같은 얼굴이고,
+ * 앱스토어 앱이라는 사실은 상세 본문까지 들어가야 나왔다. 그 약속을 그리드에서
+ * 받아주는 게 이 함수의 유일한 목적이라, 뱃지 글자도 "앱스토어"로 맞춰 뒀다.
+ * 히어로에서 읽은 단어가 카드에 그대로 있어야 증거로 이어진다.
+ *
+ * ⚠️ 슬러그를 적지 않는다. 여기에 `mobile-prompt` 를 박으면 iOS 앱을 하나 더
+ * 올릴 때 코드를 고쳐야 하고, 그건 "서비스 추가 = MDX 하나"(CLAUDE.md 5번)가
+ * 깨지는 지점이다. 호스트만 보므로 새 앱은 frontmatter 만으로 뱃지를 얻는다.
+ *
+ * ⚠️ "외부 주소인가"로 넓히지 말 것. 퍼플즈(perplz.com)까지 걸려서 `팀` 과
+ * 뱃지 두 개가 겹치고, 무엇보다 "외부"는 아무 무게도 없는 정보다. 이 뱃지가
+ * 값어치를 갖는 건 아홉 장 중 한 장에만 붙기 때문이다.
+ */
+export function isAppStoreApp(url: string | undefined): boolean {
+  if (!url) return false;
+  try {
+    return new URL(url).hostname.endsWith("apps.apple.com");
+  } catch {
+    // 내부 경로(`/navigator`)는 URL 로 파싱되지 않는다 — 그게 정상이다
+    return false;
+  }
+}

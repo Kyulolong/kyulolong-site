@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LikeButton } from "@/components/like-button";
 import { Thumbnail } from "@/components/thumbnail";
-import type { Service } from "@/lib/content";
+import { isAppStoreApp, type Service } from "@/lib/content";
 
 /**
  * 카드는 소개 페이지(/services/<slug>)로 보낸다.
@@ -73,6 +73,16 @@ export function ServiceCard({
               {service.team ? (
                 <span className="bg-paper-sky text-ink-soft shrink-0 rounded-[5px] px-1.5 py-0.5 text-[11px] font-medium">
                   팀
+                </span>
+              ) : null}
+              {/* 히어로의 "앱스토어까지"를 그리드에서 받아주는 자리 (isAppStoreApp).
+                  뱃지가 세 종류가 됐지만 알갱이가 되지 않는 건 셋이 서로 배타적에
+                  가깝고 대부분의 카드에 하나도 안 붙기 때문이다 — 지금 아홉 장 중
+                  뱃지가 붙는 건 세 장이다. 여기에 featured 나 태그까지 뱃지로
+                  올리기 시작하면 그때는 진짜로 뒤덮인다 (DESIGN.md §6). */}
+              {isAppStoreApp(service.url) ? (
+                <span className="bg-paper-peach text-ink-soft shrink-0 rounded-[5px] px-1.5 py-0.5 text-[11px] font-medium">
+                  앱스토어
                 </span>
               ) : null}
             </div>

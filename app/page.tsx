@@ -87,14 +87,32 @@ export default async function Home() {
             </h2>
             <p className="text-ink-soft mt-5 text-lg text-pretty">
               코드는 이제 AI가 짜줍니다. 그래서 어려운 건 만드는 일이 아니라
-              <strong className="text-ink font-semibold"> 뭘 만들지 정하는 일</strong>입니다.
-              그건 아직 사람 몫이고, 솔직히 제일 재미있는 부분이기도 합니다.
+              <strong className="text-ink font-semibold"> 시작하는 것 그 자체</strong>입니다.
+            </p>
+            <p className="text-ink-soft mt-5 text-lg text-pretty">
+              이 홈페이지는 시작이 어려운 분들을 위해 만들었습니다.
             </p>
             <p className="text-ink-soft mt-4 text-lg text-pretty">
-              그래서 만든 것마다 소스코드와 <strong className="text-ink font-semibold">쓴 프롬프트를 통째로</strong> 열어뒀습니다.
-              빈 화면 앞에서 시작하지 마시고, 여기서 하나 집어다 당신 것으로 바꾸세요.
+              그래서 만든 서비스마다 소스코드, 프롬프트와 <strong className="text-ink font-semibold">작업과정을 통째로</strong> 열어뒀습니다.
+              빈 화면 앞에서 시작하지 마시고, 여기서 해봄직한 것 가져다 필요한 것으로 바꾸세요.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            {/* "가져다 쓰세요"만 말하면 뭘 깔아야 하는지 모르는 사람이 여기서 멈춘다.
+                그 한 문장을 붙여야 아래 버튼이 갑자기 나오지 않는다. */}
+            <p className="text-ink-soft mt-4 text-lg text-pretty">
+              프롬프트를 어디에 붙여넣어야 할지 모르시겠다면, 뭘 깔고 어떻게 시작하는지
+              순서대로 적어뒀습니다. 터미널을 한 번도 안 열어보셨어도 됩니다.
+            </p>
+            {/* 형광이 아니라 잉크다 — 이 화면의 형광 한 점은 히어로 버튼이다 (DESIGN.md §2).
+                소셜 알약(bg-canvas)과 위계가 갈려야 해서 잉크 알약이 위, 알약 셋이 아래다. */}
+            <div className="mt-8">
+              <Link
+                href={INTERNAL_LINKS.start}
+                className="bg-ink text-canvas inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-85"
+              >
+                처음이라면: 설치부터 따라 하기
+              </Link>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-3">
               {SOCIAL_LINKS.map((link) => (
                 <a
                   key={link.href}
@@ -146,8 +164,8 @@ export default async function Home() {
             </p>
             <p className="text-ink-soft mt-4 text-lg text-pretty">
               최대한 만들어 보겠습니다. 만드는 과정을 공유합니다. 아이디어 보낸 분은
-              거기서부터 작업을 시작하세요. 혼자 60개를 짜내는 것보다 이쪽이 훨씬 나은 게
-              나올 것 같아서요.
+              거기서부터 작업을 시작하세요. 저도 혼자 아이디어를 떠올리기 보다 요청을 받아 만드는 것이
+              결과가 더 좋습니다.
             </p>
             <a
               href={INSTAGRAM_URL}

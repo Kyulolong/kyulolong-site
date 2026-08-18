@@ -13,7 +13,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "만든 서비스",
   description:
-    "인사담당 출신이 AI한테 시켜서 만든 서비스 목록. 소스코드와 쓴 프롬프트를 같이 열어뒀고, 전부 로그인 없이 바로 열립니다.",
+    "인사담당 출신이 AI와 함께 만든 서비스 목록. 소스코드와 쓴 프롬프트를 같이 열어뒀고, 전부 로그인 없이 바로 열립니다.",
   path: "/services",
 });
 

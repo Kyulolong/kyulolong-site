@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { INTERNAL_LINKS } from "@/lib/site-links";
+
 /**
  * 서비스 상세의 "시작점" 블록.
  *
@@ -7,6 +10,11 @@
  *
  * 프롬프트를 `<pre>` 로 그대로 두는 이유: 복사 버튼은 JS 가 필요해서 이 페이지를
  * 클라이언트 컴포넌트로 만들어야 하는데, 드래그 복사로 충분한 일에 그걸 치르지 않는다.
+ *
+ * ⚠️ 아래 접힘 상자는 **요약만** 둔다. 설치 순서·저장할 때의 함정·에러 대처는 전부
+ * /start 로 옮겼다 (app/start/page.tsx). 여기서 늘리면 안 되는 이유가 둘이다 —
+ * 프롬프트를 보러 온 사람 앞에서 그게 본문보다 길어지고, 서비스가 60개가 되면
+ * 같은 글이 60번 실린다. 여기는 "고를 수 있게"까지만, 그다음은 링크가 받는다.
  */
 export function PromptBlock({ prompt, title }: { prompt: string; title: string }) {
   return (
@@ -40,23 +48,18 @@ export function PromptBlock({ prompt, title }: { prompt: string; title: string }
             저는 Claude Code를 씁니다. 하지만 위 프롬프트는 특정 도구용이 아니라서
             아무 데나 붙여넣어도 됩니다. 셋 중 편한 걸로 시작하세요.
           </p>
-          <ol className="space-y-4">
+          <ol className="space-y-3">
             <li>
               <strong className="text-ink font-bold">1. 설치 없이 — 브라우저 챗봇</strong>
               <br />
-              Claude·ChatGPT·Gemini 아무거나 열어서 프롬프트를 붙여넣고
-              &ldquo;하나의 HTML 파일로 만들어줘&rdquo;를 덧붙이세요. 나온 코드를{" "}
-              <code className="bg-surface-2 rounded px-1.5 py-0.5 font-mono text-[0.8125rem]">
-                index.html
-              </code>
-              로 저장하고 더블클릭하면 그 자리에서 돌아갑니다. 무료로 됩니다.
+              쓰던 챗봇에 붙여넣고 &ldquo;하나의 HTML 파일로 만들어줘&rdquo;를 덧붙이세요.
+              나온 코드를 저장해 더블클릭하면 그 자리에서 돌아갑니다. 5분, 무료.
             </li>
             <li>
               <strong className="text-ink font-bold">2. 제대로 — 터미널에서 CLI</strong>
               <br />
-              Claude Code나 Gemini CLI를 깔고 빈 폴더에서 실행한 뒤 프롬프트를 붙여넣습니다.
               파일을 여러 개 만들고 스스로 고쳐가며 돌려보는 건 이쪽만 됩니다.
-              여기 있는 것들은 전부 이 방식으로 만들었습니다.
+              여기 있는 것들은 전부 이 방식으로 만들었습니다. 30분.
             </li>
             <li>
               <strong className="text-ink font-bold">3. 남한테 맡기고 — 웹 빌더</strong>
@@ -70,6 +73,19 @@ export function PromptBlock({ prompt, title }: { prompt: string; title: string }
             저는 대충 돌아가는 걸 먼저 받고, 거슬리는 걸 하나씩 말해서 고칩니다.
             에러가 뜨면 읽으려 하지 말고 통째로 복사해서 그대로 붙여넣으면 됩니다.
             저도 1년 동안 그렇게만 했습니다.
+          </p>
+          {/* 터미널을 처음 여는 사람에게는 위 세 줄이 여전히 불친절하다.
+              그 사람이 실제로 막히는 자리(창을 어떻게 여는지, 파일이 왜
+              index.html.txt 로 저장되는지, 돈이 드는지)는 전부 /start 가 받는다. */}
+          <p className="text-ink-faint text-sm">
+            터미널을 한 번도 안 열어보셨다면{" "}
+            <Link
+              href={INTERNAL_LINKS.start}
+              className="text-ink decoration-line-strong hover:decoration-ink underline underline-offset-4 transition-colors"
+            >
+              설치부터 순서대로 적어둔 곳
+            </Link>
+            이 따로 있습니다. 맥·윈도우 명령어와 막혔을 때 할 일까지 있습니다.
           </p>
         </div>
       </details>

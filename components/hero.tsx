@@ -53,7 +53,7 @@ export function Hero() {
         </h1>
 
         <p className="text-ink-soft mt-6 max-w-[36rem] text-lg text-pretty sm:text-xl">
-          AI한테 시켜서 만듭니다. 하나에 한두 시간,
+          AI와 함께 만듭니다. 시작은 하루 한두 시간,
           앱스토어에 올라간 것도 있습니다. 전부 로그인 없이 열리고,
           만들 때 쓴 프롬프트도 같이 뒀어요.
         </p>

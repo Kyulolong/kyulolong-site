@@ -11,6 +11,8 @@ import Image from "next/image";
 const TONE = {
   service: "bg-paper-lime",
   video: "bg-paper-sky",
+  /** /start 의 세 갈래 카드. 서비스도 영상도 아닌 세 번째 '종류'라 색을 따로 준다. */
+  guide: "bg-paper-peach",
 } as const;
 
 interface ThumbnailProps {

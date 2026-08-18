@@ -15,7 +15,7 @@ export const INSTAGRAM_URL = "https://www.instagram.com/kyulolong/";
  * 축이라 소셜 목록에 같이 세운다. 서비스로서의 퍼플즈는 /services/perplz 쪽이다.
  */
 export const PERPLZ_PROFILE_URL =
-  "https://perplz.com/user/05120996-33fb-49fe-9e5e-539291d2ef81";
+  "https://perplz.com/team/kyulolong";
 
 /**
  * 비즈니스 문의 창구. 팀임팩트(퍼플즈를 만드는 회사) 주소다.
@@ -34,6 +34,12 @@ export const SOCIAL_LINKS = [
 
 /** 홈페이지 내부 경로. 스펙 2번의 예약 경로 안에서만 쓴다. */
 export const INTERNAL_LINKS = {
+  /**
+   * 설치부터 첫 화면까지의 안내. 서비스 상세의 접힘 상자가 여기로 넘긴다.
+   * 새 예약 경로라 CLAUDE.md 2번 목록에도 `start` 를 같이 적어뒀다 —
+   * 안 적어두면 언젠가 `start` 슬러그 서비스를 만들 때 이 경로와 부딪힌다.
+   */
+  start: "/start",
   services: "/services",
   videos: "/videos",
   about: "/about",

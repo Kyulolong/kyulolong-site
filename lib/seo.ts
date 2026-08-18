@@ -29,7 +29,7 @@ export const SITE_NAME = "규로롱";
 export const SITE_TITLE = `${SITE_NAME} — 이게 되네?`;
 
 export const SITE_DESCRIPTION =
-  "인사담당 출신이 AI한테 시켜서 매주 서비스를 하나씩 만듭니다. 만든 것마다 소스코드와 쓴 프롬프트를 같이 열어뒀고, 전부 로그인 없이 열립니다.";
+  "인사담당 출신이 AI와 함께 매주 서비스를 하나씩 만듭니다. 만든 것마다 소스코드와 쓴 프롬프트를 같이 열어뒀고, 전부 로그인 없이 열립니다.";
 
 /**
  * 기본 공유 카드. public/og.png 는 scripts/make-og.tsx 가 만들어 커밋한 정적 파일이다.

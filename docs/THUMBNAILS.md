@@ -103,3 +103,27 @@ qlmanage -t -s 1000 -o . sq.svg   # → sq.svg.png
 - 바탕은 순백 전면 `<rect>`. 카드가 multiply 로 녹인다
 - 글자·숫자는 넣지 않는다. 카드 밑에 제목이 이미 있다
 - 그림자·그라데이션 없음
+
+## `/start` 의 세 갈래 카드도 같은 레시피다
+
+`public/start/{chatbot,cli,builder}.svg` 세 장. 서비스 썸네일과 **완전히 같은 파라미터·
+스타일 꼬리**로 뽑았고, 카드도 같은 `components/thumbnail.tsx` 를 쓴다 (`tone="guide"` →
+`bg-paper-peach`). 그러니 위의 모든 규칙이 그대로 적용된다.
+
+여기에 그림이 붙은 이유는 장식이 아니다. `/start` 는 "셋 중 하나를 고르세요"로 열리는데,
+글자만 세 덩어리면 고르는 화면이 아니라 읽는 화면이 된다. 반대로 **단계 안내에는 그림을
+넣지 않는다** — 이 규격은 "글자·숫자를 넣지 않는다"라, 설치 화면이나 터미널 내용을 설명하는
+이미지는 원리적으로 못 만든다. 만들면 글자가 뭉개진 가짜 스크린샷이 된다. 단계에서 사람을
+건지는 건 그대로 복사해 붙일 명령어 줄이다.
+
+| 파일 | 주제문 |
+|---|---|
+| `chatbot.svg` | A large rounded speech bubble facing forward containing three short rounded text bars, with a single small document page shape emerging from its lower right corner; the document page is filled solid acid green #8FFF00. |
+| `cli.svg` | A terminal window seen straight on, rounded corners, three small dots at the left of its title bar, containing three short rounded command bars stacked inside and one solid rectangular block cursor at the end of the last bar; the block cursor is filled solid acid green #8FFF00. |
+| `builder.svg` | A rounded browser window seen straight on with three small dots at the left of its title bar, and three separate rectangular panels floating just outside it, tilted slightly, as if being dropped into the window; one of the floating panels is filled solid acid green #8FFF00. |
+
+`builder.svg` 의 첫 판("assembled from three panels … as if snapping into place")은 그냥
+실패했다. 조립 상태를 말로 설명하는 대신 **떠 있는 판 + 창**으로 명사를 갈라 적으니 한 번에 나왔다.
+
+`chatbot.svg` 는 형광이 `rgb(198,232,48)` 로 새서(함정 1) 두 조각을 `rgb(143,255,0)` 으로
+치환했고, 손댔으므로 C2PA 매니페스트를 떼어냈다(함정 2). 나머지 두 장은 원본 그대로다.

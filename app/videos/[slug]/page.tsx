@@ -59,6 +59,9 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
 
   const relatedServices = getRelatedServices(video);
   const processEmbed = perplzEmbedUrl(video.processUrl);
+  // 머리말과 아래 CTA 가 같은 이름을 부르도록 한 번만 만든다.
+  const platformLabel =
+    video.platform.map((p) => PLATFORM_LABEL[p] ?? p).join(" / ") || "원본";
 
   return (
     <article className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
@@ -95,7 +98,7 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
           {video.platform.length > 0 ? (
             <>
               <span aria-hidden="true">·</span>
-              <span>{video.platform.map((p) => PLATFORM_LABEL[p] ?? p).join(" / ")}</span>
+              <span>{platformLabel}</span>
             </>
           ) : null}
         </div>
@@ -106,90 +109,32 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
       </header>
 
       <div className="mx-auto max-w-[46rem] pt-10">
-        {video.embedUrl ? (
-          /*
-           * 비율은 frontmatter 의 orientation 이 정한다.
-           * 릴스·쇼츠는 9:16 (폭은 화면이 좁아도 넘치지 않게 묶는다), 화면녹화는 16:9.
-           */
-          <>
-            <div
-              className={`bg-surface-2 mx-auto w-full overflow-hidden rounded-[24px] ${
-                video.orientation === "landscape"
-                  ? "aspect-video"
-                  : "aspect-[9/16] max-w-[22rem]"
-              }`}
-            >
-              <iframe
-                src={video.embedUrl}
-                title={video.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                loading="lazy"
-                className="h-full w-full border-0"
-              />
-            </div>
-
-            {/* 임베드가 막히거나 화면이 좁을 때를 위한 탈출구. 형광은 쓰지 않는다.
-                작업 원본은 아래에서 통째로 심으므로 여기 링크로 두지 않는다. */}
-            {video.externalUrl ? (
-              <p className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-                <a
-                  href={video.externalUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="text-ink-faint hover:text-ink text-sm underline decoration-[var(--color-line-strong)] underline-offset-4 transition-colors"
-                >
-                  원본에서 보기
-                </a>
-              </p>
-            ) : null}
-          </>
-        ) : video.externalUrl ? (
-          /* 임베드가 막힌 곳이라 새 탭으로 보낸다. 이 페이지의 형광 한 점. */
-          <a
-            href={video.externalUrl}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="bg-paper-sky hover:shadow-lift flex flex-col items-center gap-5 rounded-[24px] px-8 py-16 text-center transition-shadow"
-          >
-            <span className="text-ink-soft text-sm">이 영상은 다른 곳에 올라가 있어요</span>
-            <span className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors">
-              영상 보러 가기
-            </span>
-          </a>
-        ) : null}
-
-        {/* 영상을 보고 나서 누르는 자리. 임베드가 있든(릴스 아래) 없든(CTA 아래)
-            같은 자리에 오도록 조건 밖에 둔다. */}
-        <p className="mt-5 flex justify-center">
-          <LikeButton
-            kind="video"
-            slug={video.slug}
-            className="border-line text-ink-faint hover:bg-surface-2 !gap-2 border !px-4 !py-2 !text-[13px] !rounded-full"
-          />
-        </p>
-
         {/*
-          작업 과정 (퍼플즈 싱크).
+          작업 과정 (퍼플즈 싱크) — 이 페이지의 본편이다.
 
-          릴스가 1분이라 막힌 데는 거의 다 잘려 나간다. 그걸 보여주는 판이 따로
-          있다는 게 이 채널이 다른 계정과 갈리는 지점이라(CLAUDE.md 6번), 작은
-          링크 한 줄로 두면 있는 줄도 모르고 지나간다. 제목을 달아 통째로 심는다.
+          예전엔 릴스 임베드가 맨 위에 있고 이게 그 아래였다. 인스타가 임베드
+          요청을 로그인 벽으로 돌려보내기 시작하면서(응답에 x-frame-options: DENY 가
+          실려 브라우저가 iframe 을 통째로 막는다) 맨 윗자리가 회색 상자로 남았다.
+          남의 응답 헤더라 이쪽에서 뚫을 방법이 없어서, 확실히 뜨는 쪽을 위로 올렸다.
+
+          자리만 바뀐 게 아니라 순서의 이유도 바뀐다. 릴스가 1분이라 막힌 데는 거의
+          다 잘려 나가고, 그걸 보여주는 판이 따로 있다는 게 이 채널이 다른 계정과
+          갈리는 지점이다(CLAUDE.md 6번). 여기까지 들어온 사람에게 먼저 보일 것은
+          그쪽이 맞다. 릴스는 아래에서 링크로 보낸다.
 
           "자르지 않은" 이라고 쓰지 않는다. 이쪽도 컷 편집을 거친다 —
           지루한 데를 들어내는 건 원본이 아니라는 뜻이 아니지만, 문구가 사실보다
           한 걸음 앞서 나가면 그걸 확인한 사람에게는 그게 더 크게 남는다.
 
-          릴스 아래에 두는 이유: 릴스를 보고 넘어온 사람의 흐름이 먼저다.
           화면녹화라 비율은 늘 16:9 로, frontmatter 의 orientation(릴스 쪽 값)을
           따라가지 않는다.
         */}
         {video.processUrl ? (
-          <section className="border-line mt-14 border-t pt-12">
+          <section>
             <h2 className="text-xl font-bold tracking-[-0.02em]">작업 과정</h2>
             <p className="text-ink-soft mt-2 text-[0.9375rem]">
               작업과정을 담았습니다. 이렇게 작업해도 되는구나 용기를 얻어가시면 좋겠습니다 :)
-              (부끄러우니깐 2배속을 추천드려요)
+              (2배속을 추천드려요)
             </p>
 
             {processEmbed ? (
@@ -217,6 +162,79 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
             </p>
           </section>
         ) : null}
+
+        {/*
+          짧은 영상 쪽.
+
+          embedUrl 은 임베드가 실제로 허용되는 곳(유튜브 등)만 채운다. 인스타는
+          채우지 않는다 — 위 주석의 로그인 벽 때문에 iframe 이 회색 상자로 남고,
+          그게 조용히 실패하는 종류라 더 나쁘다. 대신 새 탭으로 보낸다.
+        */}
+        {video.embedUrl ? (
+          /*
+           * 비율은 frontmatter 의 orientation 이 정한다.
+           * 릴스·쇼츠는 9:16 (폭은 화면이 좁아도 넘치지 않게 묶는다), 화면녹화는 16:9.
+           */
+          <section className="border-line mt-14 border-t pt-12">
+            <div
+              className={`bg-surface-2 mx-auto w-full overflow-hidden rounded-[24px] ${
+                video.orientation === "landscape"
+                  ? "aspect-video"
+                  : "aspect-[9/16] max-w-[22rem]"
+              }`}
+            >
+              <iframe
+                src={video.embedUrl}
+                title={video.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+                className="h-full w-full border-0"
+              />
+            </div>
+
+            {/* 화면이 좁을 때를 위한 탈출구. 형광은 쓰지 않는다. */}
+            {video.externalUrl ? (
+              <p className="mt-4 flex justify-center">
+                <a
+                  href={video.externalUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-ink-faint hover:text-ink text-sm underline decoration-[var(--color-line-strong)] underline-offset-4 transition-colors"
+                >
+                  원본에서 보기
+                </a>
+              </p>
+            ) : null}
+          </section>
+        ) : video.externalUrl ? (
+          /* 임베드가 막힌 곳이라 새 탭으로 보낸다. 이 페이지의 형광 한 점. */
+          <section className="border-line mt-14 border-t pt-12">
+            <a
+              href={video.externalUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="bg-paper-sky hover:shadow-lift flex flex-col items-center gap-5 rounded-[24px] px-8 py-12 text-center transition-shadow"
+            >
+              <span className="text-ink-soft text-sm">
+                짧게 편집한 영상은 {platformLabel}에 올라가 있어요
+              </span>
+              <span className="bg-acid text-on-acid hover:bg-acid-press inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors">
+                {platformLabel}에서 보기
+              </span>
+            </a>
+          </section>
+        ) : null}
+
+        {/* 영상을 보고 나서 누르는 자리. 위가 임베드든 CTA 든 같은 자리에 오도록
+            조건 밖에 둔다. */}
+        <p className="mt-5 flex justify-center">
+          <LikeButton
+            kind="video"
+            slug={video.slug}
+            className="border-line text-ink-faint hover:bg-surface-2 !gap-2 border !px-4 !py-2 !text-[13px] !rounded-full"
+          />
+        </p>
 
         {video.body ? <Prose body={video.body} className="mt-12" /> : null}
       </div>

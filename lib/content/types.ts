@@ -190,7 +190,17 @@ export const videoFrontmatterSchema = z
      * 억지로 하나 채우게 하면 플랫폼 필터가 거짓말을 하게 된다.
      */
     platform: z.array(z.enum(PLATFORMS)).default([]),
-    /** iframe 으로 심을 수 있는 주소 (인스타/유튜브/퍼플즈 임베드) */
+    /**
+     * iframe 으로 심을 수 있는 주소 (유튜브 등).
+     *
+     * ⚠️ 인스타 게시물에는 채우지 말 것. `/embed/` 를 붙이면 심기는 게 맞지만,
+     * 로그아웃 상태로 판정된 요청에는 임베드 대신 로그인 셸이 `x-frame-options:
+     * DENY` 와 함께 돌아와서 브라우저가 iframe 을 통째로 막는다. iframe 은
+     * 서드파티 컨텍스트라 인스타 쿠키가 안 실리는 게 기본이고, IP 단위 rate
+     * limit 도 걸린다 — 즉 되는 날과 안 되는 날이 갈린다. 남의 응답 헤더라
+     * 이쪽에서 손댈 데가 없고, 실패가 회색 상자로 조용히 남아서 더 나쁘다.
+     * 인스타 편은 externalUrl 만 채워 새 탭 CTA 로 보낸다.
+     */
     embedUrl: z.url().optional(),
     /**
      * 원본이 올라가 있는 주소. embedUrl 이 없으면 새 탭 CTA 가 되고,

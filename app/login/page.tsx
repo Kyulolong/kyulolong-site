@@ -240,11 +240,13 @@ export default function LoginPage() {
           </label>
         ) : null}
 
-        {/* 이 화면의 형광 한 점 */}
+        {/* 이 화면의 형광 한 점.
+            입력칸 바로 다음에 오므로 form 의 gap 위에 한 칸을 더 얹는다 — 손가락 하나
+            굵기는 벌어져야 "쓰는 곳"과 "누르는 곳"이 다른 물건으로 읽힌다. */}
         <button
           type="submit"
           disabled={busy}
-          className="bg-acid text-on-acid hover:bg-acid-press mt-2 rounded-full px-6 py-3.5 text-[0.9375rem] font-bold transition-colors disabled:opacity-60"
+          className="bg-acid text-on-acid hover:bg-acid-press mt-5 rounded-full px-6 py-3.5 text-[0.9375rem] font-bold transition-colors disabled:opacity-60"
         >
           {creating ? "계정 만들기" : "로그인"}
         </button>

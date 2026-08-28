@@ -30,7 +30,7 @@ export const SITE_NAME = "규로롱";
  * **`창업`** 이 들어 있어서, 이름을 모르는 사람이 닿을 수 있는 문이 하나 생긴다.
  * 문구를 다시 고칠 일이 있으면 검색되는 말이 남는지부터 볼 것.
  */
-export const SITE_TITLE = `${SITE_NAME} — 내일의 창업, 오늘 내 일로`;
+export const SITE_TITLE = `${SITE_NAME} — 오늘의 생각이 내일의 창업으로`;
 
 export const SITE_DESCRIPTION =
   "인사담당 출신이 AI와 함께 매주 서비스를 하나씩 만듭니다. 만든 것마다 소스코드와 쓴 프롬프트를 같이 열어뒀고, 전부 로그인 없이 열립니다.";
@@ -45,7 +45,7 @@ export const OG_IMAGE = {
   height: 630,
   // 카드에 실제로 그려진 것을 적는다 (scripts/make-og.tsx). 예전 문구
   // "인사담당자가 · 요청 한 번에 · 앱스토어까지" 는 옛 인스타 소개글이라 카드에 없다.
-  alt: "규로롱 — 내일의 창업, 오늘 내 일로. AX · 이게 되네? · 생각소스",
+  alt: "규로롱 — 오늘의 생각이 내일의 창업으로. AX · 창업 · 조직과 사람",
 } as const;
 
 /**
@@ -111,7 +111,7 @@ export function pageMetadata({
   noIndex,
 }: PageMeta): Metadata {
   // 제목이 없으면 사이트 기본 제목을 그대로 쓴다. 그냥 문자열로 주면 레이아웃의
-  // 템플릿("%s · 규로롱")이 한 번 더 걸려 "규로롱 — 내일의 창업, 오늘 내 일로 · 규로롱"
+  // 템플릿("%s · 규로롱")이 한 번 더 걸려 "규로롱 — 오늘의 생각이 … · 규로롱"
   // 이 된다 — 이름이 두 번 나온다.
   const shareTitle = title ?? { absolute: SITE_TITLE };
   /**

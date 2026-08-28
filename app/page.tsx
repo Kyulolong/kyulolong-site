@@ -226,17 +226,22 @@ export default async function Home() {
               한 톤으로 둔다. 이름만 밝히면 14px 한 줄에 색이 둘이 되어 부산스럽고,
               서명은 자랑이 아니라 낙관(落款)이다 (DESIGN.md §7).
 
-              object-[50%_30%] — 얼굴이 세로 30% 지점이라 정가운데로 자르면
-              이마가 날아가고 랩탑만 남는다.
+              ⚠️ **원본(kyulolong2.png, 778×1202)을 여기에 직접 걸지 말 것.**
+              세로 3:4 사진이라 원형으로 자르면 얼굴이 세로의 38% 밖에 안 되고,
+              나머지를 랩탑이 채운다. object-position 으로 밀어봐야 위를 살리면
+              턱 아래가 비고 아래를 살리면 이마가 날아간다 — 자리가 없는 게 아니라
+              **잘라야 할 사진**이다. kyulolong-avatar.jpg 는 그 원본에서 머리
+              둘레로 잘라낸 정사각(760²→512²)이라 여기서는 크기만 정하면 된다.
+              다시 자를 일이 있으면 원본이 public/ 에 그대로 있다.
             */}
-            <div className="mb-7 flex items-center gap-3.5">
+            <div className="mb-7 flex items-center gap-4">
               <Image
-                src="/kyulolong2.png"
-                alt="랩탑 앞에 앉아 있는 규로롱"
-                width={112}
-                height={112}
-                sizes="(min-width: 768px) 4rem, 3.5rem"
-                className="bg-surface-2 size-14 shrink-0 rounded-full object-cover object-[50%_30%] md:size-16"
+                src="/kyulolong-avatar.jpg"
+                alt="규로롱"
+                width={192}
+                height={192}
+                sizes="(min-width: 768px) 6rem, 5rem"
+                className="bg-surface-2 size-20 shrink-0 rounded-full object-cover md:size-24"
               />
               <p className="text-ink-faint text-sm">AX하는 창업가, 규로롱</p>
             </div>

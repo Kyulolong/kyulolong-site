@@ -44,20 +44,27 @@ const flat = (fill) => `${open}<path d="${BUBBLE}" fill="${fill}"/>${SPARK}</svg
 const adaptive = `${open}<style>
     .b{fill:#6332EB}
     @media (prefers-color-scheme:light){.b{fill:#121019}}
-    @media (prefers-color-scheme:dark){.b{fill:#A8A4BC}}
+    @media (prefers-color-scheme:dark){.b{fill:#edebf5}}
   </style><path class="b" d="${BUBBLE}"/>${SPARK}</svg>\n`;
 
 const out = {
   /**
    * 기본. 헤더·앱아이콘·공유 카드가 전부 이걸 쓴다.
    *
-   * 어두운 바탕에서 2.86:1 로 --on-dark(7.81:1)보다 조용하지만 이쪽을 기본으로
-   * 둔다 — 회색 마크는 헤더에서 브랜드 색을 하나도 쓰지 않게 되고, 그러면
-   * §1 의 30% 가 마크에서 사라진다. 양쪽 바탕에서 다 서는 유일한 변형이기도 하다.
+   * 흰 바탕 6.59:1 / 어두운 바탕 2.86:1 로 **양쪽에서 다 서는 유일한 변형**이라
+   * 바탕을 고를 수 없는 자리(파비콘 .ico, 앱아이콘, 남의 화면에 얹히는 곳)의
+   * 기본이다. 워드마크와 나란히 서는 자리는 --on-dark 를 쓴다 (아래).
    */
   "public/brand/mark.svg": flat("#6332EB"),
-  // 어두운 바탕에서 마크를 조용히 눕혀야 할 때 (--ink-soft 와 같은 값)
-  "public/brand/mark-on-dark.svg": flat("#A8A4BC"),
+  /**
+   * 어두운 바탕 — 헤더와 공유 카드가 쓴다.
+   *
+   * 값이 --ink(#edebf5) 인 게 핵심이다. 이 마크는 늘 "규로롱" 워드마크 **옆에**
+   * 서는데 그 글자가 --ink 라, 마크가 다른 색이면 둘이 한 덩어리로 안 읽히고
+   * 로고 옆에 아이콘을 하나 더 붙여둔 것처럼 보인다. 형광 스파크가 브랜드
+   * 색을 맡으므로 말풍선까지 보라일 필요가 없다.
+   */
+  "public/brand/mark-on-dark.svg": flat("#edebf5"),
   // 흰 종이·인쇄·밝은 UI
   "public/brand/mark-on-light.svg": flat("#121019"),
   // 브라우저 탭 — 바탕을 모르므로 스스로 맞춘다

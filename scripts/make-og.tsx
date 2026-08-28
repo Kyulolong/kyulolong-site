@@ -46,7 +46,7 @@ function readFont(file: string): Buffer {
   return fs.readFileSync(full);
 }
 
-const mark = fs.readFileSync(path.join(process.cwd(), "public/brand/mark.svg"), "base64");
+const mark = fs.readFileSync(path.join(process.cwd(), "public/brand/mark-on-dark.svg"), "base64");
 const markSrc = `data:image/svg+xml;base64,${mark}`;
 
 function card() {

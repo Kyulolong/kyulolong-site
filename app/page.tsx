@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/hero";
 import { JsonLd } from "@/components/json-ld";
@@ -205,6 +206,35 @@ export default async function Home() {
       <section className="mx-auto w-full max-w-[1120px] px-6 pt-20 sm:px-8 sm:pt-24">
         <div className="border-line border-t pt-14 sm:pt-16">
           <div className="max-w-[42rem]">
+            {/*
+              얼굴이 이 절의 머리에 온다 — **기사의 바이라인 자리**다.
+
+              히어로에 있던 것을 여기로 내렸다. 대문이 먼저 해야 할 말은 "오늘의
+              생각이 내일의 창업으로"지 자기소개가 아니라서다. 대신 이 절은 이
+              페이지에서 **유일하게 1인칭으로 말을 거는 자리**다("최대한 만들어
+              보겠습니다", "저도 혼자 아이디어를 떠올리기 보다"). 묻는 사람의
+              얼굴이 질문 위에 있어야 그 말이 누구 말인지 분명해지고, 바로 아래
+              DM 버튼이 "이 사람에게 보낸다"가 된다.
+
+              ⚠️ 그래도 대문에서 사람을 빼지는 않는다 — 인스타에서 얼굴을 보고
+              넘어오는 채널이라, 대문 어디에도 얼굴이 없으면 두 채널이 남처럼 갈린다.
+
+              이름을 적지 않는다. 남는 한 줄이 **직함**이라 그게 서명이 된다.
+              object-[50%_30%] — 얼굴이 세로 30% 지점이라 정가운데로 자르면
+              이마가 날아가고 랩탑만 남는다.
+            */}
+            <div className="mb-7 flex items-center gap-3.5">
+              <Image
+                src="/kyulolong2.png"
+                alt="랩탑 앞에 앉아 있는 규로롱"
+                width={112}
+                height={112}
+                sizes="(min-width: 768px) 4rem, 3.5rem"
+                className="bg-surface-2 size-14 shrink-0 rounded-full object-cover object-[50%_30%] md:size-16"
+              />
+              <p className="text-ink-faint text-sm">AX하는 창업가</p>
+            </div>
+
             <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] leading-[1.2] font-extrabold tracking-[-0.03em] text-balance">
               만들어보고 싶은 게 있으세요?
             </h2>

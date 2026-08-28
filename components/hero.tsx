@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { INTERNAL_LINKS } from "@/lib/site-links";
 
@@ -156,36 +155,6 @@ export function Hero() {
           >
             소개 더 보기
           </Link>
-        </div>
-
-        {/*
-          얼굴이 맨 아래로 내려왔다. **서명(落款)의 자리다.**
-
-          위에서 주장을 먼저 하고 "누가 하는 말인지"를 뒤에서 밝히는 순서다. 얼굴이
-          맨 위에 있으면 대문이 자기소개로 시작하는데, 이 페이지가 먼저 해야 할 말은
-          위의 한 줄이다. 그래도 대문에서 사람을 빼지는 않는다 — 인스타에서 얼굴을
-          보고 넘어오는 채널이라 대문에 사람이 없으면 두 채널이 남처럼 갈린다.
-
-          이름을 적지 않는다. 헤더의 워드마크가 이미 "규로롱"이고, 여기서 한 번 더
-          쓰면 한 화면에 이름이 둘이 된다. 남는 한 줄은 **직함**이라 서명이 된다.
-
-          object-[50%_30%] — 얼굴이 세로 30% 지점에 있다. 정가운데로 자르면
-          이마가 날아가고 랩탑만 남는다.
-
-          ⚠️ priority 를 떼었다. 맨 위에 있을 때는 이 사진이 대문의 LCP 였지만
-          이제 LCP 는 위의 h1 텍스트다. 작은 사진에 priority 를 남겨두면 그 요청이
-          정작 먼저 그려져야 할 것과 대역폭을 다툰다.
-        */}
-        <div className="mt-14 flex items-center gap-3.5 sm:mt-16">
-          <Image
-            src="/kyulolong2.png"
-            alt="랩탑 앞에 앉아 있는 규로롱"
-            width={112}
-            height={112}
-            sizes="(min-width: 768px) 4rem, 3.5rem"
-            className="bg-surface-2 size-14 shrink-0 rounded-full object-cover object-[50%_30%] md:size-16"
-          />
-          <p className="text-ink-faint text-sm">AX하는 창업가</p>
         </div>
       </div>
     </section>

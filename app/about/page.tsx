@@ -159,7 +159,7 @@ export default function AboutPage() {
           <p className="text-ink-soft mt-3">
             만든 것들은 이 사이트에 모아두고, 만드는 과정은 인스타와 깃허브, 퍼플즈에 올립니다.
           </p>
-          {/* 버튼 라벨이 그냥 "퍼플즈"라 서비스 소개(/services/perplz)와 헷갈린다.
+          {/* 버튼 라벨이 그냥 "퍼플즈"라 위 문단의 회사 얘기와 헷갈린다.
               여기서 가리키는 게 내 프로필이라는 걸 한 줄로 못박는다. */}
           <p className="text-ink-faint mt-2 text-[0.9375rem]">
             재밌는 영상은 인스타에, 코드는 깃허브에, 작업 과정은

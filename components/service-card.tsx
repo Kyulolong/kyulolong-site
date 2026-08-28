@@ -77,8 +77,8 @@ export function ServiceCard({
               ) : null}
               {/* 히어로의 "앱스토어까지"를 그리드에서 받아주는 자리 (isAppStoreApp).
                   뱃지가 세 종류가 됐지만 알갱이가 되지 않는 건 셋이 서로 배타적에
-                  가깝고 대부분의 카드에 하나도 안 붙기 때문이다 — 지금 아홉 장 중
-                  뱃지가 붙는 건 세 장이다. 여기에 featured 나 태그까지 뱃지로
+                  가깝고 대부분의 카드에 하나도 안 붙기 때문이다 — 지금 여덟 장 중
+                  뱃지가 붙는 건 두 장이다. 여기에 featured 나 태그까지 뱃지로
                   올리기 시작하면 그때는 진짜로 뒤덮인다 (DESIGN.md §6). */}
               {isAppStoreApp(service.url) ? (
                 <span className="bg-surface-2 text-ink-soft shrink-0 rounded-badge px-1.5 py-0.5 text-[11px] font-medium">

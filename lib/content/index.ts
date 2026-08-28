@@ -116,7 +116,13 @@ export function readingMinutes(body: string): number {
   return Math.max(1, Math.round(chars / 500));
 }
 
-/** 필터 UI 가 쓸 태그 목록. 많이 쓰인 순, 동수면 가나다순. */
+/**
+ * 필터 UI 가 쓸 태그 목록. 많이 쓰인 순, 동수면 가나다순.
+ *
+ * ⚠️ 여기서 거르는 서비스가 있으면 /services 목록에서도 같은 기준으로 걸러야 한다.
+ * 한쪽만 빼면 칩에 적힌 개수와 실제 카드 수가 어긋나고, 그 서비스만 쓰던 태그는
+ * 눌러도 빈 화면이 나오는 칩이 된다.
+ */
 export function getAllTags(): { tag: string; count: number }[] {
   const counts = new Map<string, number>();
   for (const service of getServices()) {
@@ -154,7 +160,7 @@ export function getRelatedServices(item: { relatedServices: string[] }): Service
  * 앱스토어에 올라간 앱인지. `url` 하나만 보고 판별한다.
  *
  * 히어로가 "앱스토어까지"를 약속하는데(components/hero.tsx) 그 근거가 목록에
- * 하나도 안 보였다 — 카드는 `url` 을 쓰지 않아서 아홉 장이 전부 같은 얼굴이고,
+ * 하나도 안 보였다 — 카드는 `url` 을 쓰지 않아서 여덟 장이 전부 같은 얼굴이고,
  * 앱스토어 앱이라는 사실은 상세 본문까지 들어가야 나왔다. 그 약속을 그리드에서
  * 받아주는 게 이 함수의 유일한 목적이라, 뱃지 글자도 "앱스토어"로 맞춰 뒀다.
  * 히어로에서 읽은 단어가 카드에 그대로 있어야 증거로 이어진다.
@@ -163,9 +169,9 @@ export function getRelatedServices(item: { relatedServices: string[] }): Service
  * 올릴 때 코드를 고쳐야 하고, 그건 "서비스 추가 = MDX 하나"(CLAUDE.md 5번)가
  * 깨지는 지점이다. 호스트만 보므로 새 앱은 frontmatter 만으로 뱃지를 얻는다.
  *
- * ⚠️ "외부 주소인가"로 넓히지 말 것. 퍼플즈(perplz.com)까지 걸려서 `팀` 과
- * 뱃지 두 개가 겹치고, 무엇보다 "외부"는 아무 무게도 없는 정보다. 이 뱃지가
- * 값어치를 갖는 건 아홉 장 중 한 장에만 붙기 때문이다.
+ * ⚠️ "외부 주소인가"로 넓히지 말 것. 남의 도메인에 사는 것이 하나만 늘어도
+ * 뱃지가 거기 붙는데, "외부"는 아무 무게도 없는 정보다. 이 뱃지가 값어치를
+ * 갖는 건 여덟 장 중 한 장에만 붙기 때문이다.
  */
 export function isAppStoreApp(url: string | undefined): boolean {
   if (!url) return false;

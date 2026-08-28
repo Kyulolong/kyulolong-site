@@ -51,10 +51,6 @@ export default async function ServicesPage({ searchParams }: PageProps<"/service
   const services = filterServices({ tags: tag ? [tag] : undefined, sort });
   const total = filterServices().length;
 
-  // 필터·정렬은 둘 다에 그대로 걸린 상태로 갈라진다 (아래 그리드 주석 참고).
-  const solo = services.filter((s) => !s.team);
-  const team = services.filter((s) => s.team);
-
   const tagOptions: FilterOption[] = [
     { label: "전체", href: hrefWith({ tag, sort }, { tag: undefined }), active: !tag, meta: total },
     ...allTags.map((t) => ({
@@ -86,51 +82,20 @@ export default async function ServicesPage({ searchParams }: PageProps<"/service
         </div>
       </FilterRail>
 
-      {solo.length > 0 ? (
+      {services.length > 0 ? (
         <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {solo.map((service, i) => (
+          {services.map((service, i) => (
             <li key={service.slug}>
               {/* 최대 3열이므로 첫 행은 세 장 */}
               <ServiceCard service={service} eager={i < 3} />
             </li>
           ))}
         </ul>
-      ) : null}
-
-      {/*
-        팀으로 만든 것은 목록을 나눠서 아래에 둔다.
-
-        이 채널의 논지가 "혼자서 이만큼 된다"라(CLAUDE.md 4번) 같은 그리드에 섞으면
-        위 목록이 하는 말이 흐려진다. 뱃지만으로는 카드 하나하나를 읽어야 구분되는데,
-        목록에서 눈에 먼저 들어오는 건 뱃지가 아니라 덩어리다.
-
-        빼지 않고 싣는 이유는 숨길 일이 아니라서다 — 구분만 하면 된다.
-
-        위 그리드가 비어 있으면(태그로 걸러 팀 것만 남은 경우) 구분선을 그리지 않는다.
-        필터 바가 이미 선으로 닫혀 있어서, 그 바로 아래 선이 하나 더 생긴다.
-      */}
-      {team.length > 0 ? (
-        <section className={solo.length > 0 ? "border-line mt-16 border-t pt-14" : ""}>
-          <h2 className="text-xl font-bold tracking-[-0.02em]">팀으로 만든 것</h2>
-          <p className="text-ink-soft mt-2 max-w-[52ch] text-[0.9375rem]">
-            여럿이 함께 만들고 있는 것들입니다. 위의 것들과 만든 방식이 달라서
-            걸린 시간도 프롬프트도 적지 않았습니다.
-          </p>
-          <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {team.map((service) => (
-              <li key={service.slug}>
-                <ServiceCard service={service} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      {services.length === 0 ? (
+      ) : (
         <p className="text-ink-soft py-16 text-center">
           이 태그로는 아직 만든 게 없어요. 위에서 다른 태그를 눌러보세요.
         </p>
-      ) : null}
+      )}
     </div>
   );
 }

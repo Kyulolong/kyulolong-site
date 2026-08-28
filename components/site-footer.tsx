@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { Brand } from "@/components/brand";
 import { VisitorCount } from "@/components/visitor-count";
-import { BUSINESS_EMAIL, INTERNAL_LINKS, PRIMARY_NAV, SOCIAL_LINKS } from "@/lib/site-links";
+import { BUSINESS_EMAIL, FOOTER_NAV, SOCIAL_LINKS } from "@/lib/site-links";
 
-/** 하단 바에서 뺀 소개·시작하기가 여기서는 다 나온다 — 푸터는 전체 지도다. */
-const NAV = [
-  { label: "시작하기", href: INTERNAL_LINKS.start },
-  ...PRIMARY_NAV,
-  { label: "소개", href: INTERNAL_LINKS.about },
-];
+/**
+ * 푸터는 전체 지도다 — 네비 셋에서 빠진 시작하기·영상이 여기서는 다 나온다.
+ * ⚠️ 영상은 이제 **여기가 사이트 안의 유일한 입구**다 (lib/site-links.ts).
+ */
+const NAV = FOOTER_NAV;
 
 /**
  * 푸터는 **보라 띠**다 (DESIGN.md §1 — 30%).

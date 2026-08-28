@@ -12,7 +12,10 @@ export const INSTAGRAM_URL = "https://www.instagram.com/kyulolong/";
 
 /**
  * 퍼플즈의 내 프로필. 작업 과정이 여기에 녹화된다 — 다른 채널이 못 보여주는
- * 축이라 소셜 목록에 같이 세운다. 서비스로서의 퍼플즈는 /services/perplz 쪽이다.
+ * 축이라 소셜 목록에 같이 세운다.
+ *
+ * 여기 걸리는 건 **내 프로필**이지 서비스가 아니다. 퍼플즈는 팀으로 만드는
+ * 것이라 이 사이트의 서비스 목록에서는 뺐다 (소개 페이지도 없다).
  */
 export const PERPLZ_PROFILE_URL =
   "https://perplz.com/team/kyulolong";
@@ -48,17 +51,32 @@ export const INTERNAL_LINKS = {
 } as const;
 
 /**
- * 주요 목적지. 헤더(md 이상)·하단 바(md 미만)·푸터가 전부 여기서 읽는다.
+ * 목적지 하나에 이름 하나.
  *
- * ⚠️ **한 목적지에 이름 하나.** 예전엔 헤더·푸터가 "서비스", 히어로 CTA 가
- * "만든 것" 이었다. 같은 곳을 두 이름으로 부르면 처음 온 사람은 그게 다른
- * 곳인 줄 안다. URL 은 `/services` 그대로 두고 라벨만 "만든 것" 으로 맞췄다.
- *
- * ⚠️ **소개(`/about`)는 여기에 없다.** 하단 바는 세 칸이고, 소개는 대문 안에
- * 요약 + "더 보기" 로 들어간다. 헤더와 푸터는 이 배열에 소개를 따로 더한다.
+ * ⚠️ 예전엔 헤더·푸터가 "서비스", 히어로 CTA 가 "만든 것" 이었다. 같은 곳을 두
+ * 이름으로 부르면 처음 온 사람은 그게 다른 곳인 줄 안다. 아래 배열들이 전부 이
+ * 상수를 집어다 쓰므로, 라벨을 고칠 자리는 늘 여기 한 곳이다.
  */
-export const PRIMARY_NAV = [
-  { label: "생각들", href: INTERNAL_LINKS.thoughts },
-  { label: "만든 것", href: INTERNAL_LINKS.services },
-  { label: "영상", href: INTERNAL_LINKS.videos },
-] as const;
+const START = { label: "시작하기", href: INTERNAL_LINKS.start } as const;
+const THOUGHTS = { label: "생각들", href: INTERNAL_LINKS.thoughts } as const;
+const SERVICES = { label: "만든 것", href: INTERNAL_LINKS.services } as const;
+const VIDEOS = { label: "영상", href: INTERNAL_LINKS.videos } as const;
+const ABOUT = { label: "소개", href: INTERNAL_LINKS.about } as const;
+
+/**
+ * 네비게이션 셋. 하단 바(md 미만)가 그대로 펴고, 헤더(md 이상)는 여기에 퍼플즈
+ * 한 칸을 더한다.
+ *
+ * ⚠️ **"영상"이 여기에 없다** (2026-08-28). 칸이 셋인데(하단 바의 상한) 소개가
+ * 그 자리를 가져갔다 — 이 채널은 "왜 이걸 하나"를 묻는 사람이 먼저 오는 곳이라
+ * 소개가 상시 입구여야 하고, 영상은 인스타·유튜브가 이미 가진 채널이라 이
+ * 사이트가 유일한 입구가 아니다. `/videos` 는 그대로 살아서 **푸터**로 들어간다
+ * (FOOTER_NAV). 네 칸으로 늘리지 말 것 — 375px 하단 바에서 라벨이 붙는다.
+ */
+export const PRIMARY_NAV = [THOUGHTS, SERVICES, ABOUT] as const;
+
+/**
+ * 푸터는 **전체 지도**다. 네비에서 빠진 것(시작하기·영상)까지 전부 싣는다 —
+ * 영상은 이제 사이트 안에서 여기가 유일한 입구다.
+ */
+export const FOOTER_NAV = [START, THOUGHTS, SERVICES, VIDEOS, ABOUT] as const;

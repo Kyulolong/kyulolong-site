@@ -73,7 +73,7 @@ const components = {
 
   code: (props: ComponentPropsWithoutRef<"code">) => (
     <code
-      className="bg-surface-2 text-ink rounded-[6px] px-1.5 py-0.5 font-mono text-[0.875em]"
+      className="bg-surface-2 text-ink rounded-badge px-1.5 py-0.5 font-mono text-[0.875em]"
       {...props}
     />
   ),
@@ -83,7 +83,7 @@ const components = {
    */
   pre: (props: ComponentPropsWithoutRef<"pre">) => (
     <pre
-      className="bg-surface-2 [&_code]:text-ink overflow-x-auto rounded-[16px] p-5 font-mono text-sm [&_code]:bg-transparent [&_code]:p-0"
+      className="bg-surface-2 [&_code]:text-ink overflow-x-auto rounded-note p-5 font-mono text-sm [&_code]:bg-transparent [&_code]:p-0"
       {...props}
     />
   ),

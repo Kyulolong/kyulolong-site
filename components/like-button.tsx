@@ -209,12 +209,17 @@ export function LikeButton({
       aria-pressed={isLiked}
       aria-label={isLiked ? "좋아요 취소" : "좋아요"}
       title={isLiked ? "좋아요 취소" : "좋아요"}
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-[6px] px-2 py-1 text-[11px] transition-colors ${
-        isLiked ? "text-acid-deep" : "text-ink-faint hover:text-ink-soft"
+      className={`relative inline-flex shrink-0 items-center gap-1.5 rounded-badge px-2 py-1 text-[11px] transition-colors after:absolute after:-inset-x-3 after:-inset-y-2.5 after:content-[''] md:after:hidden ${
+        isLiked ? "text-iris-soft" : "text-ink-faint hover:text-ink-soft"
       } ${className}`}
     >
-      {/* 형광 대신 acid-deep 을 쓴다. 카드가 60장이 되면 형광 하트가 화면 전체에
-          흩어져서, 한 화면에 한 곳이라는 규칙이 목록에서 무너진다 (DESIGN.md §2). */}
+      {/* 형광이 아니라 보라(iris-soft)다. 카드가 60장이 되면 형광 하트가 화면 전체에
+          흩어져서, 한 화면에 한 곳이라는 규칙이 목록에서 무너진다 (DESIGN.md §2).
+
+          ⚠️ 예전엔 같은 이유로 acid-deep 을 썼는데, 다크로 뒤집으면서 acid-deep 이
+          #8FFF00 그 자체가 됐다("현재 배경에서 항상 보이는 초록"이라 그게 맞다).
+          그래서 토큰은 그대로인데 의미만 뒤집혀서, 이 한 줄이 조용히 형광 하트
+          60개가 될 뻔했다. 목록에서 '켜짐'을 나타내는 색은 이제 보라다. */}
       <svg
         viewBox="0 0 20 20"
         width="14"

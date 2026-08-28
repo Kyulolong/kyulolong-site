@@ -6,65 +6,164 @@
  * 토큰은 docs/DESIGN.md §3 의 복붙 블록을 Tailwind 이름으로 옮긴 것이다.
  * 값이 어긋나면 서비스들끼리 얼굴이 달라진다 — 고칠 땐 DESIGN.md 를 먼저 고친다.
  *
- * 이 사이트는 라이트 전용이다. 누락이 아니라 선택이다 (DESIGN.md §11):
+ * 이 사이트는 다크 전용이다. 누락이 아니라 선택이다 (DESIGN.md §11):
  * 랜딩의 논지가 "누구나 열어보면 된다" 라서, 첫인상을 한 가지로 고정한다.
  * 서비스 앱들은 각자 prefers-color-scheme 대응을 유지한다.
  */
 @theme {
-  /* ── 흰 종이 ─────────────────────────────
+  /* ── 60% 바탕 — Deep Violet Slate ─────────
      canvas 로 쓰는 이유: Tailwind 의 bg-* 유틸리티와 이름이 겹쳐
-     --color-bg 는 bg-bg 라는 읽기 힘든 클래스가 된다. */
-  --color-canvas: #ffffff;
-  --color-surface: #fafaf7;
-  --color-surface-2: #f5f4ef;
-  --color-line: #e8e7e0;
-  --color-line-strong: #d9d7cc;
-  --color-ink: #1a1a17; /* 17.4:1 */
-  --color-ink-soft: #55544c; /* 7.6:1 */
-  --color-ink-faint: #73726a; /* 4.8:1 — 이보다 옅게 내리지 않는다 */
+     --color-bg 는 bg-bg 라는 읽기 힘든 클래스가 된다.
 
-  /* ── 형광 한 점 ───────────────────────────
-     acid 는 배경으로만. 밝은 바탕 위 글자로 쓰면 1.27:1 이라 사라진다.
-     글자·아이콘·작은 도형·포커스링은 전부 acid-deep(6.4:1). */
-  --color-acid: #8fff00;
-  --color-acid-deep: #3d6b00;
+     보라 기운이지 파란 기운이 아니다. 판별은 R 과 G 로 한다 —
+     #121019 는 R(18) > G(16) 이고, 금지된 푸른 검정 #0e1116 은 G > R 이다. */
+  --color-canvas: #121019;
+  --color-surface: #1a1725; /* 카드 면. 바탕 위에서 아주 살짝 뜬다 */
+  --color-surface-2: #221e30; /* 인풋 안쪽, 비활성 면, 중립 뱃지 */
+  --color-line: #2a2539;
+  --color-line-strong: #3b3550;
+  --color-ink: #edebf5; /* 15.98:1 */
+  --color-ink-soft: #a8a4bc; /* 7.81:1 */
+  --color-ink-faint: #837e99; /* 4.86:1 — 이보다 옅게 내리지 않는다 */
+
+  /* ── 30% 정체성 — Electric Purple ─────────
+     DESIGN.md §2: 면 전용. 바탕 위 2.86:1 이라 글자·아이콘·얇은 선에 쓰면 안 읽힌다.
+     이 층이 실제로 넓게 깔려야 한다 — 안 그러면 화면이 검정+형광 두 겹으로
+     돌아가고, 그건 §1 이 적어둔 1차 실패다. */
+  --color-iris: #6332eb; /* 트레이·프레임의 '면' */
+  --color-iris-press: #5528d4;
+  --color-iris-soft: #a98cff; /* 보라가 글자여야 할 때 (7.08:1) */
+  --color-iris-wash: #241b45; /* 한 단계 아래의 조용한 면. surface 와 구별되게 보라를 남긴다 */
+  --color-on-iris: #f5f3ff; /* 보라 위 글자 (6.01:1). 절대 어둡게 하지 않는다 */
+
+  /* ── 10% 강조 — Neon Lime ────────────────
+     상한이지 채울 칸이 아니다. 이 사이트에서 형광은 히어로의 커서 하나다. */
+  --color-acid: #8fff00; /* 바탕 위 14.79:1 */
+  --color-acid-deep: #8fff00; /* '현재 배경에서 항상 보이는 초록' — 다크에선 acid 와 같다 */
   --color-acid-press: #7ce600;
-  --color-acid-wash: #eaffcb;
-  --color-on-acid: #14140f; /* acid 위 14.5:1. 절대 ink 로 바꾸지 않는다 */
+  --color-acid-wash: #1e2a0d;
+  --color-on-acid: #14140f; /* acid 위 14.49:1. 절대 ink 로 바꾸지 않는다 */
 
-  /* ── 파스텔 종이 (DESIGN.md §2 — 면 전용) ──
-     글자·테두리·버튼에 쓰지 않는다. 쓰는 순간 형광과 싸운다. */
-  --color-paper-lime: #f2ffdd;
-  --color-paper-sky: #e9f3ff;
-  --color-paper-peach: #fff0e6;
-  --color-paper-lilac: #f2edff;
-  --color-paper-sand: #faf3e0;
+  /* ── 도판(plate) — 뒤집기에서 살아남은 유일한 밝은 면 ──
+     취향이 아니라 제약이다. 서비스·가이드 일러스트는 전부 흰 바탕에 그려져
+     mix-blend-multiply 로 종이에 녹는데, 어두운 면 위에서 multiply 는 그림을
+     통째로 검게 만든다. 그래서 일러스트가 앉는 판만 밝게 남긴다.
+     덕분에 어두운 페이지에서 일러스트가 '불 켜진 도판'으로 읽힌다.
+     ⚠️ 스크린샷(영상 썸네일)은 multiply 를 안 쓰므로 이 판을 쓰지 않는다. */
+  --color-plate: #ebe7f5;
+  --color-on-plate: #17151f; /* 도판 위 글자 — 18:1 */
 
-  /* ── 의미색 ────────────────────────────── */
-  --color-happy-accident: #b4551f;
-  --color-caution: #8a5a00;
+  /* ── 의미색 (어두운 바탕용으로 밝게 잡는다) ── */
+  --color-happy-accident: #f0906a;
+  --color-caution: #e8b64a;
 
-  /* ── 따뜻한 그림자 (검정 그림자 금지) ────── */
-  --shadow-soft: 0 1px 2px rgba(60, 52, 30, 0.05);
-  --shadow-lift: 0 6px 20px -6px rgba(60, 52, 30, 0.12);
-  --shadow-float: 0 20px 48px -16px rgba(60, 52, 30, 0.16);
+  /* ── 층: 다크에서 그림자는 거의 안 읽힌다 ──
+     떠 있음은 그림자가 아니라 면 밝기 차로 만든다 (canvas → surface → surface-2).
+     아래는 진짜 떠 있어야 하는 것에만. */
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-lift: 0 8px 24px -8px rgba(0, 0, 0, 0.55);
+  --shadow-float: 0 20px 48px -16px rgba(0, 0, 0, 0.65);
 
-  /* ── 모서리: 라이트는 다크보다 한 단계 더 둥글게 ── */
-  --radius-card: 16px;
-  --radius-panel: 24px;
+  /**
+   * ── 모서리 (DESIGN.md §6) ──────────────
+   *
+   * 네 칸이다. 예전엔 화면에 9종(5·6·8·12·14·16·20·24·28px)이 하드코딩돼 있었고
+   * 정작 토큰은 한 번도 안 쓰였다. 모양도 예산이라(§6) 칸이 아홉이면 아무 뜻도 없다.
+   *
+   * ⚠️ **inset 은 md 를 반올림한 값이 아니라 계산값이다.**
+   *   안쪽 반경 = 바깥 반경 − 패딩
+   * 카드(24px)에 p-3(12px)으로 도판을 앉히면 12px 이 나온다. 이 값을 card 나
+   * note 로 맞추면 안쪽 곡선이 바깥 곡선과 어긋나서, 두 모서리 사이 여백이
+   * 한쪽만 두꺼워 보인다. **패딩을 바꾸면 이 값도 같이 바꿔야 한다.**
+   */
+  --radius-badge: 6px; /* 뱃지 · 필터 칩 · 인라인 코드 · 작은 컨트롤 */
+  --radius-inset: 12px; /* 패딩 있는 카드의 '안쪽' — 위 동심원 계산 */
+  --radius-note: 16px; /* 노트 블록 · 인풋 · 코드 블록 · 프롬프트 */
+  --radius-card: 24px; /* 카드 · 큰 패널 · 보라 트레이 */
+  /* 버튼은 rounded-full 이다 — 알약은 버튼의 것 (§6) */
 
   --font-sans:
     Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic",
     sans-serif;
-  /* 숫자·코드용 고정폭. 시스템 폰트라 추가 다운로드가 없다. */
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  /**
+   * 기록용 고정폭 — DM Mono.
+   *
+   * 이 사이트의 등뼈다. 작업 번호(07)·걸린 시간(2시간)·날짜·회차·읽는 시간이
+   * 전부 이 얼굴로 나오고, 그래서 목록이 '카드 모음'이 아니라 **누가 세면서
+   * 쌓아온 기록**으로 읽힌다.
+   *
+   * JetBrains/Fira/IBM Plex 를 안 쓴 이유: 셋 다 코딩용 얼굴이라 화면이
+   * '개발자 도구' 냄새를 풍긴다. DM Mono 는 기하학적이면서 살짝 편집물
+   * 쪽이라 터미널이 아니라 **장부**로 읽힌다.
+   *
+   * ⚠️ Pretendard 가 스택 안에 있는 게 중요하다. DM Mono 는 라틴 서브셋만
+   * 받으므로 한글은 여기서 걸러지는데, Pretendard 가 없으면 고정폭 줄의
+   * 한글만 시스템 폰트로 떨어져서 본문과 얼굴이 갈린다.
+   */
+  --font-mono:
+    "DM Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Pretendard,
+    -apple-system, sans-serif;
 
   /* DESIGN.md §6: 튀는 스프링 금지 */
   --ease-calm: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/**
+ * DM Mono — 라틴 서브셋만 자체 호스팅한다 (public/fonts/).
+ *
+ * Pretendard 와 같은 방침이다: CDN 을 한 곳 더 거치는 DNS + TLS 왕복이
+ * 8KB 파일 전송보다 오래 걸린다. unicode-range 로 라틴만 잡아두면 한글
+ * 문서에서는 이 파일을 아예 안 받는다.
+ */
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/dm-mono-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/dm-mono-500.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
 :root {
-  color-scheme: light;
+  color-scheme: dark;
+
+  /**
+   * 하단 고정 네비(components/mobile-nav.tsx)가 차지하는 높이.
+   *
+   * @theme 토큰이 아니라 그냥 CSS 변수다 — 유틸리티를 만들 필요가 없고,
+   * env() 를 섞어야 해서 디자인 토큰의 성격도 아니다.
+   */
+  --nav-h: 3.5rem;
+  --nav-space: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
+}
+
+/* md 부터는 바가 사라지므로(md:hidden) 자리도 같이 없앤다 */
+@media (width >= 48rem) {
+  :root {
+    --nav-space: 0px;
+  }
+}
+
+html {
+  /* 가로 모드에서 사파리가 본문 글자를 혼자 키우는 것을 막는다.
+     11px·13px 라벨이 방향 바꿀 때마다 들썩이는 원인이다. */
+  -webkit-text-size-adjust: 100%;
+  /* transparent 로 죽이지 않는다. 이 사이트에는 JS 로 만든 press 상태가 없어서
+     이게 유일한 터치 피드백이다. iOS 기본값의 차가운 파랑만 바탕에 맞는 색으로 바꾼다.
+     ⚠️ 다크로 뒤집으면 부호가 반대다 — 어두운 바탕에 어두운 오버레이는 안 보인다. */
+  -webkit-tap-highlight-color: rgb(237 235 245 / 0.1);
 }
 
 body {
@@ -74,16 +173,39 @@ body {
   /* 한글 가독성 */
   letter-spacing: -0.01em;
   word-break: keep-all;
+  /**
+   * keep-all 의 짝.
+   *
+   * keep-all 은 한글 어절을 안 쪼개는 대신 **끊을 자리가 없는 라틴 토큰**
+   * (URL·이메일·명령어)도 통째로 안 쪼갠다. 그런 토큰 하나가 화면보다 길면
+   * 페이지 전체가 가로로 밀린다.
+   *
+   * `anywhere` 가 아니라 `break-word` 다 — anywhere 는 min-content 계산에
+   * 끼어들어서 칩이나 w-fit 요소를 전역에서 쪼그라뜨린다. 정말 안 들어가는
+   * 한 곳(서비스 상세의 주소 줄)만 wrap-anywhere 로 국소 처리한다.
+   */
+  overflow-wrap: break-word;
+  /**
+   * 하단 바가 콘텐츠와 푸터를 덮지 않게 자리를 비운다.
+   *
+   * main 이 아니라 body 에 준다 — 푸터가 main 밖에 있어서 main 에 주면
+   * 푸터의 마지막 줄(kyulolong.com / 방문자 수)이 바 밑에 깔린다.
+   */
+  padding-bottom: var(--nav-space);
+  /* viewport-fit=cover 라 가로 모드에서 노치 밑으로 글자가 들어간다.
+     컨테이너의 px-6 만으로는 모자란다. 고정 바는 뷰포트 기준이라 이걸 안 물려받고
+     자기 좌우 패딩을 따로 갖는다. */
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
 }
 
-/* DESIGN.md §5: 밝은 바탕에서 행간이 좁으면 눈이 미끄러진다 */
+/* DESIGN.md §5: 어두운 바탕에서 행간이 좁으면 밝은 글줄끼리 붙어 보인다 */
 p {
   line-height: 1.75;
 }
 
 /**
- * 포커스 링에 acid 를 쓰면 흰 바탕에서 1.27:1 이라 안 보인다.
- * 다크였을 땐 acid 로 충분했지만 라이트로 뒤집으면서 같이 뒤집어야 하는 곳이다.
+ * acid-deep 은 '현재 배경에서 항상 보이는 초록'이다 — 다크에서는 #8FFF00 자체라
+ * 이 한 줄이 다크·라이트 양쪽을 해결한다 (DESIGN.md §3).
  */
 :focus-visible {
   outline: 2px solid var(--color-acid-deep);
@@ -97,5 +219,28 @@ p {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+}
+
+/**
+ * 히어로의 커서 (components/hero.tsx).
+ *
+ * 이 페이지에서 움직이는 것은 이것 하나다. 형광 한 점이 액션이 아니라 **말**에
+ * 붙어 있는 이유는 DESIGN.md §7 에 적어뒀다 — 제목이 방금 타이핑된 것처럼,
+ * 물음표 뒤에서 다음 줄을 기다리는 상태로 두기 위해서다.
+ *
+ * steps(1) 이라 페이드가 아니라 딱 켜지고 딱 꺼진다. 페이드로 만들면
+ * 글로우처럼 번져서 §2 에 걸린다.
+ */
+@keyframes caret-blink {
+  /* 켜져 있는 쪽이 길다. 50:50 으로 두면 페이지의 형광 한 점이 절반의 시간
+     동안 아예 없어져서, 화면을 훑는 순간에 따라 브랜드 색이 사라진다. */
+  0%,
+  72% {
+    opacity: 1;
+  }
+  72.01%,
+  100% {
+    opacity: 0;
   }
 }

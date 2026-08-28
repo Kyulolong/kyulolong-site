@@ -10,6 +10,19 @@ import { z } from "zod";
 export const SERIES = ["이게 되네?", "커리어 인사이트"] as const;
 export type Series = (typeof SERIES)[number];
 
+/**
+ * 스펙 6번: 글(생각들) 시리즈. `/thoughts` 의 필터 칩이 곧 이 목록이다.
+ *
+ * 영상의 SERIES 와 **합치지 않는다.** 두 축은 각자 늘어나고, 실제로 겹치는
+ * 이름("이게 되네?")이 하나 있지만 그건 같은 축이라서가 아니라 이 채널의
+ * 말버릇이라서다. 합쳐두면 영상 시리즈를 하나 늘릴 때 글 필터가 같이 늘어난다.
+ *
+ * 셋이 지도 노릇을 한다 — AX 는 조직·경영의 축, "이게 되네?" 는 만든 과정의 축,
+ * 생각소스는 그 둘의 재료. 칩 옆에 설명을 붙이지 않는다 (제목이 스스로 말한다).
+ */
+export const THOUGHT_SERIES = ["AX", "이게 되네?", "생각소스"] as const;
+export type ThoughtSeries = (typeof THOUGHT_SERIES)[number];
+
 export const PLATFORMS = ["instagram", "youtube"] as const;
 export type Platform = (typeof PLATFORMS)[number];
 
@@ -35,7 +48,9 @@ export type ServiceStatus = (typeof SERVICE_STATUS)[number];
 export const RESERVED_PATHS = [
   "services",
   "videos",
+  "thoughts",
   "about",
+  "start",
   "api",
   "_next",
   "static",
@@ -225,8 +240,44 @@ export const videoFrontmatterSchema = z
     message: "embedUrl 이나 externalUrl 중 최소 하나는 있어야 합니다 (없으면 영상에 갈 곳이 없습니다)",
   });
 
+/**
+ * content/thoughts/<slug>.mdx — 글.
+ *
+ * ⚠️ 필드가 서비스보다 훨씬 적은 게 의도다. 서비스 쪽이 buildTime·prompt·concept 로
+ * 무거운 건 그게 "0부터 시작하지 마세요"의 실물이라서인데, 글에 같은 무게를 얹으면
+ * 쓰기 전에 채울 칸부터 보게 되고 결국 안 쓰게 된다. 글은 title·series·publishedAt
+ * 셋이면 선다. 새 필드를 더하고 싶을 때 이 문단을 먼저 읽을 것.
+ *
+ * 썸네일 필드도 두지 않는다 (스펙 5번) — 매주 이미지를 손으로 만들어야 하면
+ * 그 부담 때문에 등록을 미루게 된다. 목록은 제목·시리즈·날짜·읽는 시간으로 선다.
+ */
+export const thoughtFrontmatterSchema = z.strictObject({
+  title: z.string().min(1),
+  /**
+   * 목록에 걸리는 한 줄. 비우면 본문 첫 문단에서 summarize() 가 만들어낸다 —
+   * 없어도 목록이 안 깨지는 게 중요해서 optional 이다.
+   */
+  summary: z.string().optional(),
+  series: z.enum(THOUGHT_SERIES),
+  tags: z.array(z.string()).default([]),
+  publishedAt: isoDate,
+  /**
+   * 목록 맨 위 고정. byFeaturedThenRecent 가 이미 그 일을 한다.
+   * 이 채널에서는 "이 섹션이 무엇인지 설명하는 글"을 세우는 데 쓴다.
+   */
+  featured: z.boolean().default(false),
+  /**
+   * 글이 인용하는 서비스. **단방향이다** — 서비스 MDX 에 되받는 필드가 없다.
+   * 이유는 validate.ts 상단 주석에 적어뒀다.
+   */
+  relatedServices: z.array(z.string()).default([]),
+  /** 공유 카드 전용 래스터. 없으면 사이트 기본 카드로 떨어진다. */
+  ogImage: z.string().optional(),
+});
+
 export type ServiceFrontmatter = z.infer<typeof serviceFrontmatterSchema>;
 export type VideoFrontmatter = z.infer<typeof videoFrontmatterSchema>;
+export type ThoughtFrontmatter = z.infer<typeof thoughtFrontmatterSchema>;
 
 /** content/services/<slug>.mdx */
 export interface Service {
@@ -294,6 +345,23 @@ export interface Video {
   body: string;
 }
 
+/** content/thoughts/<slug>.mdx */
+export interface Thought {
+  slug: string;
+  title: string;
+  /** 목록의 한 줄. 없으면 본문에서 뽑는다. */
+  summary?: string;
+  series: ThoughtSeries;
+  tags: string[];
+  publishedAt: string;
+  /** 목록 맨 위 고정 */
+  featured: boolean;
+  /** 글이 인용하는 서비스 (단방향) */
+  relatedServices: string[];
+  ogImage?: string;
+  body: string;
+}
+
 /**
  * 인터페이스와 zod 스키마가 어긋나면 컴파일 에러가 나도록 묶어둔다.
  * 한쪽만 고치는 실수를 막는다.
@@ -308,5 +376,10 @@ const _videoMatches: AssertEqual<
   VideoFrontmatter,
   Omit<Video, "slug" | "body">
 > = true;
+const _thoughtMatches: AssertEqual<
+  ThoughtFrontmatter,
+  Omit<Thought, "slug" | "body">
+> = true;
 void _serviceMatches;
 void _videoMatches;
+void _thoughtMatches;

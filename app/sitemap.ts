@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getServices, getVideos } from "@/lib/content";
+import { getServices, getThoughts, getVideos } from "@/lib/content";
 import { absoluteUrl } from "@/lib/seo";
 
 /**
@@ -22,19 +22,31 @@ import { absoluteUrl } from "@/lib/seo";
 export default function sitemap(): MetadataRoute.Sitemap {
   const services = getServices();
   const videos = getVideos();
+  const thoughts = getThoughts();
 
   // 목록·랜딩의 lastmod 는 "가장 최근에 올린 콘텐츠" 날짜다. 새 서비스를 올리면
   // 목록 페이지도 실제로 바뀌므로, 크롤러에게 다시 와야 할 이유를 알려주는 값이다.
   const latest = (dates: string[]) => dates.slice().sort().at(-1);
   const lastService = latest(services.map((s) => s.publishedAt));
   const lastVideo = latest(videos.map((v) => v.publishedAt));
-  const lastAny = latest([lastService, lastVideo].filter((d): d is string => Boolean(d)));
+  const lastThought = latest(thoughts.map((t) => t.publishedAt));
+  const lastAny = latest(
+    [lastService, lastVideo, lastThought].filter((d): d is string => Boolean(d)),
+  );
 
   return [
     { url: absoluteUrl("/"), lastModified: lastAny, changeFrequency: "weekly", priority: 1 },
     {
       url: absoluteUrl("/services"),
       lastModified: lastService,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    // 서비스 목록과 같은 0.9 다. 대문 다음으로 자주 바뀌고, 이 채널이 쌓아가는
+    // 축이라 영상 아카이브(0.7)보다 위에 둔다.
+    {
+      url: absoluteUrl("/thoughts"),
+      lastModified: lastThought,
       changeFrequency: "weekly",
       priority: 0.9,
     },
@@ -66,6 +78,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
         changeFrequency: "monthly" as const,
         priority: 0.8,
       })),
+
+    ...thoughts.map((thought) => ({
+      url: absoluteUrl(`/thoughts/${thought.slug}`),
+      lastModified: thought.publishedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
 
     ...videos.map((video) => ({
       url: absoluteUrl(`/videos/${video.slug}`),

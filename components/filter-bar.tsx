@@ -60,8 +60,8 @@ export function FilterBar({ label, options }: FilterBarProps) {
           aria-current={option.active ? "true" : undefined}
           className={
             option.active
-              ? "bg-ink text-canvas inline-flex items-center gap-1.5 rounded-[6px] px-3 py-1.5 text-[13px] font-medium"
-              : "bg-surface-2 text-ink-soft hover:bg-line inline-flex items-center gap-1.5 rounded-[6px] px-3 py-1.5 text-[13px] font-medium transition-colors"
+              ? "bg-ink text-canvas inline-flex min-h-11 items-center gap-1.5 rounded-badge px-3.5 py-2 text-[13px] font-medium md:min-h-0 md:px-3 md:py-1.5"
+              : "bg-surface-2 text-ink-soft hover:bg-line inline-flex min-h-11 items-center gap-1.5 rounded-badge px-3.5 py-2 text-[13px] font-medium transition-colors md:min-h-0 md:px-3 md:py-1.5"
           }
         >
           {option.label}

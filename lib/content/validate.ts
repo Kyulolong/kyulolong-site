@@ -1,4 +1,4 @@
-import { ContentError, getServices, getVideos } from "./loader";
+import { ContentError, getServices, getThoughts, getVideos } from "./loader";
 import { RESERVED_PATHS } from "./types";
 
 const RESERVED = new Set<string>(RESERVED_PATHS);
@@ -103,10 +103,23 @@ function findDuplicates(values: string[]): string[] {
  *   4. 같은 대상을 중복 참조하는지
  *   5. URL 필드가 자리표시자인지 (가짜 링크 배포 방지)
  *   6. processUrl 의 퍼플즈 주소가 임베드로 바뀔 수 있는 형식인지
+ *
+ * ⚠️ **글(thoughts)의 relatedServices 는 3번에서 빠진다 — 일부러다.**
+ *
+ * 서비스↔영상이 양방향인 건 두 축이 서로를 설명하기 때문이다(그 영상은 그 서비스를
+ * 만드는 영상이고, 그 서비스는 그 영상에서 만들어진다). 글은 서비스를 **인용할** 뿐이고
+ * 서비스는 자기를 인용한 글을 몰라도 된다.
+ *
+ * 규칙으로 만들면 더 분명하다: 타입이 N 개면 양방향 쌍은 N·(N−1)/2 로 는다. 글 하나
+ * 올릴 때마다 인용한 서비스 MDX 를 같이 고쳐야 하고, 그 순간 "글 추가 = MDX 하나"
+ * (스펙 5번)가 깨진다. 글은 매주 늘어나는 쪽이라 이 비용이 먼저 터진다.
+ *
+ * 존재 검사(2번)와 중복 검사(4번)는 그대로 돈다 — 끊긴 링크는 여전히 빌드 실패다.
  */
 export function validateContent(): void {
   const services = getServices();
   const videos = getVideos();
+  const thoughts = getThoughts();
 
   const serviceSlugs = new Set(services.map((s) => s.slug));
   const videoSlugs = new Set(videos.map((v) => v.slug));
@@ -186,6 +199,37 @@ export function validateContent(): void {
         problems.push(
           `양방향 참조 불일치: videos/${video.slug}.mdx 는 "${serviceSlug}" 를 가리키는데, ` +
             `services/${serviceSlug}.mdx 의 relatedVideos 에 "${video.slug}" 가 없습니다.`,
+        );
+      }
+    }
+  }
+
+  for (const thought of thoughts) {
+    const thoughtFile = `thoughts/${thought.slug}.mdx`;
+
+    // 1. 예약 경로 침범. 글은 /thoughts/<slug> 라 루트와 부딪히지는 않지만,
+    //    슬러그를 서비스와 같은 규칙으로 유지해야 나중에 옮길 때 안 걸린다.
+    if (RESERVED.has(thought.slug)) {
+      problems.push(
+        `${thoughtFile} — 슬러그 "${thought.slug}" 는 홈페이지 예약 경로입니다. ` +
+          `다른 이름을 쓰세요. (예약: ${RESERVED_PATHS.join(", ")})`,
+      );
+    }
+
+    // 5. 자리표시자 링크
+    checkFakeUrl(thoughtFile, "ogImage", thought.ogImage, problems);
+
+    // 4. 중복 참조
+    for (const dupe of findDuplicates(thought.relatedServices)) {
+      problems.push(`${thoughtFile} — relatedServices 에 "${dupe}" 가 중복 있습니다.`);
+    }
+
+    // 2. 대상 존재 여부. 3번(양방향)은 위 주석대로 일부러 안 본다.
+    for (const serviceSlug of thought.relatedServices) {
+      if (!serviceSlugs.has(serviceSlug)) {
+        problems.push(
+          `${thoughtFile} — relatedServices 의 "${serviceSlug}" 에 해당하는 ` +
+            `content/services/${serviceSlug}.mdx 가 없습니다.`,
         );
       }
     }

@@ -65,7 +65,7 @@ function Cmd({ os, children }: { os?: string; children: string }) {
   return (
     <div className="mt-3">
       {os ? <p className="text-ink-faint mb-1.5 text-[13px] font-semibold">{os}</p> : null}
-      <pre className="border-line bg-surface-2 text-ink overflow-x-auto rounded-[16px] border px-5 py-4 font-mono text-[0.8125rem] leading-relaxed whitespace-pre-wrap">
+      <pre className="border-line bg-surface-2 text-ink overflow-x-auto rounded-note border px-5 py-4 font-mono text-[0.8125rem] leading-relaxed whitespace-pre-wrap">
         {children}
       </pre>
     </div>
@@ -134,7 +134,7 @@ export default function StartPage() {
 
         {/* 준비물과 비용을 맨 위에 둔다. 이걸 뒤에 숨기면 설치까지 따라온 사람이
             로그인 화면에서 막히고, 그때는 이미 이 글을 믿지 않게 된다. */}
-        <section className="bg-paper-sand rounded-[28px] px-7 py-9 sm:px-10 sm:py-11">
+        <section className="bg-iris-wash rounded-card px-7 py-9 sm:px-10 sm:py-11">
           <h2 className="text-xl font-bold tracking-[-0.02em]">먼저 알고 시작하세요</h2>
           <dl className="mt-6 space-y-5">
             <div>
@@ -170,12 +170,12 @@ export default function StartPage() {
             지금 상태에서 제일 부담 없는 걸 고르시면 되고, 나중에 갈아타도 됩니다.
           </p>
 
-          <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {ROUTES.map((route) => (
               <li key={route.id}>
                 <a
                   href={`#${route.id}`}
-                  className="group border-line bg-canvas hover:shadow-lift block h-full rounded-[24px] border p-3 transition-[transform,box-shadow] duration-200 ease-[var(--ease-calm)] hover:-translate-y-0.5"
+                  className="group border-line bg-surface hover:border-line-strong hover:bg-surface-2 block h-full rounded-card border p-3 transition-[transform,box-shadow] duration-200 ease-[var(--ease-calm)] hover:-translate-y-0.5"
                 >
                   <Thumbnail
                     src={route.src}
@@ -446,7 +446,7 @@ export default function StartPage() {
 
         {/* ── 막혔을 때 ─────────────────────────────────────────────────── */}
         <section className="mt-20">
-          <div className="bg-paper-lilac rounded-[28px] px-7 py-9 sm:px-10 sm:py-11">
+          <div className="bg-iris-wash rounded-card px-7 py-9 sm:px-10 sm:py-11">
             <h2 className="text-2xl font-bold tracking-[-0.02em]">막혔을 때</h2>
             <p className="text-ink-soft mt-3 text-pretty">
               이 페이지에서 제일 중요한 부분입니다. 여기까지 오는 사람은 많고,
@@ -491,7 +491,7 @@ export default function StartPage() {
           </p>
           <Link
             href={INTERNAL_LINKS.services}
-            className="bg-ink text-canvas mt-7 inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-85"
+            className="bg-iris text-on-iris hover:bg-iris-press mt-7 inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-85"
           >
             만든 것 + 프롬프트 보기
           </Link>

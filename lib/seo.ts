@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { Service, Video } from "./content/types";
+import type { Service, Thought, Video } from "./content/types";
 
 /**
  * 검색엔진과 링크 미리보기(카톡·슬랙·X)가 읽는 것들의 단일 출처.
@@ -23,10 +23,14 @@ export const SITE_NAME = "규로롱";
 /**
  * 검색 결과와 탭에 뜨는 제목.
  *
- * "규로롱" 만 두면 이름을 이미 아는 사람만 찾을 수 있다. 채널의 그 한 줄을
- * 같이 세워서 처음 보는 사람도 뭘 하는 곳인지 알게 한다 (인스타 썸네일과 같은 문구).
+ * "규로롱" 만 두면 이름을 이미 아는 사람만 찾을 수 있다. 대문의 그 한 줄을
+ * 같이 세워서 처음 보는 사람도 뭘 하는 곳인지 알게 한다 (components/hero.tsx 의 h1).
+ *
+ * ⚠️ 예전엔 `이게 되네?` 였다. 그 말은 아무도 검색하지 않는다 — 지금 줄에는
+ * **`창업`** 이 들어 있어서, 이름을 모르는 사람이 닿을 수 있는 문이 하나 생긴다.
+ * 문구를 다시 고칠 일이 있으면 검색되는 말이 남는지부터 볼 것.
  */
-export const SITE_TITLE = `${SITE_NAME} — 이게 되네?`;
+export const SITE_TITLE = `${SITE_NAME} — 내일의 창업, 오늘 내 일로`;
 
 export const SITE_DESCRIPTION =
   "인사담당 출신이 AI와 함께 매주 서비스를 하나씩 만듭니다. 만든 것마다 소스코드와 쓴 프롬프트를 같이 열어뒀고, 전부 로그인 없이 열립니다.";
@@ -39,7 +43,9 @@ export const OG_IMAGE = {
   url: "/og.png",
   width: 1200,
   height: 630,
-  alt: "규로롱 — 이게 되네? 인사담당자가 · 요청 한 번에 · 앱스토어까지",
+  // 카드에 실제로 그려진 것을 적는다 (scripts/make-og.tsx). 예전 문구
+  // "인사담당자가 · 요청 한 번에 · 앱스토어까지" 는 옛 인스타 소개글이라 카드에 없다.
+  alt: "규로롱 — 내일의 창업, 오늘 내 일로. AX · 이게 되네? · 생각소스",
 } as const;
 
 /**
@@ -105,7 +111,8 @@ export function pageMetadata({
   noIndex,
 }: PageMeta): Metadata {
   // 제목이 없으면 사이트 기본 제목을 그대로 쓴다. 그냥 문자열로 주면 레이아웃의
-  // 템플릿("%s · 규로롱")이 한 번 더 걸려 "규로롱 — 이게 되네? · 규로롱" 이 된다.
+  // 템플릿("%s · 규로롱")이 한 번 더 걸려 "규로롱 — 내일의 창업, 오늘 내 일로 · 규로롱"
+  // 이 된다 — 이름이 두 번 나온다.
   const shareTitle = title ?? { absolute: SITE_TITLE };
   /**
    * 페이지 전용 이미지에도 alt 를 붙인다. 기본 카드(OG_IMAGE)는 alt 를 갖고 있어서,
@@ -227,6 +234,39 @@ export function serviceJsonLd(service: Service): Record<string, unknown> {
         }
       : {}),
     ...(service.github ? { codeRepository: service.github } : {}),
+  };
+}
+
+/**
+ * 글 — BlogPosting.
+ *
+ * 서비스(SoftwareApplication)·영상(VideoObject)과 달리 값·접근조건을 적을 게
+ * 없어서 훨씬 짧다. 여기서도 별점은 넣지 않는다 (이 파일 위 주석).
+ *
+ * dateModified 를 적지 않는다. frontmatter 에 그 필드가 없어서 적으려면
+ * publishedAt 을 그대로 베껴야 하는데, 그건 "고친 적 없다"는 사실 주장이
+ * 된다 — 실제로는 고치고 있다. 모르는 건 비워두는 쪽이 맞다.
+ */
+export function thoughtJsonLd(thought: Thought): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: thought.title,
+    description: thought.summary ?? summarize(thought.body) ?? thought.title,
+    datePublished: thought.publishedAt,
+    inLanguage: "ko-KR",
+    url: absoluteUrl(`/thoughts/${thought.slug}`),
+    mainEntityOfPage: absoluteUrl(`/thoughts/${thought.slug}`),
+    ...(() => {
+      const image = shareableImage(thought.ogImage);
+      return image ? { image: absoluteUrl(image) } : {};
+    })(),
+    // 시리즈가 곧 이 글이 속한 갈래다. 태그는 그 아래 결이라 같이 싣는다.
+    ...(thought.tags.length
+      ? { keywords: [thought.series, ...thought.tags].join(", ") }
+      : { keywords: thought.series }),
+    author: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
+    publisher: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
   };
 }
 

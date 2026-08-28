@@ -11,9 +11,8 @@ import type { MetadataRoute } from "next";
  * 마크가 캔버스의 52% 안에 들어가 있다. 꽉 채우면 어떤 런처에서는 잘린다.
  * (public/icon-*-maskable.png)
  *
- * 색이 어두운 건 의도다. 사이트 본문은 라이트지만 앱 아이콘과 스플래시는
- * 마크의 잉크색을 쓴다 — 형광이 가장 잘 서는 바탕이고, 홈 화면에서
- * 흰 타일은 다른 앱들 사이에서 존재감이 없다.
+ * 색은 DESIGN.md §3 의 바탕(#121019)이다. 형광과 보라가 가장 잘 서는
+ * 바탕이고, 홈 화면에서 흰 타일은 다른 앱들 사이에서 존재감이 없다.
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -23,8 +22,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "인사담당 출신이 IT 서비스를 만듭니다. 만든 서비스와 소스코드, 만드는 과정을 남긴 영상을 모아둡니다.",
     start_url: "/",
     display: "standalone",
-    theme_color: "#14180F",
-    background_color: "#14180F",
+    theme_color: "#121019",
+    background_color: "#121019",
     icons: [
       {
         src: "/icon-192-maskable.png",

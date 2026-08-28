@@ -26,11 +26,12 @@ const OUT = path.join(process.cwd(), "public/og.png");
 const SIZE = { width: 1200, height: 630 };
 
 // docs/DESIGN.md §3 토큰. 값이 어긋나면 공유 카드만 다른 사이트처럼 보인다.
-const INK = "#1a1a17";
-const INK_SOFT = "#55544c";
-const INK_FAINT = "#73726a";
-const CANVAS = "#ffffff";
-const PAPER_LIME = "#f2ffdd";
+const INK = "#edebf5";
+const INK_SOFT = "#a8a4bc";
+const INK_FAINT = "#837e99";
+const CANVAS = "#121019";
+const IRIS = "#6332eb";
+const ON_IRIS = "#f5f3ff";
 
 function readFont(file: string): Buffer {
   const full = path.join(FONT_DIR, file);
@@ -79,8 +80,8 @@ function card() {
           style={{
             display: "flex",
             alignSelf: "flex-start",
-            backgroundColor: PAPER_LIME,
-            color: INK_SOFT,
+            backgroundColor: IRIS,
+            color: ON_IRIS,
             fontSize: 26,
             fontWeight: 500,
             padding: "10px 24px",
@@ -89,20 +90,28 @@ function card() {
         >
           {/* 히어로 눈썹 줄과 같은 문구다 (components/hero.tsx).
               한쪽만 고치면 링크 미리보기와 도착한 화면이 다른 말을 한다. */}
-          인사담당자가 · 요청 한 번에 · 앱스토어까지
+          AX · 이게 되네? · 생각소스
         </div>
 
+        {/* 히어로의 h1 과 같은 문장이다 (components/hero.tsx).
+            `내일` 과 `내 일` 의 띄어쓰기 차이가 이 문장의 전부다 — 오타로 보고
+            고치지 말 것. 둘이 같은 줄에 있어야 말장난이 오타가 아닌 게 된다.
+
+            ⚠️ 116px 에서 84px 로 내렸다. 예전 문구는 다섯 글자라 크게 세울 수
+            있었지만, 이 줄은 열한 글자다. 116px 로 두면 satori 가 카드 안쪽 폭
+            (1200 − 좌우 80 = 1040px)을 넘겨 어디선가 접는데, 하필 `내 일로` 가
+            갈리면 말장난이 통째로 죽는다. 문구를 바꿀 때 글자 수부터 셀 것. */}
         <div
           style={{
             marginTop: 28,
-            fontSize: 116,
+            fontSize: 84,
             fontWeight: 700,
             color: INK,
             letterSpacing: "-0.045em",
             lineHeight: 1.05,
           }}
         >
-          이게 되네?
+          내일의 창업, 오늘 내 일로
         </div>
 
         <div

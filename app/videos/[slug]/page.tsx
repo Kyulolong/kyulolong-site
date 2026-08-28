@@ -138,7 +138,7 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
             </p>
 
             {processEmbed ? (
-              <div className="bg-surface-2 mt-6 aspect-video w-full overflow-hidden rounded-[24px]">
+              <div className="bg-surface-2 mt-6 aspect-video w-full overflow-hidden rounded-card">
                 <iframe
                   src={processEmbed}
                   title={`${video.title} — 작업 과정`}
@@ -177,7 +177,7 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
            */
           <section className="border-line mt-14 border-t pt-12">
             <div
-              className={`bg-surface-2 mx-auto w-full overflow-hidden rounded-[24px] ${
+              className={`bg-surface-2 mx-auto w-full overflow-hidden rounded-card ${
                 video.orientation === "landscape"
                   ? "aspect-video"
                   : "aspect-[9/16] max-w-[22rem]"
@@ -214,7 +214,7 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
               href={video.externalUrl}
               target="_blank"
               rel="noreferrer noopener"
-              className="bg-paper-sky hover:shadow-lift flex flex-col items-center gap-5 rounded-[24px] px-8 py-12 text-center transition-shadow"
+              className="bg-iris-wash hover:bg-surface-2 flex flex-col items-center gap-5 rounded-card px-8 py-12 text-center transition-shadow"
             >
               <span className="text-ink-soft text-sm">
                 짧게 편집한 영상은 {platformLabel}에 올라가 있어요

@@ -37,7 +37,7 @@ export function VideoCard({
   likes?: number;
 }) {
   return (
-    <div className="group border-line bg-canvas hover:shadow-lift rounded-[24px] border p-3 transition-[transform,box-shadow] duration-200 ease-[var(--ease-calm)] hover:-translate-y-0.5">
+    <div className="group border-line bg-surface hover:border-line-strong hover:bg-surface-2 rounded-card border p-3 transition-[transform,box-shadow] duration-200 ease-[var(--ease-calm)] hover:-translate-y-0.5">
       <Link href={`/videos/${video.slug}`} className="block">
         <Thumbnail
           src={video.thumbnail}

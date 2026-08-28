@@ -4,14 +4,17 @@ import matter from "gray-matter";
 import { z } from "zod";
 import {
   serviceFrontmatterSchema,
+  thoughtFrontmatterSchema,
   videoFrontmatterSchema,
   type Service,
+  type Thought,
   type Video,
 } from "./types";
 
 export const CONTENT_DIR = path.join(process.cwd(), "content");
 const SERVICES_DIR = path.join(CONTENT_DIR, "services");
 const VIDEOS_DIR = path.join(CONTENT_DIR, "videos");
+const THOUGHTS_DIR = path.join(CONTENT_DIR, "thoughts");
 
 /** 스키마 위반을 파일 단위로 모아서 한 번에 보고하기 위한 에러 */
 export class ContentError extends Error {
@@ -98,6 +101,7 @@ function byFeaturedThenRecent<T extends { featured?: boolean; publishedAt: strin
 // 빌드 한 번에 파일을 여러 번 읽지 않도록 캐시한다.
 let servicesCache: Service[] | null = null;
 let videosCache: Video[] | null = null;
+let thoughtsCache: Thought[] | null = null;
 
 /**
  * 작업 번호를 매긴다 — 인스타 썸네일의 `#5` 와 같은 번호.
@@ -144,6 +148,20 @@ export function getVideos(): Video[] {
   return videosCache;
 }
 
+/**
+ * 글 목록. assignSeq 를 태우지 않는다 — 작업 번호는 "혼자 만든 줄"을 세는 것이고
+ * (스펙 4번) 글은 그 줄이 아니다. 글에 번호를 붙이면 회차처럼 읽혀서, 순서대로
+ * 읽어야 하는 연재물이라는 인상을 준다. 글은 아무 데서나 들어와도 되는 것이다.
+ */
+export function getThoughts(): Thought[] {
+  if (!thoughtsCache) {
+    thoughtsCache = readCollection(THOUGHTS_DIR, thoughtFrontmatterSchema, "thoughts")
+      .map(({ slug, data, body }) => ({ slug, ...data, body }))
+      .sort(byFeaturedThenRecent);
+  }
+  return thoughtsCache;
+}
+
 export function getService(slug: string): Service | undefined {
   return getServices().find((s) => s.slug === slug);
 }
@@ -152,8 +170,13 @@ export function getVideo(slug: string): Video | undefined {
   return getVideos().find((v) => v.slug === slug);
 }
 
+export function getThought(slug: string): Thought | undefined {
+  return getThoughts().find((t) => t.slug === slug);
+}
+
 /** 테스트/검증 스크립트가 캐시를 비우고 다시 읽을 때 쓴다. */
 export function clearContentCache(): void {
   servicesCache = null;
   videosCache = null;
+  thoughtsCache = null;
 }

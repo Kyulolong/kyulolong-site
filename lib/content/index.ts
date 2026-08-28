@@ -1,25 +1,30 @@
-import { getService, getServices, getVideo, getVideos } from "./loader";
-import type { Service, Video } from "./types";
+import { getService, getServices, getThoughts, getVideo, getVideos } from "./loader";
+import { THOUGHT_SERIES, type Service, type Thought, type ThoughtSeries, type Video } from "./types";
 
 export {
   getServices,
   getVideos,
+  getThoughts,
   getService,
   getVideo,
+  getThought,
   clearContentCache,
   ContentError,
 } from "./loader";
 export { validateContent } from "./validate";
 export {
   SERIES,
+  THOUGHT_SERIES,
   PLATFORMS,
   SERVICE_STATUS,
   RESERVED_PATHS,
   type Series,
+  type ThoughtSeries,
   type Platform,
   type ServiceStatus,
   type Service,
   type Video,
+  type Thought,
 } from "./types";
 
 /** 스펙 5번: 목록에 태그 필터와 정렬을 처음부터 넣어둔다. */
@@ -67,6 +72,50 @@ export function filterVideos(
   return applySort(items, sort);
 }
 
+export function filterThoughts(
+  options: { series?: string; tags?: string[]; sort?: SortOrder } = {},
+): Thought[] {
+  const { series, tags, sort = "featured" } = options;
+  let items = getThoughts();
+  if (series) items = items.filter((t) => t.series === series);
+  if (tags?.length) {
+    items = items.filter((t) => tags.every((tag) => t.tags.includes(tag)));
+  }
+  return applySort(items, sort);
+}
+
+/**
+ * 글 시리즈 칩. 영상의 필터와 달리 **글이 하나도 없는 축은 그리지 않는다.**
+ * 시리즈 셋을 다 세워두고 "0" 을 붙이면, 아직 안 쓴 축이 빈 약속으로 보인다.
+ */
+export function getThoughtSeries(): { series: ThoughtSeries; count: number }[] {
+  const counts = new Map<ThoughtSeries, number>();
+  for (const thought of getThoughts()) {
+    counts.set(thought.series, (counts.get(thought.series) ?? 0) + 1);
+  }
+  // THOUGHT_SERIES 의 선언 순서를 따른다 — 개수순으로 하면 글을 올릴 때마다
+  // 칩이 자리를 바꿔서, 늘 같은 자리를 누르던 사람이 다른 축으로 떨어진다.
+  return THOUGHT_SERIES.filter((series) => counts.has(series)).map((series) => ({
+    series,
+    count: counts.get(series) ?? 0,
+  }));
+}
+
+/**
+ * 읽는 데 걸리는 시간(분).
+ *
+ * frontmatter 로 받지 않는 이유: 본문을 고칠 때마다 숫자가 어긋나고, 어긋난 걸
+ * 아무도 못 알아챈다. 계산해서 쓰면 늘 맞다.
+ *
+ * 한국어 성인 묵독 속도를 분당 500자로 잡는다. 코드블록·표가 섞이면 실제보다
+ * 짧게 나오지만, 이 숫자가 하는 일은 "지금 읽을까 나중에 읽을까"를 정하게
+ * 해주는 것뿐이라 그 정도 오차는 상관없다. 0분은 안 나오게 최소 1.
+ */
+export function readingMinutes(body: string): number {
+  const chars = body.replace(/\s/g, "").length;
+  return Math.max(1, Math.round(chars / 500));
+}
+
 /** 필터 UI 가 쓸 태그 목록. 많이 쓰인 순, 동수면 가나다순. */
 export function getAllTags(): { tag: string; count: number }[] {
   const counts = new Map<string, number>();
@@ -88,8 +137,15 @@ export function getRelatedVideos(service: Service): Video[] {
     .filter((v): v is Video => v !== undefined);
 }
 
-export function getRelatedServices(video: Video): Service[] {
-  return video.relatedServices
+/**
+ * 영상과 글 양쪽이 쓴다. 둘 다 `relatedServices` 를 갖고 있어서 구조 타입으로 받는다 —
+ * 타입이 늘 때마다 오버로드를 하나씩 더하는 대신.
+ *
+ * ⚠️ 영상의 링크는 양방향이 보장되지만(validate.ts) **글의 링크는 단방향이다.**
+ * 여기서 갈리는 건 없다 — 어느 쪽이든 가리키는 서비스가 실재하는 건 검증된다.
+ */
+export function getRelatedServices(item: { relatedServices: string[] }): Service[] {
+  return item.relatedServices
     .map((slug) => getService(slug))
     .filter((s): s is Service => s !== undefined);
 }

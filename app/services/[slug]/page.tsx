@@ -84,7 +84,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         <div className="flex items-baseline gap-4 sm:gap-5">
           {service.seq ? (
             <span
-              className="text-ink-faint shrink-0 font-mono text-[clamp(2rem,5vw,2.75rem)] leading-none font-bold tabular-nums"
+              className="text-ink-soft shrink-0 font-mono text-[clamp(2rem,5vw,2.75rem)] leading-none font-bold tabular-nums"
               aria-label={`작업 ${service.seq}번`}
             >
               {String(service.seq).padStart(2, "0")}
@@ -96,12 +96,12 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             </h1>
             {/* 상태 뱃지는 액션이 아니라서 알약을 쓰지 않는다 (DESIGN.md §6) */}
             {service.status === "soon" ? (
-              <span className="bg-surface-2 text-ink-faint rounded-[5px] px-2 py-0.5 text-xs font-medium">
+              <span className="bg-surface-2 text-ink-faint rounded-badge px-2 py-0.5 text-xs font-medium">
                 준비 중
               </span>
             ) : null}
             {service.team ? (
-              <span className="bg-paper-sky text-ink-soft rounded-[5px] px-2 py-0.5 text-xs font-medium">
+              <span className="bg-iris text-on-iris rounded-badge px-2 py-0.5 text-xs font-medium">
                 팀으로 만든 것
               </span>
             ) : null}
@@ -113,7 +113,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       <div className="grid grid-cols-1 gap-x-16 gap-y-12 pt-10 pb-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
         <div>
           {service.thumbnail ? (
-            <div className="bg-paper-lime relative aspect-[3/2] w-full overflow-hidden rounded-[24px]">
+            <div className="bg-plate relative aspect-[3/2] w-full overflow-hidden rounded-card">
               <Image
                 src={service.thumbnail}
                 alt=""
@@ -192,7 +192,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
           </div>
 
           {service.status === "soon" ? (
-            <p className="bg-paper-peach text-ink-soft mt-6 max-w-[46ch] rounded-[16px] px-5 py-4 text-sm">
+            <p className="bg-surface-2 text-ink-soft mt-6 max-w-[46ch] rounded-note px-5 py-4 text-sm">
               아직 열어드릴 수 있는 주소가 없어요. 준비되는 대로 여기에 버튼이 생깁니다.
             </p>
           ) : null}
@@ -214,7 +214,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             형광은 쓰지 않는다 — 이 페이지의 한 점은 "지금 써보기" 다.
           */}
           {service.concept?.length ? (
-            <section className="bg-paper-lilac mt-10 rounded-[20px] px-6 py-6 sm:px-7">
+            <section className="bg-iris-wash mt-10 rounded-note px-6 py-6 sm:px-7">
               <h2 className="text-ink-faint font-mono text-xs tracking-[0.12em] uppercase">
                 concept
               </h2>
@@ -275,7 +275,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             </MetaRow>
             {service.url ? (
               <MetaRow label="주소">
-                <span className="font-mono text-sm">{service.url}</span>
+                <span className="font-mono text-sm wrap-anywhere">{service.url}</span>
               </MetaRow>
             ) : null}
             {service.stack.length > 0 ? (
@@ -283,12 +283,12 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             ) : null}
             {service.tags.length > 0 ? (
               <MetaRow label="태그">
-                <span className="flex flex-wrap gap-1.5">
+                <span className="flex flex-wrap gap-2 md:gap-1.5">
                   {service.tags.map((tag) => (
                     <Link
                       key={tag}
                       href={`/services?tag=${encodeURIComponent(tag)}`}
-                      className="bg-surface-2 text-ink-soft hover:bg-line rounded-[6px] px-2 py-1 text-[11px] font-medium transition-colors"
+                      className="bg-surface-2 text-ink-soft hover:bg-line inline-flex min-h-11 items-center rounded-badge px-2.5 text-[11px] font-medium transition-colors md:min-h-0 md:py-1"
                     >
                       {tag}
                     </Link>

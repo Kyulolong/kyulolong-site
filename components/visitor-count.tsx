@@ -36,10 +36,12 @@ export function VisitorCount() {
   if (visitors === null) return null;
 
   return (
-    <p className="text-ink-faint flex items-center gap-2 text-xs opacity-70">
+    <p className="text-ink-soft flex items-center gap-2 text-xs">
       {/*
         형광은 화면에 한 점만(DESIGN.md 3번). 상태 점은 그 규칙의 명시적 예외지만,
-        밝은 바탕 위의 '작은 도형'이라 --acid 가 아니라 --acid-deep 을 쓴다.
+        --acid-deep 은 '현재 배경에서 항상 보이는 초록'이라 다크에서는 #8FFF00 이다.
+        §2 가 형광 예산에서 빼주는 '작은 상태 점'(~8px) 예외에 해당한다 — 정보를
+        전달하고 면적이 없으며, 늘 푸터 같은 자리에 고정이라 흩어지지 않는다.
       */}
       <span className="bg-acid-deep h-1.5 w-1.5 shrink-0 rounded-full" aria-hidden="true" />
       오늘 <span className="font-mono tabular-nums">{visitors.toLocaleString("ko-KR")}</span>명

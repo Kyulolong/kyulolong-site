@@ -33,7 +33,7 @@ export default function AboutPage() {
           장식이지만, "이 한마디가 저 앱이 됐다"가 붙는 순간 증거가 된다.
         */}
         <figure className="mb-14">
-          <div className="bg-surface-2 relative aspect-[3/2] w-full overflow-hidden rounded-[24px]">
+          <div className="bg-surface-2 relative aspect-[3/2] w-full overflow-hidden rounded-card">
             <Image
               src="/kyulolong.jpg"
               alt="광안대교 아래 배 위에서 아기띠로 아기를 안고 바다를 보고 있는 규로롱"

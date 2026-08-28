@@ -113,13 +113,13 @@ export default function LoginPage() {
     }
   }
 
-  const shell = "mx-auto w-full max-w-[26rem] px-6 py-20 sm:py-28";
+  const shell = "mx-auto w-full max-w-[26rem] px-6 py-20 sm:px-8 sm:py-28";
 
   if (!isAuthConfigured) {
     return (
       <div className={shell}>
-        <h1 className="text-3xl font-extrabold tracking-[-0.03em]">로그인</h1>
-        <p className="bg-paper-peach text-ink-soft mt-6 rounded-[16px] px-5 py-4 text-sm">
+        <h1 className="text-[clamp(1.75rem,5vw,2rem)] font-extrabold tracking-[-0.03em]">로그인</h1>
+        <p className="bg-surface-2 text-ink-soft mt-6 rounded-note px-5 py-4 text-sm">
           계정 기능을 아직 연결하는 중이에요. 로그인 없이도 모든 서비스는 그대로
           쓰실 수 있습니다.
         </p>
@@ -135,7 +135,7 @@ export default function LoginPage() {
   if (user && !user.is_anonymous) {
     return (
       <div className={shell}>
-        <h1 className="text-3xl font-extrabold tracking-[-0.03em]">
+        <h1 className="text-[clamp(1.75rem,5vw,2rem)] font-extrabold tracking-[-0.03em]">
           {(user.user_metadata?.nickname as string) || "이미 로그인되어 있어요"}
         </h1>
         <p className="text-ink-soft mt-4 text-sm">{user.email}</p>
@@ -169,7 +169,7 @@ export default function LoginPage() {
 
   return (
     <div className={shell}>
-      <h1 className="text-3xl font-extrabold tracking-[-0.03em] text-balance">
+      <h1 className="text-[clamp(1.75rem,5vw,2rem)] font-extrabold tracking-[-0.03em] text-balance">
         {creating ? "규로롱 계정 만들기" : "규로롱 계정으로 로그인"}
       </h1>
       <p className="text-ink-soft mt-4 text-[0.9375rem]">
@@ -187,7 +187,7 @@ export default function LoginPage() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="bg-surface-2 border-line-strong focus:border-ink rounded-[14px] border px-4 py-3 outline-none"
+            className="bg-surface-2 border-line-strong focus:border-ink rounded-note border px-4 py-3 outline-none"
             placeholder="you@example.com"
           />
         </label>
@@ -201,7 +201,7 @@ export default function LoginPage() {
             autoComplete={creating ? "new-password" : "current-password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="bg-surface-2 border-line-strong focus:border-ink rounded-[14px] border px-4 py-3 outline-none"
+            className="bg-surface-2 border-line-strong focus:border-ink rounded-note border px-4 py-3 outline-none"
           />
         </label>
 
@@ -223,7 +223,7 @@ export default function LoginPage() {
               maxLength={20}
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
-              className="bg-surface-2 border-line-strong focus:border-ink rounded-[14px] border px-4 py-3 outline-none"
+              className="bg-surface-2 border-line-strong focus:border-ink rounded-note border px-4 py-3 outline-none"
               placeholder="예: 규로롱"
             />
             <span className="text-ink-faint text-[13px]">

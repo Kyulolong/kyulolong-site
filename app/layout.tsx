@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Analytics } from "@/components/analytics";
+import { MobileNav } from "@/components/mobile-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
@@ -72,13 +73,40 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * ⚠️ `viewportFit: "cover"` 가 이 객체의 존재 이유다.
+ *
+ * Next 의 기본값은 `width=device-width, initial-scale=1` 뿐이라 viewport-fit 이
+ * 안 실린다. 그게 없으면 iOS 에서 `env(safe-area-inset-*)` 가 전부 0 으로 풀려서,
+ * 하단 바의 홈 인디케이터 여백도 가로 모드의 노치 여백도 아무 일을 안 한다.
+ *
+ * maximumScale·userScalable 은 넣지 않는다. 확대를 막는 건 DESIGN.md §10 과
+ * WCAG 1.4.4 위반이고, 375px 넘침은 구조로 고쳤으니 손댈 이유가 없다.
+ *
+ * themeColor 는 페이지를 감싸는 사파리·크롬의 주소창 색이다. 다크로 뒤집은
+ * 뒤로는 manifest.ts 의 theme_color 와 같은 값이 맞다 — 둘 다 이 사이트의
+ * 바탕(#121019)이고, 다르면 주소창과 페이지 사이에 없던 경계선이 생긴다.
+ */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#121019",
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    /* min-h-dvh: min-h-full 은 html.h-full 을 타고 '큰 뷰포트'에 맞춰져서,
+       iOS 에서 주소창이 보이는 동안 실제 보이는 높이보다 커진다. */
     <html lang="ko" className="h-full antialiased">
-      <body className="bg-canvas text-ink flex min-h-full flex-col">
+      <body className="bg-canvas text-ink flex min-h-dvh flex-col">
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        {/* 푸터 뒤에 둔다 — 보조 네비라 스크린리더가 마지막에 만나는 게 맞고,
+            main·footer 와 나란한 최상위 랜드마크가 된다. /login 에서도 남긴다:
+            나갈 길이 없는 화면을 만들지 않는다. */}
+        <MobileNav />
         <Analytics />
       </body>
     </html>

@@ -28,7 +28,7 @@ export function ServiceCard({
   likes?: number;
 }) {
   return (
-    <div className="group border-line bg-canvas hover:shadow-lift rounded-[24px] border p-3 transition-[transform,box-shadow] duration-200 ease-[var(--ease-calm)] hover:-translate-y-0.5">
+    <div className="group border-line bg-surface hover:border-line-strong hover:bg-surface-2 rounded-card border p-3 transition-[transform,background-color,border-color] duration-200 ease-[var(--ease-calm)] hover:-translate-y-0.5">
       <Link href={`/services/${service.slug}`} className="block">
         <Thumbnail
           src={service.thumbnail}
@@ -52,7 +52,7 @@ export function ServiceCard({
         <div className="flex items-baseline gap-3 px-3 pt-5">
           {service.seq ? (
             <span
-              className="text-ink-faint w-8 shrink-0 font-mono text-[1.5rem] leading-none font-bold tabular-nums"
+              className="text-ink-soft w-8 shrink-0 font-mono text-[1.5rem] leading-none font-medium tabular-nums"
               aria-label={`작업 ${service.seq}번`}
             >
               {String(service.seq).padStart(2, "0")}
@@ -66,12 +66,12 @@ export function ServiceCard({
               </h3>
               {/* 상태 뱃지는 액션이 아니라서 알약을 쓰지 않는다 (DESIGN.md §6) */}
               {service.status === "soon" ? (
-                <span className="bg-surface-2 text-ink-faint shrink-0 rounded-[5px] px-1.5 py-0.5 text-[11px] font-medium">
+                <span className="bg-surface-2 text-ink-faint shrink-0 rounded-badge px-1.5 py-0.5 text-[11px] font-medium">
                   준비 중
                 </span>
               ) : null}
               {service.team ? (
-                <span className="bg-paper-sky text-ink-soft shrink-0 rounded-[5px] px-1.5 py-0.5 text-[11px] font-medium">
+                <span className="bg-iris text-on-iris shrink-0 rounded-badge px-1.5 py-0.5 text-[11px] font-medium">
                   팀
                 </span>
               ) : null}
@@ -81,7 +81,7 @@ export function ServiceCard({
                   뱃지가 붙는 건 세 장이다. 여기에 featured 나 태그까지 뱃지로
                   올리기 시작하면 그때는 진짜로 뒤덮인다 (DESIGN.md §6). */}
               {isAppStoreApp(service.url) ? (
-                <span className="bg-paper-peach text-ink-soft shrink-0 rounded-[5px] px-1.5 py-0.5 text-[11px] font-medium">
+                <span className="bg-surface-2 text-ink-soft shrink-0 rounded-badge px-1.5 py-0.5 text-[11px] font-medium">
                   앱스토어
                 </span>
               ) : null}
@@ -104,7 +104,7 @@ export function ServiceCard({
       <div className="flex items-center justify-between gap-3 px-3 pt-4 pb-2">
         <p className="text-ink-faint flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[11px]">
           {service.buildTime ? (
-            <span className="text-ink-soft font-mono font-medium tabular-nums">
+            <span className="text-ink-soft font-mono tracking-[0.02em] tabular-nums">
               {service.buildTime}
             </span>
           ) : null}

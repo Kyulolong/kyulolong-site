@@ -34,6 +34,8 @@ export const SOCIAL_LINKS = [
 
 /** 홈페이지 내부 경로. 스펙 2번의 예약 경로 안에서만 쓴다. */
 export const INTERNAL_LINKS = {
+  /** 글. 이 채널이 쌓아가는 축이라 네비의 첫 자리다. */
+  thoughts: "/thoughts",
   /**
    * 설치부터 첫 화면까지의 안내. 서비스 상세의 접힘 상자가 여기로 넘긴다.
    * 새 예약 경로라 CLAUDE.md 2번 목록에도 `start` 를 같이 적어뒀다 —
@@ -44,3 +46,19 @@ export const INTERNAL_LINKS = {
   videos: "/videos",
   about: "/about",
 } as const;
+
+/**
+ * 주요 목적지. 헤더(md 이상)·하단 바(md 미만)·푸터가 전부 여기서 읽는다.
+ *
+ * ⚠️ **한 목적지에 이름 하나.** 예전엔 헤더·푸터가 "서비스", 히어로 CTA 가
+ * "만든 것" 이었다. 같은 곳을 두 이름으로 부르면 처음 온 사람은 그게 다른
+ * 곳인 줄 안다. URL 은 `/services` 그대로 두고 라벨만 "만든 것" 으로 맞췄다.
+ *
+ * ⚠️ **소개(`/about`)는 여기에 없다.** 하단 바는 세 칸이고, 소개는 대문 안에
+ * 요약 + "더 보기" 로 들어간다. 헤더와 푸터는 이 배열에 소개를 따로 더한다.
+ */
+export const PRIMARY_NAV = [
+  { label: "생각들", href: INTERNAL_LINKS.thoughts },
+  { label: "만든 것", href: INTERNAL_LINKS.services },
+  { label: "영상", href: INTERNAL_LINKS.videos },
+] as const;

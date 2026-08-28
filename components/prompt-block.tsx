@@ -25,7 +25,7 @@ export function PromptBlock({ prompt, title }: { prompt: string; title: string }
         그대로 복사해서 붙여넣고, 마음에 안 드는 부분만 바꾸세요.
       </p>
 
-      <pre className="border-line bg-surface-2 text-ink mt-6 overflow-x-auto rounded-[20px] border px-6 py-6 font-mono text-[0.8125rem] leading-relaxed whitespace-pre-wrap">
+      <pre className="border-line bg-surface-2 text-ink mt-6 overflow-x-auto rounded-note border px-6 py-6 font-mono text-[0.8125rem] leading-relaxed whitespace-pre-wrap">
         {prompt}
       </pre>
 
@@ -36,7 +36,7 @@ export function PromptBlock({ prompt, title }: { prompt: string; title: string }
         그 뒤에 디테일을 잡는 데 보통 하루 이틀이 더 들고, 지금도 필요할 때 업데이트 하고 있습니다.
       </p>
 
-      <details className="border-line group mt-8 rounded-[20px] border px-6 py-5">
+      <details className="border-line group mt-8 rounded-note border px-6 py-5">
         <summary className="cursor-pointer list-none font-bold [&::-webkit-details-marker]:hidden">
           <span className="text-ink-faint mr-2 inline-block transition-transform group-open:rotate-90">
             ▸

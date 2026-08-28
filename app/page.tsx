@@ -219,7 +219,13 @@ export default async function Home() {
               ⚠️ 그래도 대문에서 사람을 빼지는 않는다 — 인스타에서 얼굴을 보고
               넘어오는 채널이라, 대문 어디에도 얼굴이 없으면 두 채널이 남처럼 갈린다.
 
-              이름을 적지 않는다. 남는 한 줄이 **직함**이라 그게 서명이 된다.
+              **이름을 적는다.** 히어로에 있을 때는 뺐었다 — 헤더 워드마크가 바로
+              위에 있어서 한 화면에 "규로롱"이 둘이 됐기 때문이다. 여기까지 내려오면
+              헤더는 이미 스크롤 밖이고, 바이라인은 이름이 있어야 바이라인이다.
+
+              한 톤으로 둔다. 이름만 밝히면 14px 한 줄에 색이 둘이 되어 부산스럽고,
+              서명은 자랑이 아니라 낙관(落款)이다 (DESIGN.md §7).
+
               object-[50%_30%] — 얼굴이 세로 30% 지점이라 정가운데로 자르면
               이마가 날아가고 랩탑만 남는다.
             */}
@@ -232,7 +238,7 @@ export default async function Home() {
                 sizes="(min-width: 768px) 4rem, 3.5rem"
                 className="bg-surface-2 size-14 shrink-0 rounded-full object-cover object-[50%_30%] md:size-16"
               />
-              <p className="text-ink-faint text-sm">AX하는 창업가</p>
+              <p className="text-ink-faint text-sm">AX하는 창업가, 규로롱</p>
             </div>
 
             <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] leading-[1.2] font-extrabold tracking-[-0.03em] text-balance">

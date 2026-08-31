@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { FounderQuestions } from "@/components/founder-questions";
 import { Hero } from "@/components/hero";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
@@ -41,7 +42,7 @@ const DAY = 86400;
 /**
  * 대문의 순서가 이 사이트의 논지다.
  *
- *   히어로(왜 이걸 하나) → 생각들 → 만든 것 → 가져가세요 → 말 거는 곳 → 소개
+ *   히어로(왜 이걸 하나) → 생각들 → 만든 것 → 질문들 → 말 거는 곳 → 소개
  *
  * 글이 서비스보다 **위**에 온다. 이 채널이 쌓아가는 건 글이고, 만든 것은
  * 그 글이 탁상공론이 아니라는 증거로 뒤를 받친다. 반대로 놓으면 진열장이 된다.
@@ -144,51 +145,41 @@ export default async function Home() {
           ))}
           <li aria-hidden="true" className="w-2 shrink-0" />
         </ul>
+
+        {/*
+          "가져가세요"의 초대와 /start 진입점이 여기로 왔다 — 예전엔 아래 보라
+          슬랩이 이 말을 했는데, 그 슬랩이 질문들로 바뀌면서 초대는 증거(카드 줄)
+          바로 옆으로 붙는다. 버튼이 아니라 밑줄 링크다: 이 섹션의 주인공은
+          카드들이고, 이 줄은 카드를 보고 "나도"가 된 사람만 집는 보조 통로라서다.
+        */}
+        <p className="text-ink-soft mx-auto mt-6 w-full max-w-[1120px] px-6 text-[0.9375rem] text-pretty sm:px-8">
+          만든 것마다 소스코드와 프롬프트를 통째로 열어뒀습니다. 가져다 필요한 것으로
+          바꾸세요. 터미널을 한 번도 안 열어보셨다면{" "}
+          <Link
+            href={INTERNAL_LINKS.start}
+            className="text-ink decoration-line-strong hover:decoration-ink underline underline-offset-4 transition-colors"
+          >
+            설치부터 따라 하는 안내
+          </Link>
+          가 따로 있습니다.
+        </p>
       </section>
 
       {/*
-        "용기" 쪽 문. 위의 서비스 줄이 "됐다"를 보여주고 여기가 "가져가라"를 말한다.
-        그래서 그 줄 바로 아래 붙는다 — 사이에 다른 섹션이 끼면 증거와 초대가 갈린다.
+        질문들 — 회사를 시작하기 전에 답해둘 스무 개 (components/founder-questions.tsx).
 
-        예전의 네 문단을 셋으로 줄였다. 잘라낸 것(빈 화면 얘기)은 /about 에 있다.
+        예전 이 자리는 "0부터 시작하지 마세요"(설치 안내로 보내는 초대)였다.
+        2026-08-31 에 창업 질문 은행으로 바꿨다 — 위의 서비스 줄이 "만드는 건
+        됐다"를 보여주고, 여기가 "그럼 무엇을 답해야 하나"를 받는다. 만드는 일이
+        쉬워졌다는 증거 바로 아래라야 "어려운 건 질문 쪽"이라는 말이 선다.
+        /start 진입점은 위의 서비스 줄 끝으로 옮겼다 (footer 에도 상시로 있다).
+
         ⚠️ **이 블록이 이 페이지에서 보라 30%를 실제로 채우는 자리다** (DESIGN.md §1).
         면이 넓어야 하는 건 취향이 아니라 구조다 — 보라가 뱃지 몇 개로 쪼그라들면
         화면이 검정과 형광 두 겹으로 돌아가고, 그건 §1 이 적어둔 1차 실패다.
-        가장 진한 면을 여기 준 이유는 이 블록이 "용기" 쪽 문의 논지 그 자체라서다.
       */}
       <section className="mx-auto w-full max-w-[1120px] px-6 pt-12 sm:px-8 sm:pt-16">
-        <div className="bg-iris text-on-iris rounded-card px-8 py-14 sm:px-14 sm:py-20">
-          <div className="max-w-[42rem]">
-            <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] leading-[1.2] font-extrabold tracking-[-0.03em] text-balance">
-              0부터 시작하지 마세요
-            </h2>
-            <p className="text-on-iris/80 mt-5 text-lg text-pretty">
-              코드는 이제 AI가 짜줍니다. 그래서 어려운 건 만드는 일이 아니라
-              <strong className="text-on-iris font-semibold"> 시작하는 것 그 자체</strong>입니다.
-            </p>
-            <p className="text-on-iris/80 mt-4 text-lg text-pretty">
-              그래서 만든 것마다 소스코드, 프롬프트와{" "}
-              <strong className="text-on-iris font-semibold">작업과정을 통째로</strong> 열어뒀습니다.
-              빈 화면 앞에서 시작하지 마시고, 해봄직한 것 가져다 필요한 것으로 바꾸세요.
-            </p>
-            {/* "가져다 쓰세요"만 말하면 뭘 깔아야 하는지 모르는 사람이 여기서 멈춘다.
-                그 한 문장을 붙여야 아래 버튼이 갑자기 나오지 않는다. */}
-            <p className="text-on-iris/80 mt-4 text-lg text-pretty">
-              프롬프트를 어디에 붙여넣어야 할지 모르시겠다면, 뭘 깔고 어떻게 시작하는지
-              순서대로 적어뒀습니다. 터미널을 한 번도 안 열어보셨어도 됩니다.
-            </p>
-            {/* 보라 면 위에서는 밝은 알약이 가장 단단하다. 형광을 쓰지 않는 건
-                그대로다 — 이 화면의 형광 한 점은 히어로의 커서다 (§2). */}
-            <div className="mt-8">
-              <Link
-                href={INTERNAL_LINKS.start}
-                className="bg-on-iris text-iris inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-opacity hover:opacity-90"
-              >
-                처음이라면: 설치부터 따라 하기
-              </Link>
-            </div>
-          </div>
-        </div>
+        <FounderQuestions />
       </section>
 
       {/*

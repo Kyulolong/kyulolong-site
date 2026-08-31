@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "validate:content": "tsx scripts/validate-content.ts",
+    "lint:copy": "node scripts/lint-copy.mjs",
     "thumbs": "tsx scripts/fetch-thumbnails.ts",
     "og": "tsx scripts/make-og.tsx"
   },
@@ -18,6 +19,7 @@
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "remark-gfm": "^4.0.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {

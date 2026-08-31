@@ -43,5 +43,12 @@ next-env.d.ts
 # 프로젝트 스펙 — 공개 repo 에 올리지 않음 (로컬 전용)
 CLAUDE.md
 
+# 규로롱 철학 100편 — 발행 전 초고와 계획. CLAUDE.md 와 같은 이유로 로컬 전용,
+# 발행된 글만 content/thoughts/ 로 옮겨져 공개된다 (drafts/PLAN.md 5번 워크플로)
+/drafts
+
+# 글쓰기 스킬 — 내부 편집 워크플로라 로컬 전용 (drafts 와 같은 이유)
+/.claude/skills/
+
 # 아이콘 세트 다운로드 압축본 — 풀린 파일만 두면 된다
 kyulolongicon.zip

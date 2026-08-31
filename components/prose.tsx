@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 
 /**
  * MDX 본문 렌더러.
@@ -107,7 +108,13 @@ const components = {
 export async function Prose({ body, className = "" }: { body: string; className?: string }) {
   return (
     <div className={`max-w-[62ch] space-y-5 text-[1.0625rem] ${className}`}>
-      <MDXRemote source={body} components={components} />
+      <MDXRemote
+        source={body}
+        components={components}
+        // 표 문법은 GFM 확장이라 플러그인 없이는 파이프가 문단에 그대로 찍힌다.
+        // 위의 table/th/td 스타일은 이 플러그인이 있어야 실제로 쓰인다.
+        options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+      />
     </div>
   );
 }

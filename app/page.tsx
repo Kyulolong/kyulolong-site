@@ -245,7 +245,7 @@ export default async function Home() {
               &ldquo;이런 게 있으면 좋겠는데&rdquo; 정도로 충분해요.
             </p>
             <p className="text-ink-soft mt-4 text-lg text-pretty">
-              최대한 만들어 보겠습니다. 만드는 과정을 공유합니다. 아이디어 보낸 분은
+              최대한 만들어 보겠습니다. 생각과정을 공유합니다. 아이디어 보낸 분은
               거기서부터 작업을 시작하세요. 저도 혼자 아이디어를 떠올리기 보다 요청을 받아
               만드는 것이 결과가 더 좋습니다.
             </p>

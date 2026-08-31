@@ -19,7 +19,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "규로롱",
     short_name: "규로롱",
     description:
-      "인사담당 출신이 IT 서비스를 만듭니다. 만든 서비스와 소스코드, 만드는 과정을 남긴 영상을 모아둡니다.",
+      "인사담당 출신이 IT 서비스를 만듭니다. 만든 서비스와 소스코드, 생각과정을 모아둡니다.",
     start_url: "/",
     display: "standalone",
     theme_color: "#121019",

@@ -44,7 +44,7 @@ export default async function ThoughtsPage({ searchParams }: PageProps<"/thought
         <PageHeader
           eyebrow="thoughts"
           title="생각들"
-          description="만들면서 알게 된 것을 적어둡니다. 정답은 아니고, 틀린 것도 그대로 둡니다."
+          description="AX하는 창업자의 생각을 적어둡니다."
         />
 
         <FilterRail>

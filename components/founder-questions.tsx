@@ -204,16 +204,14 @@ export function FounderQuestions() {
           사업계획서부터 쓰지 마세요
         </h2>
         <p className="text-on-iris/80 mt-5 text-lg text-pretty">
-          코드는 이제 AI가 짜줍니다. 서비스는 일주일이면 나옵니다. 그래서 창업에서
+          코드를 짜는 것 부터 지식노동까지 이제 AI가 더 잘하게 될겁니다. 서비스는 일주일이면 나옵니다. 그래서 창업에서
           어려운 건 만드는 일이 아니라{" "}
           <strong className="text-on-iris font-semibold">어떤 회사를 만들 것인지 답하는 일</strong>
           입니다.
         </p>
         <p className="text-on-iris/80 mt-4 text-lg text-pretty">
-          회사를 시작하기 전에 스스로 답해둘 질문 열 개를 추렸습니다. 정답이 있는
-          질문은 하나도 없습니다. 대신{" "}
-          <strong className="text-on-iris font-semibold">답이 갈리는 자리마다 회사의 모양이 갈립니다</strong>
-          . 사업계획서는 그다음에 써도 늦지 않습니다.
+          창업하기 전 스스로 답을 찾아볼 질문 열 개를 적어보았습니다. 정답이 있는
+          질문은 하나도 없습니다. 답이 매번 달라질 수도 있습니다. 다만 답을 적어두면, 다음 선택은 조금 더 선명해질 겁니다.
         </p>
 
         {/* 슬랩 안에 상자를 또 앉히지 않는다 (DESIGN.md §2 — 층은 두 겹까지).

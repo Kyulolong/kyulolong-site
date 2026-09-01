@@ -2,15 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/json-ld";
+import { LikeButton } from "@/components/like-button";
 import { Prose } from "@/components/prose";
-import { ServiceCard } from "@/components/service-card";
+import { ThoughtComments } from "@/components/thought-comments";
 import { formatDate } from "@/components/video-card";
-import {
-  getRelatedServices,
-  getThought,
-  getThoughts,
-  readingMinutes,
-} from "@/lib/content";
+import { getThought, getThoughts, readingMinutes } from "@/lib/content";
 import { pageMetadata, shareableImage, summarize, thoughtJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -38,8 +34,6 @@ export default async function ThoughtPage({ params }: PageProps<"/thoughts/[slug
   const { slug } = await params;
   const thought = getThought(slug);
   if (!thought) notFound();
-
-  const relatedServices = getRelatedServices(thought);
 
   return (
     <article className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
@@ -83,23 +77,29 @@ export default async function ThoughtPage({ params }: PageProps<"/thoughts/[slug
 
         <Prose body={thought.body} className="mt-12" />
 
+        {/* 다 읽고 누르는 자리라 본문 바로 아래다. 서비스 상세의 CTA 옆 하트와
+            같은 테두리 버튼 — 형광도 보라 면도 아니다 (DESIGN.md §2). */}
+        <div className="mt-12">
+          <LikeButton
+            kind="thought"
+            slug={thought.slug}
+            className="border-line text-ink-faint hover:bg-surface-2 !gap-2 border !px-5 !py-3 !text-sm !rounded-full"
+          />
+        </div>
+
         {/*
-          글이 인용한 서비스. 단방향이라 서비스 쪽에는 이 글로 오는 링크가 없다
-          (lib/content/validate.ts 주석). 글에서 이름만 나온 것을 실물로 받아주는
-          자리라, 없으면 줄째로 빠진다.
+          ⚠️ 여기에 서비스 카드를 다시 세우지 말 것 (2026-09-01 에 "글에서 나온 것"
+          절을 지웠다). 글 끝에 자기 서비스 카드가 서는 순간 글이 그 서비스의
+          광고로 읽혀서, 글의 진정성이 의심받는다. 인용이 필요하면 본문 문장
+          안의 링크로 한다 — 문장에 걸린 링크는 인용이고, 절로 선 카드는 진열이다.
         */}
-        {relatedServices.length > 0 ? (
-          <section className="mt-16">
-            <h2 className="text-xl font-bold tracking-[-0.02em]">글에서 나온 것</h2>
-            <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              {relatedServices.map((service) => (
-                <li key={service.slug}>
-                  <ServiceCard service={service} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
+
+        {/*
+          댓글은 페이지의 맨 끝이다 — 읽기가 끝난 자리. frontmatter 의
+          `comments: false` 가 이 줄의 스위치라, 닫힌 글은 영역째로 안 그려진다.
+          읽기·쓰기 전부 클라이언트라 이 페이지는 정적 그대로다 (CLAUDE.md 11번).
+        */}
+        {thought.comments ? <ThoughtComments slug={thought.slug} /> : null}
       </div>
     </article>
   );

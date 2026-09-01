@@ -104,17 +104,13 @@ function findDuplicates(values: string[]): string[] {
  *   5. URL 필드가 자리표시자인지 (가짜 링크 배포 방지)
  *   6. processUrl 의 퍼플즈 주소가 임베드로 바뀔 수 있는 형식인지
  *
- * ⚠️ **글(thoughts)의 relatedServices 는 3번에서 빠진다 — 일부러다.**
+ * ⚠️ **글(thoughts)에는 relatedServices 자체가 없다 (2026-09-01 에 뺐다).**
  *
- * 서비스↔영상이 양방향인 건 두 축이 서로를 설명하기 때문이다(그 영상은 그 서비스를
- * 만드는 영상이고, 그 서비스는 그 영상에서 만들어진다). 글은 서비스를 **인용할** 뿐이고
- * 서비스는 자기를 인용한 글을 몰라도 된다.
- *
- * 규칙으로 만들면 더 분명하다: 타입이 N 개면 양방향 쌍은 N·(N−1)/2 로 는다. 글 하나
- * 올릴 때마다 인용한 서비스 MDX 를 같이 고쳐야 하고, 그 순간 "글 추가 = MDX 하나"
- * (스펙 5번)가 깨진다. 글은 매주 늘어나는 쪽이라 이 비용이 먼저 터진다.
- *
- * 존재 검사(2번)와 중복 검사(4번)는 그대로 돈다 — 끊긴 링크는 여전히 빌드 실패다.
+ * 처음엔 단방향 인용 필드로 뒀는데, 글 상세 끝에 "글에서 나온 것"으로 서비스
+ * 카드가 서는 순간 글이 그 서비스의 광고로 읽혀서 글의 진정성이 의심받았다.
+ * 그래서 렌더만 지우는 게 아니라 필드째로 걷어냈다 — 렌더되지 않는 필드는
+ * 언젠가 다시 UI 를 부른다. 글이 서비스를 인용하고 싶으면 본문 문장 안의
+ * 링크로 한다. 그건 마크다운 링크라 여기서 검증할 것도 없다.
  */
 export function validateContent(): void {
   const services = getServices();
@@ -216,23 +212,8 @@ export function validateContent(): void {
       );
     }
 
-    // 5. 자리표시자 링크
+    // 5. 자리표시자 링크. 참조 검사(2·3·4번)는 없다 — 글에는 참조 필드가 없다 (위 주석).
     checkFakeUrl(thoughtFile, "ogImage", thought.ogImage, problems);
-
-    // 4. 중복 참조
-    for (const dupe of findDuplicates(thought.relatedServices)) {
-      problems.push(`${thoughtFile} — relatedServices 에 "${dupe}" 가 중복 있습니다.`);
-    }
-
-    // 2. 대상 존재 여부. 3번(양방향)은 위 주석대로 일부러 안 본다.
-    for (const serviceSlug of thought.relatedServices) {
-      if (!serviceSlugs.has(serviceSlug)) {
-        problems.push(
-          `${thoughtFile} — relatedServices 의 "${serviceSlug}" 에 해당하는 ` +
-            `content/services/${serviceSlug}.mdx 가 없습니다.`,
-        );
-      }
-    }
   }
 
   if (problems.length) throw new ContentError(problems);

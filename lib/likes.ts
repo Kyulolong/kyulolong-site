@@ -17,15 +17,15 @@ const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const isLikesConfigured = Boolean(url && anon);
 
-/** 서비스와 영상이 같은 테이블을 kind 로 나눠 쓴다 (supabase/likes.sql) */
-export const LIKE_KINDS = ["service", "video"] as const;
+/** 서비스·영상·글이 같은 테이블을 kind 로 나눠 쓴다 (supabase/likes.sql) */
+export const LIKE_KINDS = ["service", "video", "thought"] as const;
 export type LikeKind = (typeof LIKE_KINDS)[number];
 
-/** kind 별 { 슬러그: 개수 }. 슬러그는 services/videos 사이에서 겹칠 수 있다. */
+/** kind 별 { 슬러그: 개수 }. 슬러그는 kind 사이에서 겹칠 수 있다. */
 export type LikeCounts = Record<LikeKind, Record<string, number>>;
 
 export function emptyCounts(): LikeCounts {
-  return { service: {}, video: {} };
+  return { service: {}, video: {}, thought: {} };
 }
 
 /** 응답을 기다리다 페이지 생성이 물리지 않게 한다 */
@@ -61,9 +61,10 @@ export async function getLikeCounts(revalidate?: number): Promise<LikeCounts> {
       if (
         typeof slug === "string" &&
         typeof likes === "number" &&
-        (kind === "service" || kind === "video")
+        typeof kind === "string" &&
+        (LIKE_KINDS as readonly string[]).includes(kind)
       ) {
-        counts[kind][slug] = likes;
+        counts[kind as LikeKind][slug] = likes;
       }
     }
     return counts;

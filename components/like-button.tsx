@@ -3,6 +3,7 @@
 import { useState, useSyncExternalStore } from "react";
 import type { LikeKind } from "@/lib/likes";
 import { getSupabase, isAuthConfigured } from "@/lib/supabase";
+import { readStorage, visitorId, writeStorage } from "@/lib/visitor";
 
 /**
  * 로그인 없이 누르는 좋아요. 서비스 카드와 영상 카드가 같이 쓴다.
@@ -19,38 +20,8 @@ import { getSupabase, isAuthConfigured } from "@/lib/supabase";
  * 버튼이 남아 있는 것보다 없는 게 낫다.
  */
 
-const VISITOR_KEY = "kyulolong.visitor";
+// visitor uuid 와 저장소 래퍼는 lib/visitor.ts 로 옮겼다 — 댓글과 같이 쓴다.
 const LIKED_KEY = "kyulolong.likes";
-
-/** 저장소가 막혀 있어도(사파리 프라이빗 등) 페이지가 죽지 않게 전부 감싼다 */
-function readStorage(key: string): string | null {
-  try {
-    return window.localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
-function writeStorage(key: string, value: string): void {
-  try {
-    window.localStorage.setItem(key, value);
-  } catch {
-    // 저장 못 하면 이번 세션만 유지된다. 그걸로 충분하다.
-  }
-}
-
-/**
- * 이 브라우저의 id. kyulolong.com/* 가 같은 오리진이라 서비스들과 함께 쓴다
- * (세션 공유와 같은 원리 — CLAUDE.md 11번).
- */
-function visitorId(): string {
-  const saved = readStorage(VISITOR_KEY);
-  if (saved) return saved;
-
-  const fresh = crypto.randomUUID();
-  writeStorage(VISITOR_KEY, fresh);
-  return fresh;
-}
 
 function readLikedSlugs(): Set<string> {
   try {

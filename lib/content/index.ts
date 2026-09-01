@@ -144,11 +144,11 @@ export function getRelatedVideos(service: Service): Video[] {
 }
 
 /**
- * 영상과 글 양쪽이 쓴다. 둘 다 `relatedServices` 를 갖고 있어서 구조 타입으로 받는다 —
- * 타입이 늘 때마다 오버로드를 하나씩 더하는 대신.
+ * 지금은 영상만 쓴다. 구조 타입으로 받는 건 그대로 둔다 — `relatedServices` 를
+ * 가진 타입이 다시 생기면 오버로드 없이 그냥 태우면 된다.
  *
- * ⚠️ 영상의 링크는 양방향이 보장되지만(validate.ts) **글의 링크는 단방향이다.**
- * 여기서 갈리는 건 없다 — 어느 쪽이든 가리키는 서비스가 실재하는 건 검증된다.
+ * 글은 여기 안 온다 (2026-09-01) — 글 상세의 서비스 카드 절을 지우면서
+ * 글의 relatedServices 필드째로 걷어냈다. 이유는 validate.ts 상단 주석에.
  */
 export function getRelatedServices(item: { relatedServices: string[] }): Service[] {
   return item.relatedServices

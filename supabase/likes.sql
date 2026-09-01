@@ -1,4 +1,4 @@
--- 좋아요 (로그인 없이 누른다) — 서비스와 영상 공용
+-- 좋아요 (로그인 없이 누른다) — 서비스·영상·글 공용
 --
 -- 실행: Supabase Studio → SQL Editor 에 통째로 붙여넣고 Run.
 -- 한 번만 돌리면 되고, 두 번 돌려도 안전하다 (if not exists / or replace).
@@ -7,8 +7,10 @@
 -- 왜 테이블 하나에 kind 로 나누는가
 --
 -- 서비스와 영상은 같은 것을 센다 — "이 카드 좋다". 테이블을 둘로 나누면 함수도
--- 뷰도 API 도 두 벌이 되고, 나중에 셋째(글·프롬프트)가 생기면 세 벌이 된다.
--- 슬러그는 services/videos 사이에서 겹칠 수 있으므로 kind 를 키에 넣는다.
+-- 뷰도 API 도 두 벌이 되고, 나중에 넷째(프롬프트)가 생기면 네 벌이 된다.
+-- 슬러그는 services/videos/thoughts 사이에서 겹칠 수 있으므로 kind 를 키에 넣는다.
+-- 셋째 kind(thought — 글)는 2026-09-01 에 실제로 왔고, 예상대로 여기 한 줄과
+-- 아래 함수의 검사 한 줄만 늘었다.
 --
 -- 왜 테이블을 직접 열지 않고 함수 두 개만 여는가
 --
@@ -32,8 +34,8 @@
 -- ─────────────────────────────────────────────────────────────
 
 create table if not exists public.content_likes (
-  -- 'service' = content/services/<slug>.mdx, 'video' = content/videos/<slug>.mdx
-  kind        text        not null check (kind in ('service', 'video')),
+  -- 'service'/'video'/'thought' = content/<kind>s/<slug>.mdx
+  kind        text        not null check (kind in ('service', 'video', 'thought')),
   -- MDX 파일명에서 온 슬러그. 홈페이지가 MDX 로 도니까 외래키는 없다.
   slug        text        not null,
   -- 브라우저 localStorage 에 사는 임의의 uuid. 사람과 이어지는 정보가 아니다.
@@ -41,6 +43,13 @@ create table if not exists public.content_likes (
   created_at  timestamptz not null default now(),
   primary key (kind, slug, visitor_id)
 );
+
+-- 이미 두 kind 짜리로 만들어진 테이블에 thought 를 더한다.
+-- 방금 위에서 새로 만들어졌다면 같은 제약을 지웠다 다시 다는 것뿐이라 안전하다.
+alter table public.content_likes
+  drop constraint if exists content_likes_kind_check;
+alter table public.content_likes
+  add constraint content_likes_kind_check check (kind in ('service', 'video', 'thought'));
 
 -- 목록에서 "이 카드 좋아요 몇 개" 를 셀 때 쓴다
 create index if not exists content_likes_kind_slug_idx on public.content_likes (kind, slug);
@@ -70,7 +79,7 @@ as $$
 declare
   total int;
 begin
-  if p_kind is null or p_kind not in ('service', 'video') then
+  if p_kind is null or p_kind not in ('service', 'video', 'thought') then
     raise exception 'invalid kind';
   end if;
 

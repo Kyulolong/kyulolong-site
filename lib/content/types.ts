@@ -269,10 +269,12 @@ export const thoughtFrontmatterSchema = z.strictObject({
    */
   featured: z.boolean().default(false),
   /**
-   * 글이 인용하는 서비스. **단방향이다** — 서비스 MDX 에 되받는 필드가 없다.
-   * 이유는 validate.ts 상단 주석에 적어뒀다.
+   * 댓글창을 여는지. 기본이 열림이라 **쓸 때 채울 칸이 아니다** — 닫고 싶은
+   * 글에만 `comments: false` 한 줄을 적는다 (위의 "필드를 늘리지 말 것" 경고를
+   * 통과하는 이유다). 댓글 하나만 치우는 건 글이 아니라 DB 쪽이다:
+   * supabase/comments.sql 의 hidden 컬럼을 Studio 에서 올린다.
    */
-  relatedServices: z.array(z.string()).default([]),
+  comments: z.boolean().default(true),
   /** 공유 카드 전용 래스터. 없으면 사이트 기본 카드로 떨어진다. */
   ogImage: z.string().optional(),
 });
@@ -358,8 +360,8 @@ export interface Thought {
   publishedAt: string;
   /** 목록 맨 위 고정 */
   featured: boolean;
-  /** 글이 인용하는 서비스 (단방향) */
-  relatedServices: string[];
+  /** 댓글창을 여는지. 기본 true — 닫을 글에만 frontmatter 에 적는다. */
+  comments: boolean;
   ogImage?: string;
   body: string;
 }

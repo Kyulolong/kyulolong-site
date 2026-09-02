@@ -256,7 +256,7 @@ export function FounderQuestions() {
 
         <p className="text-on-iris/80 mt-8 text-lg text-pretty">
           저도 이 질문들에 하나씩 답을 적어가는 중입니다. 정답이어서가 아니라,
-          적어둔 답이 있어야 틀렸다는 걸 알게 되기 때문입니다.
+          적어둔 답이 있어야 달라진 점을 알게 되기 때문입니다.
         </p>
         {/* 보라 면 위에서는 밝은 알약이 가장 단단하다. 형광을 쓰지 않는 건
             그대로다 — 이 화면의 형광 한 점은 히어로의 커서다 (DESIGN.md §2). */}

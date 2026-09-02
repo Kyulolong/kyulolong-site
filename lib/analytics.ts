@@ -124,3 +124,54 @@ export async function getTodayVisitors(): Promise<number | null> {
 
   return readMetric((data as { visitors?: unknown } | null)?.visitors);
 }
+
+/**
+ * 사이트가 열린 뒤 전부. Umami 는 startAt/endAt 을 반드시 요구해서 "전체 기간"
+ * 이라는 값이 없다. 가장 오래된 글이 2026-07-09 라 그 앞의 넉넉한 자리를 잡는다 —
+ * 이 날짜를 뒤로 미루면 미룬 만큼의 조회가 조용히 사라지므로 앞으로만 당긴다.
+ */
+const SITE_EPOCH = Date.UTC(2026, 5, 1); // 2026-06-01
+
+/**
+ * 글별 조회수. **순 방문자가 아니라 페이지뷰다** — 같은 사람이 새로고침하면 또
+ * 센다. 좋아요(visitor uuid 로 중복을 막는다)와 세는 단위가 다르다는 뜻이라,
+ * 두 숫자를 나란히 놓을 때 큰 쪽이 조회수인 게 정상이다.
+ *
+ * 조회수 때문에 테이블을 새로 만들지 않는 이유: Umami 가 이미 URL 별로 세고
+ * 있다. Supabase 에 카운터를 두면 `visitor_id` 같은 키가 없어서 curl 반복문
+ * 하나로 무한히 부풀릴 수 있는데(좋아요는 uuid 를 새로 만들어야 한다), 여기는
+ * 막을 방법이 원리상 없다. Umami 도 완벽하진 않지만 최소한 브라우저에서
+ * 스크립트가 돌아야 한 줄이 쌓인다.
+ *
+ * @returns 슬러그별 조회수. 설정이 없거나 Umami 가 안 되면 null (0 이 아니다 —
+ *   부르는 쪽이 "0회"와 "모름"을 구분해야 한다).
+ */
+export async function getThoughtViews(): Promise<Record<string, number> | null> {
+  if (!isAnalyticsReadConfigured) return null;
+
+  const data = await authedFetch(
+    `/api/websites/${websiteId}/metrics` +
+      `?startAt=${SITE_EPOCH}&endAt=${Date.now()}&type=url&limit=500`,
+  );
+  if (!Array.isArray(data)) return null;
+
+  const views: Record<string, number> = {};
+  for (const row of data) {
+    const { x, y } = (row ?? {}) as { x?: unknown; y?: unknown };
+    if (typeof x !== "string" || typeof y !== "number") continue;
+
+    /*
+     * `/thoughts/foo?ref=insta` 나 `/thoughts/foo/` 가 각각 다른 줄로 올 수 있다.
+     * 쿼리와 끝 슬래시를 떼서 같은 글로 합친다 — 인스타에서 오는 링크에 파라미터가
+     * 붙는 날이 있고, 안 합치면 그날치 조회가 통째로 빠진다.
+     */
+    const path = x.split(/[?#]/, 1)[0].replace(/\/+$/, "");
+    const slug = path.startsWith("/thoughts/") ? path.slice("/thoughts/".length) : null;
+    // 목록(/thoughts)과 더 깊은 경로는 세지 않는다
+    if (!slug || slug.includes("/")) continue;
+
+    views[slug] = (views[slug] ?? 0) + y;
+  }
+
+  return views;
+}

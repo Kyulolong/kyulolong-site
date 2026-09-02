@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LikeButton } from "@/components/like-button";
 import { Prose } from "@/components/prose";
 import { ThoughtComments } from "@/components/thought-comments";
+import { ThoughtViews } from "@/components/thought-views";
 import { formatDate } from "@/components/video-card";
 import { getThought, getThoughts, readingMinutes } from "@/lib/content";
 import { pageMetadata, shareableImage, summarize, thoughtJsonLd } from "@/lib/seo";
@@ -78,13 +79,22 @@ export default async function ThoughtPage({ params }: PageProps<"/thoughts/[slug
         <Prose body={thought.body} className="mt-12" />
 
         {/* 다 읽고 누르는 자리라 본문 바로 아래다. 서비스 상세의 CTA 옆 하트와
-            같은 테두리 버튼 — 형광도 보라 면도 아니다 (DESIGN.md §2). */}
-        <div className="mt-12">
+            같은 테두리 버튼 — 형광도 보라 면도 아니다 (DESIGN.md §2).
+
+            조회수가 그 옆에 선다. 이 자리인 이유는 목록이 아니어서다 — 읽기 전에
+            보이면 제목 대신 숫자로 고르게 되고, 그러면 "제목 셋이 곧 명함"이라는
+            /thoughts 의 전제가 무너진다 (CLAUDE.md 1번). 다 읽은 뒤에는 하트와
+            나란히 "이만큼 읽혔고 이만큼 좋아했다"로 읽힌다.
+
+            두 숫자는 세는 단위가 다르다 — 하트는 브라우저마다 한 번(visitor uuid),
+            조회수는 열 때마다 한 번(페이지뷰). 조회수가 늘 더 큰 게 정상이다. */}
+        <div className="mt-12 flex flex-wrap items-center gap-x-4 gap-y-3">
           <LikeButton
             kind="thought"
             slug={thought.slug}
             className="border-line text-ink-faint hover:bg-surface-2 !gap-2 border !px-5 !py-3 !text-sm !rounded-full"
           />
+          <ThoughtViews slug={thought.slug} />
         </div>
 
         {/*

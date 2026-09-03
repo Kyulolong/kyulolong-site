@@ -37,7 +37,7 @@ export default async function VideosPage({ searchParams }: PageProps<"/videos">)
       <PageHeader
         eyebrow="videos"
         title="만드는 과정"
-        description="저는 가르치는 사람이 아닙니다. 만드는 과정을 공유합니다."
+        description="저는 생각하는 과정을 공유합니다."
       />
 
       <FilterRail>

@@ -61,7 +61,7 @@ export default function AboutPage() {
         <div className="text-ink-soft space-y-6 pb-4 text-[1.0625rem]">
           <p>
             이 홈페이지는 창업을 고민하는 분들에게 생각의 확신을, 커리어를 시작하는 주니어 분들에게는
-            조금 더 용기를 주기 위해 만들었습니다.
+            조금 더 용기를 드리기 위해 만들었습니다.
           </p>
 
           <p>
@@ -121,7 +121,7 @@ export default function AboutPage() {
           </p>
 
           <p>
-            지식은 점점 복제하기 쉬워지고 있습니다. 그래서 저는 감추기보다
+            지식은 점점 복제하기 쉬워지고 있습니다. 다만, 사람에게 남는 것은 맥락입니다. 그래서 저는 감추기보다
             공유하려고 합니다.
           </p>
 
@@ -146,6 +146,8 @@ export default function AboutPage() {
           </p>
 
           <p>빈 화면 앞에서 시작하는 사람이 조금 더 용기를 낼 수 있도록.</p>
+          <p>규로롱 소개였습니다.</p>
+          
         </div>
 
         <section className="mt-14 pb-4">
@@ -171,7 +173,7 @@ export default function AboutPage() {
             >
               인스타 DM
             </a>
-            으로 한 줄 보내주세요. 즐거운 여정을 함께해요.
+            으로 한 줄 보내주세요. 즐거운 만남을 늘 기대해요.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link

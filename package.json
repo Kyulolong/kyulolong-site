@@ -10,7 +10,8 @@
     "validate:content": "tsx scripts/validate-content.ts",
     "lint:copy": "node scripts/lint-copy.mjs",
     "thumbs": "tsx scripts/fetch-thumbnails.ts",
-    "og": "tsx scripts/make-og.tsx"
+    "og": "tsx scripts/make-og.tsx",
+    "questions": "node scripts/make-questions-pdf.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.2",

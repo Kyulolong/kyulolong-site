@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Brand } from "@/components/brand";
 import { VisitorCount } from "@/components/visitor-count";
-import { BUSINESS_EMAIL, FOOTER_NAV, SOCIAL_LINKS } from "@/lib/site-links";
+import { BUSINESS_EMAIL, FOOTER_CHANNELS, FOOTER_NAV } from "@/lib/site-links";
 
 /**
  * 푸터는 전체 지도다 — 네비 셋에서 빠진 시작하기·영상이 여기서는 다 나온다.
@@ -29,8 +29,14 @@ export function SiteFooter() {
         <div className="flex flex-wrap items-start justify-between gap-x-10 gap-y-8">
           <div>
             <Brand />
+            {/* 워드마크 아래는 **태그라인 자리**다 (2026-09-07). 여기가 모든
+                페이지에 서므로, 사이트 안에서 태그라인이 가장 자주 읽히는 자리이기도
+                하다. 예전엔 "만든 서비스와 소스코드, 만드는 과정을 남긴 영상을
+                모아둡니다"였는데 그건 **목차**라, 바로 옆 nav 두 줄이 이미 하고 있던
+                말을 한 번 더 하고 있었다. 태그라인 전문은 components/hero.tsx 와
+                lib/seo.ts 의 SITE_TITLE 에도 같은 문장으로 있다 — 한 곳만 고치지 말 것. */}
             <p className="text-ink-soft mt-3 max-w-[26rem] text-sm">
-              만든 서비스와 소스코드, 만드는 과정을 남긴 영상을 모아둡니다.
+              사람과 AI, 일하는 방식을 탐구합니다.
             </p>
 
             {/* 라벨을 붙여 두는 이유: 주소만 있으면 "만들어달라" 요청도 여기로 온다.
@@ -62,8 +68,10 @@ export function SiteFooter() {
               ))}
             </nav>
 
+            {/* 소셜 셋 + 오픈채팅. SOCIAL_LINKS 를 그대로 쓰지 않는 이유는
+                lib/site-links.ts 에 적어뒀다 — 저 배열은 sameAs 로도 나간다. */}
             <nav aria-label="채널" className="flex flex-col md:gap-2.5">
-              {SOCIAL_LINKS.map((link) => (
+              {FOOTER_CHANNELS.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}

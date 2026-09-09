@@ -29,10 +29,70 @@ export const PERPLZ_PROFILE_URL =
  */
 export const BUSINESS_EMAIL = "kyulolong@teaminpact.com";
 
+/**
+ * 카카오톡 오픈채팅. 질문지(public/founder-questions.pdf)의 질문들을 **같이 적는
+ * 방**이다. 사이트 안의 입구는 히어로 타일(components/hero-links.tsx)과 푸터 둘이다.
+ *
+ * **입장코드를 숨기지 않는다.** 코드는 봇을 거르는 문턱이지 사람을 거르는
+ * 장치가 아니라, 감춰서 얻는 게 없다. 채널 추가나 DM 을 조건으로 걸지 않는
+ * 것도 같은 이유다 — 11번의 "로그인은 문이 아니라 덤"이 여기까지 이어진다.
+ *
+ * ⚠️ 방 제목·설명에서는 상대를 불러도 된다. 카카오 안의 문패는 그 방을 찾는
+ * 사람이 읽는 것이고, 이 사이트의 목소리(CLAUDE.md 1번 "쓰지 않을 말")는
+ * 여기 적히는 라벨과 슬랩의 문장까지다.
+ */
+export const KAKAO_OPENCHAT = {
+  /** 푸터 '채널' 줄에 서는 이름. 그 칸은 플랫폼 목록이라 플랫폼 이름으로 적는다 */
+  label: "오픈채팅",
+  /**
+   * ⚠️ **화면에 보이는 문구는 여기 없다.** 히어로 타일(components/hero-links.tsx)이
+   * 유일한 자리라 거기 인라인으로 두고, 이 파일은 **주소와 숫자**만 갖는다.
+   * 두 번째 자리가 생기면 그때 문구를 이리로 올릴 것 — 아래 "목적지 하나에 이름
+   * 하나"가 그때부터 걸린다.
+   */
+  href: "https://open.kakao.com/o/gygwZpMi",
+  /** 입장할 때 치는 숫자. 고정폭으로 적는다 — 눈으로 옮겨 적는 문자열이다 */
+  code: "2609",
+} as const;
+
+/**
+ * 질문 열 개를 적어 넣을 수 있게 묶은 종이. scripts/make-questions-pdf.mjs 가
+ * lib/founder-questions.ts 에서 구워 public/ 에 커밋해둔다 (og.png 와 같은 방식).
+ *
+ * 페이지가 아니라 정적 파일이라 INTERNAL_LINKS 에 넣지 않는다 — 저쪽은 예약
+ * 경로 목록(CLAUDE.md 2번)이고 이건 그 규칙과 무관한 자산이다.
+ *
+ * ⚠️ **`pages` 는 화면에 그대로 나가는 숫자다** (히어로 타일의 "무료 · 12장").
+ * 갈래를 더하면 종이가 늘어나는데 이 숫자는 안 따라오므로, `npm run questions` 가
+ * 굽고 나서 이 값과 대조해 어긋나면 세운다. 크기를 정직하게 적는 게 이 절의
+ * 전제라(CLAUDE.md 3번), 틀린 장 수는 오탈자가 아니라 그 전제를 깨는 일이다.
+ */
+export const FOUNDER_QUESTIONS = {
+  href: "/founder-questions.pdf",
+  pages: 12,
+} as const;
+
+/**
+ * ⚠️ **이 배열은 구조화 데이터의 `sameAs` 로도 나간다** (app/page.tsx → siteJsonLd).
+ * `sameAs` 는 "이 사람이 누구인지 가리키는 프로필 주소"라, 프로필이 아닌 것을
+ * 여기 넣으면 12번의 "구조화 데이터에는 사실만 적는다"가 흐려진다. 오픈채팅방은
+ * 프로필이 아니라 장소라서 아래 FOOTER_CHANNELS 에서만 합류한다.
+ */
 export const SOCIAL_LINKS = [
   { label: "인스타그램", href: INSTAGRAM_URL },
   { label: "깃허브", href: "https://github.com/Kyulolong" },
   { label: "퍼플즈", href: PERPLZ_PROFILE_URL },
+] as const;
+
+/**
+ * 푸터의 '채널' 줄. 소셜 셋에 오픈채팅을 더한 것이다.
+ *
+ * 푸터는 전체 지도라(FOOTER_NAV 와 같은 이유) 대문 슬랩에서만 열리는 방도
+ * 여기 실린다 — 슬랩을 지나쳐 내려온 사람에게 남는 유일한 입구다.
+ */
+export const FOOTER_CHANNELS = [
+  ...SOCIAL_LINKS,
+  { label: KAKAO_OPENCHAT.label, href: KAKAO_OPENCHAT.href },
 ] as const;
 
 /** 홈페이지 내부 경로. 스펙 2번의 예약 경로 안에서만 쓴다. */

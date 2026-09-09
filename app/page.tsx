@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { FounderQuestions } from "@/components/founder-questions";
 import { Hero } from "@/components/hero";
+import { HeroLinks } from "@/components/hero-links";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
 import { ServiceCard } from "@/components/service-card";
@@ -42,7 +42,7 @@ const DAY = 86400;
 /**
  * 대문의 순서가 이 사이트의 논지다.
  *
- *   히어로(왜 이걸 하나) → 생각들 → 만든 것 → 질문들 → 말 거는 곳 → 소개
+ *   히어로(왜 이걸 하나) → 타일 둘 → 생각들 → 만든 것 → 말 거는 곳
  *
  * 글이 서비스보다 **위**에 온다. 이 채널이 쌓아가는 건 글이고, 만든 것은
  * 그 글이 탁상공론이 아니라는 증거로 뒤를 받친다. 반대로 놓으면 진열장이 된다.
@@ -70,6 +70,11 @@ export default async function Home() {
       <JsonLd data={siteJsonLd(SOCIAL_LINKS.map((link) => link.href))} />
 
       <Hero />
+
+      {/* 종이와 방으로 가는 타일 둘. 아래 보라 슬랩에 같은 쌍이 있는데도 위에
+          두는 이유는 components/hero-links.tsx 에 적어뒀다 — 인스타에서 온
+          사람 상당수가 슬랩까지 안 내려간다. */}
+      <HeroLinks />
 
       {/*
         인사이트가 착지하는 자리.
@@ -166,33 +171,21 @@ export default async function Home() {
       </section>
 
       {/*
-        질문들 — 회사를 시작하기 전에 답해둘 스무 개 (components/founder-questions.tsx).
-
-        예전 이 자리는 "0부터 시작하지 마세요"(설치 안내로 보내는 초대)였다.
-        2026-08-31 에 창업 질문 은행으로 바꿨다 — 위의 서비스 줄이 "만드는 건
-        됐다"를 보여주고, 여기가 "그럼 무엇을 답해야 하나"를 받는다. 만드는 일이
-        쉬워졌다는 증거 바로 아래라야 "어려운 건 질문 쪽"이라는 말이 선다.
-        /start 진입점은 위의 서비스 줄 끝으로 옮겼다 (footer 에도 상시로 있다).
-
-        ⚠️ **이 블록이 이 페이지에서 보라 30%를 실제로 채우는 자리다** (DESIGN.md §1).
-        면이 넓어야 하는 건 취향이 아니라 구조다 — 보라가 뱃지 몇 개로 쪼그라들면
-        화면이 검정과 형광 두 겹으로 돌아가고, 그건 §1 이 적어둔 1차 실패다.
-      */}
-      <section className="mx-auto w-full max-w-[1120px] px-6 pt-12 sm:px-8 sm:pt-16">
-        <FounderQuestions />
-      </section>
-
-      {/*
         말 거는 곳. 이 채널의 유일한 쌍방향 장치라 /about 배너보다 위에 둔다.
 
         창구가 둘이다 — 인스타 DM 과 퍼플즈 DM. 여기서는 상대를 불러도 된다:
         실제로 말을 거는 자리라서다. 대신 문턱을 낮추는 쪽으로만 쓴다
         ("한 줄이면 됩니다").
 
-        ⚠️ **여기에 면을 깔지 않는다.** 바로 위가 이 페이지에서 가장 진한 보라
-        슬랩이라, 여기도 면을 깔면 덩어리 둘이 나란히 서서 쌍둥이로 읽힌다.
-        큰 보라는 페이지에 **한 번만** 쳐야 세다. 이 절은 가는 선 하나로 열고
-        여백으로 buffer 를 만든다 — 조용한 자리가 있어야 위가 크게 들린다.
+        여기에 면을 깔지 않는다. 이 절은 가는 선 하나로 열고 여백으로 buffer 를
+        만든다 — 얼굴과 1인칭 문장이 서는 자리라, 상자에 담으면 배너로 읽힌다.
+
+        ⚠️ **2026-09-07 에 바로 위의 보라 슬랩(질문들)을 지웠다.** 그전까지 이
+        문단은 "위가 가장 진한 보라라 여기도 면을 깔면 쌍둥이가 된다"가 이유였는데,
+        그 근거는 이제 없다. 대신 **반대 문제가 열려 있다**: 대문에 남은 보라가
+        히어로 버튼 하나와 푸터 띠뿐이라, 화면이 검정+형광 두 겹으로 기운다
+        (DESIGN.md §1 의 1차 실패). 30% 층을 어디서 다시 세울지는 아직 안 정했다 —
+        여기에 면을 까는 것도 후보 중 하나다.
       */}
       <section className="mx-auto w-full max-w-[1120px] px-6 pt-20 sm:px-8 sm:pt-24">
         <div className="border-line border-t pt-14 sm:pt-16">
@@ -246,8 +239,7 @@ export default async function Home() {
             </p>
             <p className="text-ink-soft mt-4 text-lg text-pretty">
               최대한 만들어 보겠습니다. 생각과정을 공유합니다. 아이디어 보낸 분은
-              거기서부터 작업을 시작하세요. 저도 혼자 아이디어를 떠올리기 보다 요청을 받아
-              만드는 것이 결과가 더 좋습니다.
+              거기서부터 작업을 시작하세요. 저도 혼자 아이디어를 떠올리기 보다 함께 생각을 개선해 나가는 과정이 더 즐겁습니다.
             </p>
             {/* 둘 다 잉크다. 알약 둘이 나란히 서지만 색이 같아서 위계가 아니라
                 선택지로 읽힌다 — 실제로 둘은 대등한 창구다. */}
@@ -273,29 +265,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 소개 요약. 하단 바에서 소개를 뺐으므로 모바일에서는 히어로의 밑줄
-          링크와 여기 둘이 /about 으로 가는 길이다. */}
-      <section className="mx-auto w-full max-w-[1120px] px-6 pt-8 sm:px-8 sm:pt-10">
-        <div className="border-line flex flex-wrap items-center justify-between gap-6 rounded-card border px-8 py-10 sm:px-12">
-          <div>
-            <h2 className="text-xl font-bold tracking-[-0.02em]">
-              인사담당자가 어떻게 여기까지 왔나
-            </h2>
-            {/* 두 문장을 같은 축(못했다)으로 묶는다. 앞뒤 주제가 갈리면
-                예고편이 아니라 두 개의 짧은 알림처럼 읽힌다. */}
-            <p className="text-ink-soft mt-2 max-w-[38rem]">
-              대기업에서 인사 시스템을 기획했지만 코드는 한 줄도 못 짰습니다.
-              얼마 전까지도 에러가 뜨면 읽지 못하고 통째로 복사해서 AI한테 붙여넣었고요.
-            </p>
-          </div>
-          <Link
-            href={INTERNAL_LINKS.about}
-            className="border-line-strong text-ink hover:bg-surface-2 inline-flex min-h-11 shrink-0 items-center rounded-full border px-5 py-2.5 text-sm font-medium transition-colors"
-          >
-            읽어보기
-          </Link>
-        </div>
-      </section>
     </>
   );
 }

@@ -29,6 +29,7 @@ const BANNED = [
 const DIRS = ["content/thoughts", "drafts/thoughts"];
 
 let hits = 0;
+let dashes = 0;
 for (const dir of DIRS) {
   if (!fs.existsSync(dir)) continue;
   const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
@@ -41,12 +42,23 @@ for (const dir of DIRS) {
           hits += 1;
         }
       }
+      // 링크는 통째로 걷어내고 본다. 원문 제목 안의 엠대시는 그대로 적어야
+      // 그 제목으로 검색해 찾아갈 수 있다 (drafts/STYLE.md 4번).
+      if (line.replace(/\[[^\]]*\]\([^)]*\)/g, "").includes("\u2014")) {
+        console.log(`${dir}/${file}:${i + 1}  「\u2014」  ${line.trim().slice(0, 72)}`);
+        dashes += 1;
+      }
     });
   }
 }
 
+if (dashes > 0) {
+  console.error(
+    `\n엠대시 ${dashes}곳. 마침표로 끊거나, 쉼표로 잇거나, 정의 목록이면 콜론입니다 (drafts/STYLE.md 1번).`,
+  );
+}
 if (hits > 0) {
   console.error(`\n${hits}곳 — 정체성 호명이면 지우고, 인용이면 알고 둡니다 (drafts/STYLE.md 1번).`);
-  process.exit(1);
 }
-console.log("호명 금지어 없음 — 문은 둘 다 열려 있습니다.");
+if (hits > 0 || dashes > 0) process.exit(1);
+console.log("호명 금지어 없음 — 문은 둘 다 열려 있습니다. 엠대시도 없습니다.");

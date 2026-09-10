@@ -48,10 +48,37 @@ function formatIssues(file: string, error: z.ZodError): string[] {
   });
 }
 
+/**
+ * 파일명 앞의 `YYYY-MM-DD-` 는 **탐색기 정렬용 접두어**라 슬러그에서 뗀다.
+ *
+ * 편집기의 파일 목록은 파일명 알파벳순으로만 서는데, 글의 파일명은 영문 슬러그라
+ * 그 순서가 발행 순서와 아무 관계가 없다. `ax-not-to-use-ai` 가 맨 위에 서고
+ * 방금 쓴 편이 가운데에 끼는 식이다. 12편일 때 이미 못 읽겠는데 100편이 목표라
+ * (`drafts/PLAN.md`) 접두어를 붙여 파일 순서를 발행 순서와 맞춘다.
+ *
+ * ⚠️ **접두어는 URL 에 들어가지 않는다.** 파일명이 곧 슬러그이던 것을 그대로
+ * 두고 이름만 바꿨다면 12편의 주소가 전부 바뀌고, 글끼리 걸어둔 본문 링크와
+ * 사이트맵과 이미 인스타에 나간 링크가 같이 깨진다. 그래서 여기서 뗀다 —
+ * `2026-08-18-ax-not-to-use-ai.mdx` 는 예나 지금이나 `/thoughts/ax-not-to-use-ai` 다.
+ */
+const DATE_PREFIX = /^(\d{4}-\d{2}-\d{2})-/;
+
+/**
+ * 접두어 정책. 글만 `required` 다.
+ *
+ * 서비스와 영상을 `none` 으로 둔 이유는 그 둘의 파일 목록이 이미 읽을 만해서다
+ * (여덟 개 · 여섯 개고 슬러그가 곧 아는 이름이다). 무엇보다 **반쯤 적용되면
+ * 조용히 슬러그가 바뀐다** — 접두어가 붙은 서비스 파일 하나가 `none` 인 채로
+ * 들어오면 그 서비스의 주소가 소리 없이 달라지므로, 붙이는 것도 안 붙이는 것도
+ * 컬렉션 단위로 못 박고 어긴 파일에서 빌드를 세운다.
+ */
+type DatePrefixPolicy = "required" | "none";
+
 function readCollection<T extends z.ZodType>(
   dir: string,
   schema: T,
   label: string,
+  datePrefix: DatePrefixPolicy,
 ): { slug: string; data: z.infer<T>; body: string }[] {
   if (!fs.existsSync(dir)) {
     throw new ContentError([
@@ -66,9 +93,12 @@ function readCollection<T extends z.ZodType>(
 
   const problems: string[] = [];
   const entries: { slug: string; data: z.infer<T>; body: string }[] = [];
+  const seenSlugs = new Map<string, string>();
 
   for (const file of files) {
-    const slug = file.replace(/\.mdx$/, "");
+    const base = file.replace(/\.mdx$/, "");
+    const prefix = base.match(DATE_PREFIX);
+    const slug = prefix ? base.slice(prefix[0].length) : base;
     const raw = fs.readFileSync(path.join(dir, file), "utf8");
     const { data, content } = matter(raw);
 
@@ -76,6 +106,40 @@ function readCollection<T extends z.ZodType>(
     if (!parsed.success) {
       problems.push(...formatIssues(`${label}/${file}`, parsed.error));
       continue;
+    }
+
+    // 접두어를 떼고 나면 슬러그가 겹칠 수 있다 (`foo.mdx` 와 `2026-01-01-foo.mdx`).
+    // 겹치면 나중 파일이 앞 파일을 조용히 밀어내는 게 아니라 여기서 세운다.
+    const twin = seenSlugs.get(slug);
+    if (twin) {
+      problems.push(
+        `${label}/${file} — 슬러그 "${slug}" 가 ${label}/${twin} 와 겹칩니다. ` +
+          `날짜 접두어를 떼면 같은 이름이라 둘 중 하나만 살아남습니다.`,
+      );
+      continue;
+    }
+    seenSlugs.set(slug, file);
+
+    // 접두어와 publishedAt 이 어긋나는 건 눈으로 절대 못 잡는 종류다. 발행일을
+    // 고치고 파일명을 안 고치면 목록의 날짜와 파일 순서가 따로 놀기 시작한다.
+    const publishedAt = (parsed.data as { publishedAt?: string }).publishedAt;
+    if (datePrefix === "required") {
+      if (!prefix) {
+        problems.push(
+          `${label}/${file} — 파일명에 날짜 접두어가 없습니다. ` +
+            `${label}/${publishedAt}-${base}.mdx 로 바꾸세요 (주소는 /${label}/${slug} 그대로입니다).`,
+        );
+      } else if (prefix[1] !== publishedAt) {
+        problems.push(
+          `${label}/${file} — 파일명의 날짜(${prefix[1]})와 publishedAt(${publishedAt})이 다릅니다. ` +
+            `${label}/${publishedAt}-${slug}.mdx 로 바꾸거나 publishedAt 을 고치세요.`,
+        );
+      }
+    } else if (prefix) {
+      problems.push(
+        `${label}/${file} — ${label} 에는 날짜 접두어를 붙이지 않습니다. ` +
+          `그대로 두면 슬러그가 "${slug}" 로 바뀌어 주소가 달라집니다.`,
+      );
     }
 
     entries.push({ slug, data: parsed.data, body: content.trim() });
@@ -131,7 +195,7 @@ function assignSeq(services: Omit<Service, "seq">[]): Service[] {
 
 export function getServices(): Service[] {
   if (!servicesCache) {
-    const parsed = readCollection(SERVICES_DIR, serviceFrontmatterSchema, "services").map(
+    const parsed = readCollection(SERVICES_DIR, serviceFrontmatterSchema, "services", "none").map(
       ({ slug, data, body }) => ({ slug, ...data, body }),
     );
     servicesCache = assignSeq(parsed).sort(byFeaturedThenRecent);
@@ -141,7 +205,7 @@ export function getServices(): Service[] {
 
 export function getVideos(): Video[] {
   if (!videosCache) {
-    videosCache = readCollection(VIDEOS_DIR, videoFrontmatterSchema, "videos")
+    videosCache = readCollection(VIDEOS_DIR, videoFrontmatterSchema, "videos", "none")
       .map(({ slug, data, body }) => ({ slug, ...data, body }))
       .sort(byFeaturedThenRecent);
   }
@@ -155,7 +219,7 @@ export function getVideos(): Video[] {
  */
 export function getThoughts(): Thought[] {
   if (!thoughtsCache) {
-    thoughtsCache = readCollection(THOUGHTS_DIR, thoughtFrontmatterSchema, "thoughts")
+    thoughtsCache = readCollection(THOUGHTS_DIR, thoughtFrontmatterSchema, "thoughts", "required")
       .map(({ slug, data, body }) => ({ slug, ...data, body }))
       .sort(byFeaturedThenRecent);
   }

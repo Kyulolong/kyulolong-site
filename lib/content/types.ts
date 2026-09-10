@@ -243,7 +243,11 @@ export const videoFrontmatterSchema = z
   });
 
 /**
- * content/thoughts/<slug>.mdx — 글.
+ * content/thoughts/<publishedAt>-<slug>.mdx — 글.
+ *
+ * 파일명 앞의 날짜는 **탐색기를 발행순으로 세우기 위한 접두어**이고 주소에는
+ * 들어가지 않는다 (loader.ts 의 DATE_PREFIX). 접두어와 publishedAt 이 어긋나면
+ * 빌드가 선다. 서비스·영상은 접두어를 붙이지 않는다.
  *
  * ⚠️ 필드가 서비스보다 훨씬 적은 게 의도다. 서비스 쪽이 buildTime·prompt·concept 로
  * 무거운 건 그게 "0부터 시작하지 마세요"의 실물이라서인데, 글에 같은 무게를 얹으면
@@ -349,7 +353,7 @@ export interface Video {
   body: string;
 }
 
-/** content/thoughts/<slug>.mdx */
+/** content/thoughts/<publishedAt>-<slug>.mdx — slug 에는 날짜가 안 들어간다 */
 export interface Thought {
   slug: string;
   title: string;

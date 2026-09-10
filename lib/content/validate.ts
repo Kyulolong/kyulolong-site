@@ -201,7 +201,9 @@ export function validateContent(): void {
   }
 
   for (const thought of thoughts) {
-    const thoughtFile = `thoughts/${thought.slug}.mdx`;
+    // 글 파일명에는 날짜 접두어가 붙는다 (loader.ts 의 DATE_PREFIX). 에러에 적는
+    // 이름이 실제 파일과 달라지면 고치러 갈 자리를 못 찾으므로 여기서도 붙인다.
+    const thoughtFile = `thoughts/${thought.publishedAt}-${thought.slug}.mdx`;
 
     // 1. 예약 경로 침범. 글은 /thoughts/<slug> 라 루트와 부딪히지는 않지만,
     //    슬러그를 서비스와 같은 규칙으로 유지해야 나중에 옮길 때 안 걸린다.
@@ -227,7 +229,7 @@ export function validateContent(): void {
   if (pinned.length > 1) {
     problems.push(
       `글의 featured 는 하나만 둘 수 있습니다 (${pinned.length}개): ` +
-        pinned.map((t) => `thoughts/${t.slug}.mdx`).join(", ") +
+        pinned.map((t) => `thoughts/${t.publishedAt}-${t.slug}.mdx`).join(", ") +
         ` — 새로 추천할 글에 붙였으면 옛 글에서는 빼세요.`,
     );
   }

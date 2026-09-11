@@ -13,6 +13,16 @@ export {
 } from "./loader";
 export { validateContent } from "./validate";
 export {
+  MAX_QUERY_LENGTH,
+  normalizeQuery,
+  queryTerms,
+  rowSummary,
+  searchThoughts,
+  splitMatches,
+  thoughtsHref,
+  type ThoughtHit,
+} from "./search";
+export {
   SERIES,
   THOUGHT_SERIES,
   PLATFORMS,

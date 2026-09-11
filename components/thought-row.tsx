@@ -1,7 +1,31 @@
 import Link from "next/link";
 import { formatDate } from "@/components/video-card";
-import { readingMinutes, type Thought } from "@/lib/content";
-import { summarize } from "@/lib/seo";
+import { readingMinutes, rowSummary, splitMatches, type Thought } from "@/lib/content";
+
+/**
+ * 검색어가 걸린 자리를 칠한다 (`/thoughts?q=…` 에서만).
+ *
+ * **형광이 아니라 옅은 보라 면이다.** 결과가 열 줄이면 칠도 열 곳 넘게 서는데,
+ * 그걸 형광으로 하면 §2 가 세는 '흩어짐' 그 자체가 된다. 보라 면은 형광 예산에
+ * 안 들어가고(DESIGN.md §2 "보라 면은 예산에 안 들어간다"), 글자는 원래 색을
+ * 그대로 물려받아 대비가 안 깨진다 — 보라 25% 위 ink-soft 가 6.54:1, 제목 ink 가
+ * 13.37:1 이다 (재어본 값. 25% 를 올리면 ink-soft 쪽부터 다시 잴 것).
+ *
+ * 반경도 여백도 주지 않는다. 낱말에 조사가 붙어 있어서(`평가`+`를`) 좌우 여백을
+ * 주면 한 어절 한가운데가 벌어진다.
+ */
+function Marked({ text, terms }: { text: string; terms?: string[] }) {
+  if (!terms?.length) return text;
+  return splitMatches(text, terms).map((part, i) =>
+    part.hit ? (
+      <mark key={i} className="bg-iris/25 text-inherit">
+        {part.text}
+      </mark>
+    ) : (
+      part.text
+    ),
+  );
+}
 
 /**
  * 글 목록의 한 줄. 대문과 `/thoughts` 가 같이 쓴다.
@@ -29,9 +53,23 @@ import { summarize } from "@/lib/seo";
  * 알약이 아니라 `rounded-badge`, 보라 면 위에 밝은 글자. 상태지 액션이 아니다
  * (DESIGN.md §6). 글 줄에 뱃지가 이것 하나뿐이라 알갱이로 보이지 않는다. 여기에
  * 태그나 시리즈까지 뱃지로 올리기 시작하면 그때는 목록이 뒤덮인다.
+ *
+ * ── 검색 결과일 때 (`terms` · `excerpt`)
+ *
+ * 둘 다 `/thoughts?q=…` 만 넘긴다. 대문은 안 넘기므로 그대로다.
+ * `excerpt` 는 본문에서만 걸린 글의 "그 말이 나온 문장"이고, 요약 자리를 대신
+ * 차지한다 (lib/content/search.ts 의 ThoughtHit).
  */
-export function ThoughtRow({ thought }: { thought: Thought }) {
-  const summary = thought.summary ?? summarize(thought.body, 110);
+export function ThoughtRow({
+  thought,
+  terms,
+  excerpt,
+}: {
+  thought: Thought;
+  terms?: string[];
+  excerpt?: string;
+}) {
+  const summary = excerpt ?? rowSummary(thought);
 
   return (
     <Link
@@ -61,11 +99,13 @@ export function ThoughtRow({ thought }: { thought: Thought }) {
       </p>
 
       <h3 className="group-hover:text-ink-soft mt-2 text-[clamp(1.25rem,4vw,1.5rem)] leading-[1.35] font-bold tracking-[-0.02em] text-pretty transition-colors">
-        {thought.title}
+        <Marked text={thought.title} terms={terms} />
       </h3>
 
       {summary ? (
-        <p className="text-ink-soft mt-2 max-w-[58ch] text-[0.9375rem] text-pretty">{summary}</p>
+        <p className="text-ink-soft mt-2 max-w-[58ch] text-[0.9375rem] text-pretty">
+          <Marked text={summary} terms={terms} />
+        </p>
       ) : null}
     </Link>
   );

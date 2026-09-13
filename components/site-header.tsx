@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AuthStatus } from "@/components/auth-status";
 import { Brand } from "@/components/brand";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { PERPLZ_PROFILE_URL, PRIMARY_NAV } from "@/lib/site-links";
 
 /**
@@ -45,6 +46,7 @@ const EXTERNAL_NAV = [{ label: "퍼플즈", href: PERPLZ_PROFILE_URL }];
  *
  * AuthStatus 는 nav 밖으로 뺐다. 로그인은 '이동'이 아니라 '창구'라 하단 바에
  * 내려보내지 않고 모바일에서도 헤더에 남긴다 — 그러려면 nav 만 감출 수 있어야 한다.
+ * 테마 토글도 같은 이유로 nav 밖이다 — 이동이 아니라 설정이다.
  */
 const NAV_LINK = "text-ink-soft hover:text-ink text-sm font-medium transition-colors";
 
@@ -79,8 +81,13 @@ export function SiteHeader() {
               </a>
             ))}
           </nav>
+          {/* 테마 토글 (components/theme-toggle.tsx). 링크처럼 잉크색 무형태로 선다 —
+              "헤더에 버튼을 넣지 않는다"는 알약·채움 얘기라, 이건 그 규칙 안에 있다.
+              375px: 브랜드 ~87 + 토글 44 + 계정명 최대 144 + 간격 ≈ 315 < 327 이라
+              접히지 않는다. */}
+          <ThemeToggle />
           {/* 로그인은 '창구'라 헤더에 상시로 둔다. 형광은 안 쓴다 — 이 화면의
-              형광 한 점은 히어로 버튼이고, 헤더는 조용해야 한다 (DESIGN.md §8) */}
+              형광 한 점은 히어로 커서이고, 헤더는 조용해야 한다 (DESIGN.md §8) */}
           <AuthStatus />
         </div>
       </div>

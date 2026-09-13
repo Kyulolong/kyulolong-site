@@ -3,6 +3,8 @@
 모든 서비스에 같은 얼굴을 주기 위한 문서. 새 프로젝트를 시작할 때 §3의 토큰 블록을 복사해서 시작하고, 판단이 갈릴 때는 §1의 원칙으로 돌아온다.
 
 > **2026-08-27 개정.** 기본값을 **라이트에서 다시 다크로** 뒤집고, 그 사이에 **보라 한 겹(`#6332EB`)을 새로 넣었다.** 형광 한 점 규칙(§2)과 말투(§9)는 그대로다. 왜 두 번 뒤집었는지는 §1 끝에 적어뒀다 — **그 이력을 읽지 않고 색만 가져가면 세 번째로 뒤집게 된다.**
+>
+> **2026-09-14.** 라이트 *대응*이 코드에 들어갔다 — OS 설정을 따르고 헤더 토글로 고른다. 기본은 여전히 다크다. §3 의 라이트 블록이 `light-dark()` 한 벌로 바뀌었고, 워드마크 옆 마크는 `currentColor` 가 됐다(§7).
 
 ---
 
@@ -154,7 +156,7 @@ text-shadow: 0 0 26px rgba(143, 255, 0, 0.4); /* ❌ 절대 */
   --iris: #6332eb;          /* 트레이·프레임·뱃지의 '면' */
   --iris-press: #5528d4;    /* --iris 를 누른 상태 */
   --iris-soft: #a98cff;     /* '현재 배경에서 항상 보이는 보라' — 글자·아이콘·링크 (7.08:1) */
-  --iris-wash: #1c1633;     /* 보라를 아주 옅게 깐 면. 섹션 블록·인용 */
+  --iris-wash: #241b45;     /* 한 단계 아래의 조용한 면. surface 와 구별되게 보라를 남긴다 — 섹션 블록·인용·푸터 띠 */
   --on-iris: #f5f3ff;       /* 보라 '위에' 올라가는 글자 (6.01:1). 절대 어둡게 하지 않는다 */
 
   /* ── 10% 강조 — Neon Lime ───────────────
@@ -194,32 +196,40 @@ text-shadow: 0 0 26px rgba(143, 255, 0, 0.4); /* ❌ 절대 */
   --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px; --s9: 112px;
 }
 
-/* 라이트는 이제 '기본'이 아니라 '대응'이다. 그래도 누락시키지 않는다. */
-@media (prefers-color-scheme: light) {
+/* 라이트는 이제 '기본'이 아니라 '대응'이다. 그래도 누락시키지 않는다.
+   토큰마다 두 값을 한 줄에 둔다 — 두 벌로 복사하면 반드시 어긋난다. **첫 인자가 라이트,
+   둘째가 다크다** — 순서를 바꾸면 화면이 통째로 뒤집히니 고친 뒤엔 두 테마를 렌더해 본다. 갈리는 건
+   color-scheme 하나다: `light dark` 는 OS 를 따르고, 토글은 <html data-theme> 으로 못 박는다.
+   light-dark() 를 모르는 브라우저(iOS 17.4 이하)는 이 @supports 를 통째로 건너뛰어
+   위의 다크 값을 본다 — 위 블록이 폴백이라 이 블록이 없어도 깨지지 않는다. */
+@supports (color: light-dark(#000, #fff)) {
   :root {
-    color-scheme: light;
-    --bg: #ffffff;
-    --surface: #faf9fd;
-    --surface-2: #f4f2f9;
-    --line: #e8e5f0;
-    --line-strong: #d6d2e4;
-    --ink: #17151f;          /* 18.05:1 */
-    --ink-soft: #514d61;     /* 8.13:1 */
-    --ink-faint: #6f6a80;    /* 5.19:1 */
-    --iris-soft: #4a1fc0;    /* 흰 바탕에선 보라도 진해져야 읽힌다 — 9.34:1 */
-    --iris-wash: #f0ebff;
-    --acid-deep: #3d6b00;    /* 흰 바탕 위 초록 글자 — 6.36:1 */
-    --acid-wash: #eaffcb;
-    --happy-accident: #b4551f;
-    --caution: #8a5a00;
-    --danger: #b03a2e;
-    --shadow-sm: 0 1px 2px rgba(40, 30, 70, 0.06);
-    --shadow-md: 0 6px 20px -6px rgba(40, 30, 70, 0.14);
-    --shadow-lg: 0 20px 48px -16px rgba(40, 30, 70, 0.18);
-    /* --iris 와 --on-acid 와 --on-iris 는 일부러 다시 선언하지 않는다 (아래 표) */
+    color-scheme: light dark;
+    --bg: light-dark(#ffffff, #121019);
+    --surface: light-dark(#faf9fd, #1a1725);
+    --surface-2: light-dark(#f4f2f9, #221e30);
+    --line: light-dark(#e8e5f0, #2a2539);
+    --line-strong: light-dark(#d6d2e4, #3b3550);
+    --ink: light-dark(#17151f, #edebf5);            /* 라이트 18.05:1 */
+    --ink-soft: light-dark(#514d61, #a8a4bc);       /* 8.13:1 */
+    --ink-faint: light-dark(#6f6a80, #837e99);      /* 5.19:1 — iris-wash 위에선 4.45 라 거기선 --ink-soft */
+    --iris-soft: light-dark(#4a1fc0, #a98cff);      /* 흰 바탕에선 보라도 진해져야 읽힌다 — 9.34:1 */
+    --iris-wash: light-dark(#f0ebff, #241b45);
+    --acid-deep: light-dark(#3d6b00, #8fff00);      /* 흰 바탕 위 초록 글자 — 6.36:1 */
+    --acid-wash: light-dark(#eaffcb, #1e2a0d);
+    --happy-accident: light-dark(#b4551f, #f0906a);
+    --caution: light-dark(#8a5a00, #e8b64a);
+    --danger: light-dark(#b03a2e, #ef7469);
+    /* --iris 와 --on-acid 와 --on-iris 와 --plate 는 일부러 다시 선언하지 않는다 (아래 표) */
   }
+  /* 사용자 토글 — 명시 선택이 OS 를 이긴다. 속성이 없으면 OS 를 따르는 상태다 */
+  :root[data-theme="light"] { color-scheme: light; }
+  :root[data-theme="dark"]  { color-scheme: dark; }
 }
-/* 뷰어 토글이 미디어쿼리를 이겨야 하면 :root[data-theme="light"] / ["dark"] 에 같은 값을 한 번 더 선언한다. */
+/* 그림자는 라이트에서 기하까지 달라(md: 0 6px 20px -6px rgba(40,30,70,.14)) light-dark() 로
+   못 감싼다. 쓰는 곳이 생기면 그때 @supports 안에서 통째로 다시 선언한다.
+   ⚠️ light-dark() 는 반드시 위 @supports 안에만. 밖에 두면 모르는 브라우저에서 그 토큰이
+   빈 값이 되고, 빌드 도구(Turbopack 의 lightningcss)가 가드 밖 것만 폴리필해 다크로 고정시킨다. */
 ```
 
 ### 뒤집히는 토큰 vs 안 뒤집히는 토큰 (여기서 제일 많이 깨진다)
@@ -487,7 +497,8 @@ ep 6 · 이게 되네?             영상
 
 | 파일 | 말풍선 색 | 쓰는 곳 |
 | --- | --- | --- |
-| `public/brand/mark-on-dark.svg` | `#edebf5` (`--ink`) | **사이트가 쓰는 것.** 헤더·공유 카드 — 워드마크와 나란히 서는 자리 |
+| `components/brand-mark.tsx` | `currentColor` | **사이트가 쓰는 것.** 헤더·푸터 — 워드마크 옆이라 그 글자 색을 그대로 따른다(테마·hover 포함). `scripts/make-marks.mjs` 가 생성한다 |
+| `public/brand/mark-on-dark.svg` | `#edebf5` (`--ink`) | 공유 카드(`npm run og`) — 어두운 바탕에 워드마크와 나란히. 카드는 테마를 안 탄다 |
 | `public/brand/mark.svg` | `#6332EB` (`--iris`) | 마크 혼자 서는 자리. 파비콘 `.ico`·앱아이콘·남의 화면. 흰 바탕 6.59:1 / 어두운 바탕 2.86:1 로 **양쪽에서 서는 유일한 변형** |
 | `public/brand/mark-on-light.svg` | `#121019` | 흰 종이·인쇄·밝은 UI |
 | `app/icon.svg` | 미디어쿼리 | 브라우저 탭. 바탕을 고를 수 없어 스스로 맞춘다 |
@@ -646,10 +657,10 @@ export const viewport: Viewport = { viewportFit: "cover", /* … */ };
 ```css
 body { padding-bottom: var(--nav-space); }   /* main 이 아니라 body 다 — 푸터가 main 밖에 있다 */
 html { -webkit-text-size-adjust: 100%; }     /* 가로 모드에서 글자가 혼자 커지는 것 */
-html { -webkit-tap-highlight-color: rgb(237 235 245 / .10); }  /* transparent 로 죽이지 않는다 */
+html { -webkit-tap-highlight-color: color-mix(in srgb, var(--ink) 10%, transparent); }  /* transparent 로 죽이지 않는다 */
 ```
 
-탭 하이라이트를 `transparent` 로 지우지 않는 이유: JS 로 만든 press 상태가 없는 사이트에서는 이게 **유일한 터치 피드백**이다. iOS 기본값의 차가운 파랑만 바탕에 맞는 색으로 바꾼다. ⚠️ **다크로 뒤집으면 부호가 반대가 된다** — 어두운 바탕에는 어두운 오버레이가 안 보이므로 밝은 쪽으로 얹는다.
+탭 하이라이트를 `transparent` 로 지우지 않는 이유: JS 로 만든 press 상태가 없는 사이트에서는 이게 **유일한 터치 피드백**이다. iOS 기본값의 차가운 파랑만 바탕에 맞는 색으로 바꾼다. ⚠️ **부호가 테마를 따라 뒤집혀야 한다** — 어두운 바탕에는 밝은 오버레이, 흰 바탕에는 어두운 오버레이다. 잉크의 10% 로 쓰면 `--ink` 가 뒤집힐 때 같이 뒤집힌다.
 
 ### 3. 탭 타깃 44px
 
@@ -683,7 +694,7 @@ body { overflow-wrap: break-word; }   /* anywhere 가 아니다 */
 
 ## 11. 새 서비스 체크리스트
 
-- [ ] §3 토큰 블록 복붙했다 (**다크가 기본**)
+- [ ] §3 토큰 블록 복붙했다 (**다크가 기본**, 라이트는 `light-dark()` 한 벌 — 두 벌로 복사하지 않았고, 컴포넌트에 `dark:` 변형을 두지 않았다)
 - [ ] **브랜드 마크 + `made by kyulolong` 서명**을 넣었다 (§7). 바탕에 맞는 변형을 골랐고, SVG 를 손으로 고치지 않았다
 - [ ] **마크를 16px로 렌더해서 형태가 살아있는지 봤다** (§7 — 여기서 대부분 깨진다)
 - [ ] **"이 화면의 형광 한 점은 무엇인가?"** — 하나만 정했다
@@ -708,6 +719,6 @@ body { overflow-wrap: break-word; }   /* anywhere 가 아니다 */
 
 **적용 사례:** [kyulolong.com](https://kyulolong.com) — 글과 서비스 아카이브. 어두운 바탕 위에 보라 트레이로 리듬을 주고, 형광은 히어로의 "생각들 읽기" 버튼 한 곳에만 찍힌다. 모바일에서는 하단 고정 네비가 이동을 맡되 거기엔 초록을 하나도 두지 않는다 (§12).
 
-> **이 문서와 화면이 같다 (2026-08-27 기준).** `app/globals.css` 의 `@theme` 가 §3 토큰 블록이고, 공유 카드(`npm run og`)까지 같은 값으로 다시 구웠다.
+> **이 문서와 화면이 같다 (2026-09-14 기준).** `app/globals.css` 의 `@theme` 가 §3 의 다크 블록이고, 그 아래 `@supports` 가 라이트 블록이다. 공유 카드(`npm run og`)는 다크 값으로 구워져 있다 — 카드는 테마를 안 탄다.
 >
 > 페이지의 리듬은 이렇다: **조용한 히어로(형광 커서 하나) → 글 목록 → 밝은 도판이 박힌 카드 → 진한 보라 슬랩 한 번 → 선 하나로 연 조용한 절 → 보라 띠로 닫기.** 형광은 랜딩 전체에서 커서 하나와 푸터의 상태 점 하나뿐이다.

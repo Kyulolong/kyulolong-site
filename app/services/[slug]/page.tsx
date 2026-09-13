@@ -215,7 +215,10 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
           */}
           {service.concept?.length ? (
             <section className="bg-iris-wash mt-10 rounded-note px-6 py-6 sm:px-7">
-              <h2 className="text-ink-faint font-mono text-xs tracking-[0.12em] uppercase">
+              {/* iris-wash 면 위에서 ink-faint 는 다크 4.1:1 · 라이트 4.45:1 로 기준(4.5)에
+                  못 미친다. 푸터와 같은 이유로 이 안의 옅은 글자는 전부 ink-soft 다
+                  (components/site-footer.tsx). */}
+              <h2 className="text-ink-soft font-mono text-xs tracking-[0.12em] uppercase">
                 concept
               </h2>
               {/* 여러 개여도 판은 하나다. 개념마다 상자를 만들면 세 덩어리가 되고,
@@ -233,7 +236,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
                       {/* 원어를 같이 적는 이유는 검색 단서다. 여기서 처음 본 사람이
                           이 이름으로 찾아 나갈 수 있어야 '가져다 쓰라'가 성립한다. */}
                       {concept.full ? (
-                        <span className="text-ink-faint text-sm">{concept.full}</span>
+                        <span className="text-ink-soft text-sm">{concept.full}</span>
                       ) : null}
                     </p>
                     <p className="text-ink-soft mt-2 max-w-[52ch] text-[0.9375rem] leading-relaxed">

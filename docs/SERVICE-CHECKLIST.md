@@ -185,7 +185,15 @@ createClient(url, anon, {
 GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED=true
 ```
 
+### 테마도 같은 키 하나로 따라온다
+
+홈페이지는 다크가 기본이고, 헤더 토글이 `localStorage["kyulolong.theme"]` 에 `"light"` 또는
+`"dark"` 를 적는다 (없으면 OS 설정을 따른다는 뜻). 앱이 `prefers-color-scheme` 대응을 하고
+있다면 이 키를 먼저 읽고, 있으면 그 값을 OS 보다 우선하면 된다 — 사람이 홈페이지에서 고른
+테마가 앱에서도 그대로다. 앱 쪽에서 바꿀 때도 같은 키에 적는다. 키 이름을 새로 만들지 말 것.
+
 - [ ] `storageKey: "kyulolong.auth"`
+- [ ] 테마를 지원한다면 `localStorage["kyulolong.theme"]` 을 OS 설정보다 먼저 읽는다
 - [ ] RLS 정책 4종 (select · insert · update · delete), `to authenticated`
 - [ ] 익명 세션은 첫 저장 때만
 - [ ] 로그인 없이도 앱의 본래 기능이 전부 된다 (로그인은 문이 아니라 덤)

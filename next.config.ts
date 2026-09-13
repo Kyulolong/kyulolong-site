@@ -55,6 +55,22 @@ const nextConfig: NextConfig = {
   output: "standalone",
 
   /**
+   * Turbopack 의 lightningcss 가 light-dark() 를 폴리필하지 못하게 한다.
+   *
+   * Next 기본 타깃(chrome/edge/firefox 111, safari 16.4)은 넷 다 light-dark() 를
+   * 몰라서 폴리필(var(--lightningcss-light, …))이 켜진다. app/globals.css 는 라이트
+   * 토큰 전부를 `@supports (color: light-dark(…))` 가드 안에 두므로 구형은 가드가
+   * 이미 막고, 폴리필은 할 일이 없다. 그런데 폴리필은 가드 **밖**의 light-dark() 만
+   * 골라 바꾸고 최상위 `color-scheme: dark` 에 묶어버려서, 누가 가드 밖에 하나 쓰면
+   * 늘 다크로 고정되는 조용한 버그가 된다. 그래서 끈다.
+   *
+   * experimental 키라 이름이 바뀔 수 있다. 검증은 빌드 뒤 `.next/static` 에
+   * "lightningcss" 문자열이 없는지 보는 것이다. 플래그가 안 먹어도 light-dark() 가
+   * 가드 안에 있는 한 동작은 같다 — 진짜 방어선은 globals.css 의 그 규칙이다.
+   */
+  experimental: { lightningCssFeatures: { exclude: ["light-dark"] } },
+
+  /**
    * www 로 들어온 요청을 apex 로 넘긴다.
    *
    * 서비스들은 apex 에만 붙어 있다. Traefik 이 `kyulolong.com/navigator` 만

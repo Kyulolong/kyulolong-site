@@ -10,6 +10,8 @@
  * 쓰는 법 (마크 모양이 바뀔 때만)
  *   node scripts/make-marks.mjs
  *   그다음 파생 자산도 다시 구울 것 — 파비콘·앱아이콘·maskable·og.png
+ *   산출물은 SVG 넷 + 헤더용 TSX 하나(components/brand-mark.tsx)다. 전부 생성물이라
+ *   손으로 고치면 다음 생성에서 덮인다.
  *
  * 원본은 public/brand/source/ 의 SVG 다. viewBox 는 콘텐츠 bbox
  * (x 503–1466, y 314–1206) 를 정사각으로 감싸 여백을 고르게 준 값이다 —
@@ -36,6 +38,38 @@ const open = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${VIEWBOX}" fill=
 const flat = (fill) => `${open}<path d="${BUBBLE}" fill="${fill}"/>${SPARK}</svg>\n`;
 
 /**
+ * 사이트 헤더·푸터용 React 컴포넌트 (components/brand.tsx 가 쓴다).
+ *
+ * 말풍선이 currentColor 다 — 옆 워드마크의 색(text-ink, hover 땐 ink-soft)을 그대로
+ * 따라간다. 파일로 둔 변형은 <img> 라 색이 박혀 있어서, 라이트 테마가 생기자
+ * --on-dark 말풍선(#edebf5)이 흰 바탕에 1.18:1 로 사라졌다. 인라인이면 테마도
+ * hover 도 저절로 따라오고 요청도 하나 준다. 스파크는 여기서도 형광 고정이다.
+ * SPARK 는 인용부호 속성만이라 JSX 에 그대로 들어간다.
+ */
+const tsx = `/**
+ * 생성물 — scripts/make-marks.mjs 가 만든다 (docs/DESIGN.md §7). 손으로 고치지 말 것.
+ *
+ * 말풍선은 currentColor 라 옆 워드마크(text-ink · hover:text-ink-soft)를 그대로 따라간다 —
+ * 테마가 뒤집혀도, hover 로 옅어져도 둘이 한 덩어리다. 스파크는 늘 형광이다.
+ */
+export function BrandMark({ size = 26, className }: { size?: number; className?: string }) {
+  return (
+    <svg
+      viewBox="${VIEWBOX}"
+      width={size}
+      height={size}
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="${BUBBLE}" fill="currentColor" />
+      ${SPARK}
+    </svg>
+  );
+}
+`;
+
+/**
  * 탭 아이콘은 바탕을 고를 수 없다 — 브라우저 크롬이 밝을 수도 어두울 수도 있다.
  * SVG 안의 미디어쿼리는 크롬·파이어폭스가 파비콘에도 적용한다. 지원하지 않는
  * 렌더러(구형 사파리, librsvg)를 위한 기본값은 --iris 다: 흰 바탕 6.59:1,
@@ -49,22 +83,26 @@ const adaptive = `${open}<style>
 
 const out = {
   /**
-   * 기본. 헤더·앱아이콘·공유 카드가 전부 이걸 쓴다.
+   * 기본. 앱아이콘(app/manifest.ts)·파비콘 .ico 가 쓴다.
    *
    * 흰 바탕 6.59:1 / 어두운 바탕 2.86:1 로 **양쪽에서 다 서는 유일한 변형**이라
    * 바탕을 고를 수 없는 자리(파비콘 .ico, 앱아이콘, 남의 화면에 얹히는 곳)의
-   * 기본이다. 워드마크와 나란히 서는 자리는 --on-dark 를 쓴다 (아래).
+   * 기본이다. 워드마크와 나란히 서는 자리는 워드마크 색을 쓴다 (아래).
    */
   "public/brand/mark.svg": flat("#6332EB"),
   /**
-   * 어두운 바탕 — 헤더와 공유 카드가 쓴다.
+   * 어두운 바탕 — 공유 카드(scripts/make-og.tsx)가 쓴다. 카드는 테마를 안 타서 늘 다크다.
    *
    * 값이 --ink(#edebf5) 인 게 핵심이다. 이 마크는 늘 "규로롱" 워드마크 **옆에**
    * 서는데 그 글자가 --ink 라, 마크가 다른 색이면 둘이 한 덩어리로 안 읽히고
    * 로고 옆에 아이콘을 하나 더 붙여둔 것처럼 보인다. 형광 스파크가 브랜드
    * 색을 맡으므로 말풍선까지 보라일 필요가 없다.
+   * 헤더는 예전에 이 파일을 썼는데 지금은 아래 TSX 다 — 라이트 테마에서 색이 박힌
+   * 파일은 못 따라간다.
    */
   "public/brand/mark-on-dark.svg": flat("#edebf5"),
+  // 사이트 헤더·푸터 — 워드마크 옆이라 currentColor (위 tsx 주석)
+  "components/brand-mark.tsx": tsx,
   // 흰 종이·인쇄·밝은 UI
   "public/brand/mark-on-light.svg": flat("#121019"),
   // 브라우저 탭 — 바탕을 모르므로 스스로 맞춘다

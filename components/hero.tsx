@@ -115,10 +115,14 @@ export function Hero() {
             motion-safe: 를 쓰는 이유는 전역 reduced-motion 규칙이 duration 만
             0.01ms 로 줄이기 때문이다 — 그러면 멈추는 게 아니라 안 보이게 깜빡인다.
             여기서는 아예 애니메이션을 안 걸어서 켜진 채로 둔다.
+
+            acid 가 아니라 acid-deep 이다 — "현재 배경에서 항상 보이는 초록". 다크에선
+            #8FFF00 그 자체라 화면이 같고, 라이트에선 #3d6b00 이 된다. 흰 바탕 위 형광은
+            1.27:1 이라 커서가 통째로 사라진다 (DESIGN.md §3).
           */}
           <span
             aria-hidden="true"
-            className="bg-acid ml-[0.12em] inline-block h-[0.74em] w-[0.16em] translate-y-[0.04em] align-baseline motion-safe:animate-[caret-blink_1.6s_steps(1,end)_infinite]"
+            className="bg-acid-deep ml-[0.12em] inline-block h-[0.74em] w-[0.16em] translate-y-[0.04em] align-baseline motion-safe:animate-[caret-blink_1.6s_steps(1,end)_infinite]"
           />
         </h1>
 

@@ -96,7 +96,7 @@ export function filterThoughts(
 
 /**
  * 글 시리즈 칩. 영상의 필터와 달리 **글이 하나도 없는 축은 그리지 않는다.**
- * 시리즈 셋을 다 세워두고 "0" 을 붙이면, 아직 안 쓴 축이 빈 약속으로 보인다.
+ * 모든 시리즈를 세워두고 "0" 을 붙이면, 아직 안 쓴 축이 빈 약속으로 보인다.
  */
 export function getThoughtSeries(): { series: ThoughtSeries; count: number }[] {
   const counts = new Map<ThoughtSeries, number>();

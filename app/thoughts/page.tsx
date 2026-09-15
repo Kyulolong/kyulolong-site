@@ -22,7 +22,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "생각들",
   description:
-    "만들면서 알게 된 것들을 적어둡니다. 조직에서 일이 어떻게 굴러가는지, 만들다 어디서 막혔는지.",
+    "직장인·인사전문가·창업가의 시선으로 사람과 조직을 이해하고, 회사에서 다음 일을 준비하는 방법을 이야기합니다.",
   path: "/thoughts",
 });
 
@@ -59,7 +59,7 @@ export default async function ThoughtsPage({ searchParams }: PageProps<"/thought
         <PageHeader
           eyebrow="thoughts"
           title="생각들"
-          description="AX하는 창업자의 생각을 적어둡니다."
+          description="사람과 조직을 이해하고, 회사에서 다음 일을 준비합니다."
         />
 
         <FilterRail>

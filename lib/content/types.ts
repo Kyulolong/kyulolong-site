@@ -16,13 +16,11 @@ export type Series = (typeof SERIES)[number];
  * 영상의 SERIES 와 **합치지 않는다.** 두 축은 각자 늘어나고, "이게 되네?" 는
  * 영상 쪽에만 있다. 합쳐두면 영상 시리즈를 하나 늘릴 때 글 필터가 같이 늘어난다.
  *
- * 셋이 지도 노릇을 한다 — 인스타 프로필 3행(AX · 창업 · 조직과 사람)과 같은
- * 세 키워드다. AX 는 AI 가 일을 바꾸는 축, 창업은 만드는 일의 축, 조직과 사람은
- * 인사 10년이 본 제도의 축. 칩 옆에 설명을 붙이지 않는다 (제목이 스스로 말한다).
- * (2026-08-31 에 `이게 되네? · 생각소스` 를 이 둘로 바꿨다 — 글 100편이 쌓일
- * 기둥이라, 감탄사·재료가 아니라 프로필과 같은 키워드로 세운다.)
+ * 브랜드 가이드(docs/BRAND.md §6)의 네 카테고리와 순서를 따른다.
+ * 조직과 사람은 관계와 구조, 일과 성장은 개인의 전문성과 다음 역할,
+ * AX는 AI 이후 일하는 방식, 창업은 사람과 조직을 만드는 일을 다룬다.
  */
-export const THOUGHT_SERIES = ["AX", "창업", "조직과 사람"] as const;
+export const THOUGHT_SERIES = ["조직과 사람", "일과 성장", "AX", "창업"] as const;
 export type ThoughtSeries = (typeof THOUGHT_SERIES)[number];
 
 export const PLATFORMS = ["instagram", "youtube"] as const;

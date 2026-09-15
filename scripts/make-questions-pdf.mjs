@@ -107,7 +107,7 @@ function buildHtml(groups) {
         <img class="mark" src="/brand/mark-on-light.svg" alt="" />
         <span class="wordmark">규로롱</span>
       </div>
-      <p class="eyebrow">AX · 창업 · 조직과 사람</p>
+      <p class="eyebrow">사람 · 조직 · 창업</p>
     </div>
 
     <div class="cover-title">

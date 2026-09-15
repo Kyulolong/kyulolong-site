@@ -75,7 +75,8 @@ function card() {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {/* 인스타 썸네일에 박혀 있는 그 줄. 릴스를 보고 넘어온 사람이 같은 얼굴을 만난다. */}
+        {/* 이 채널의 제목 줄 — 세 키워드. /thoughts 의 시리즈 칩(네 카테고리)과는
+            다른 축이라 문구를 맞추지 않는다 (components/hero.tsx 의 주석). */}
         <div
           style={{
             display: "flex",
@@ -90,7 +91,7 @@ function card() {
         >
           {/* 히어로 눈썹 줄과 같은 문구다 (components/hero.tsx).
               한쪽만 고치면 링크 미리보기와 도착한 화면이 다른 말을 한다. */}
-          AX · 창업 · 조직과 사람
+          사람 · 조직 · 창업
         </div>
 
         {/* 히어로의 h1 과 같은 문장 — 이 채널의 **캐치프레이즈**다

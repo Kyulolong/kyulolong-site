@@ -28,11 +28,16 @@ export function Hero() {
        사이에 화면 반 개짜리 빈 칸이 생겨서, 넓은 게 아니라 끊긴 것처럼 보인다. */
     <section className="mx-auto w-full max-w-[1120px] px-6 pt-14 pb-4 sm:px-8 sm:pt-24 sm:pb-6">
       <div className="max-w-[46rem]">
-        {/* 세 키워드가 처음 닿는 자리. 인스타 썸네일·소개글에 박혀 있는 말들이라
-            릴스를 보고 넘어온 사람이 같은 얼굴을 만난다.
+        {/* 이 채널의 **제목 줄** — 세 키워드 `사람 · 조직 · 창업` (2026-09-15 확정).
+            홈페이지가 무엇을 다루는지를 명사 셋으로 세운다.
 
-            ⚠️ scripts/make-og.tsx 에 같은 문구가 박혀 있다. 여기를 고치면
-            거기도 고치고 `npm run og` 를 다시 돌릴 것.
+            ⚠️ /thoughts 의 시리즈 칩(조직과 사람 · 일과 성장 · AX · 창업)과는
+            **다른 축**이다. 칩은 글을 분류하는 칸(docs/BRAND.md §6)이고 이 줄은
+            채널의 제목이라, 둘을 같은 문구로 맞추려 들지 말 것.
+
+            ⚠️ scripts/make-og.tsx · lib/seo.ts(OG_IMAGE.alt) ·
+            scripts/make-questions-pdf.mjs 에 같은 문구가 박혀 있다. 여기를
+            고치면 거기도 고치고 `npm run og` 와 `npm run questions` 를 다시 돌릴 것.
 
             알약을 씌우지 않는다 (§6) — 못 누르는 라벨에 상자를 씌우면 버튼으로
             보이고, 이 화면에서 누를 것은 아래 하나여야 한다.
@@ -43,7 +48,7 @@ export function Hero() {
             (스택에 한글이 없어서 이 줄만 시스템 폰트로 떨어졌다) 이제 --font-mono
             안에 Pretendard 가 있어서 한글도 본문과 같은 얼굴로 앉는다. */}
         <p className="text-ink-faint font-mono text-[13px] tracking-[0.04em]">
-          AX · 창업 · 조직과 사람
+          사람 · 조직 · 창업
         </p>
 
         {/*

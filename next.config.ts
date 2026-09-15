@@ -92,6 +92,12 @@ const nextConfig: NextConfig = {
         destination: `https://${SITE_HOST}/:path*`,
         permanent: true,
       },
+      // 글의 새 제목에 맞춘 주소. 기존 공유 링크도 같은 글로 연결한다.
+      {
+        source: "/thoughts/ai-does-not-automatically-reduce-work",
+        destination: "/thoughts/next-step-after-working-faster",
+        permanent: true,
+      },
     ];
   },
 

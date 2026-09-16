@@ -138,8 +138,15 @@ function card() {
         {/* 첫 줄이 **태그라인 전문**이다 (lib/seo.ts 의 SITE_TITLE·푸터와 같은 문장).
             위가 주장이고 여기가 하는 일이라, 둘을 붙여 읽으면 이 채널이 무엇을
             말하고 무엇을 하는지가 카드 한 장에서 끝난다. */}
+        {/* 둘째 문장은 누가 쓰는지다 (2026-09-16). 예전엔 "매주 하나씩 만들고,
+            소스코드와 프롬프트까지 같이 열어뒀습니다"였는데, 채널의 축이 만드는
+            사람에서 사람과 조직을 해석하는 사람으로 옮겨가서 대문 아래 서명과 맞췄다.
+            ⚠️ 문장마다 줄을 나눈다. 폭에 맡기면 900px 에서 `씁니다.` 한 어절만
+            다음 줄로 떨어진다 (실제로 한 번 구워서 봤다). */}
         <div
           style={{
+            display: "flex",
+            flexDirection: "column",
             marginTop: 26,
             fontSize: 32,
             color: INK_SOFT,
@@ -147,14 +154,15 @@ function card() {
             maxWidth: 900,
           }}
         >
-          사람과 AI, 일하는 방식을 탐구합니다. 매주 하나씩 만들고,
-          소스코드와 프롬프트까지 같이 열어뒀습니다.
+          <div>사람과 AI, 일하는 방식을 탐구합니다.</div>
+          <div>인사팀에서 일하다 창업한 사람이 씁니다.</div>
         </div>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ fontSize: 26, color: INK_FAINT }}>kyulolong.com</div>
-        <div style={{ fontSize: 26, color: INK_FAINT }}>만든 서비스 · 소스코드 · 만드는 과정</div>
+        {/* 글이 이 채널의 축이라 맨 앞에 선다 (CLAUDE.md 3번 "대문의 순서가 논지다") */}
+        <div style={{ fontSize: 26, color: INK_FAINT }}>생각들 · 만든 서비스 · 소스코드</div>
       </div>
     </div>
   );

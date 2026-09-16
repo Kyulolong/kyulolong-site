@@ -78,20 +78,25 @@ export const FOUNDER_QUESTIONS = {
  * 여기 넣으면 12번의 "구조화 데이터에는 사실만 적는다"가 흐려진다. 오픈채팅방은
  * 프로필이 아니라 장소라서 아래 FOOTER_CHANNELS 에서만 합류한다.
  */
-export const SOCIAL_LINKS = [
-  { label: "인스타그램", href: INSTAGRAM_URL },
-  { label: "깃허브", href: "https://github.com/Kyulolong" },
-  { label: "퍼플즈", href: PERPLZ_PROFILE_URL },
-] as const;
+const INSTAGRAM = { label: "인스타그램", href: INSTAGRAM_URL } as const;
+const GITHUB = { label: "깃허브", href: "https://github.com/Kyulolong" } as const;
+const PERPLZ = { label: "퍼플즈", href: PERPLZ_PROFILE_URL } as const;
+
+export const SOCIAL_LINKS = [INSTAGRAM, GITHUB, PERPLZ] as const;
 
 /**
- * 푸터의 '채널' 줄. 소셜 셋에 오픈채팅을 더한 것이다.
+ * 푸터의 '채널' 줄. 인스타그램·퍼플즈에 오픈채팅을 더한 것이다.
  *
  * 푸터는 전체 지도라(FOOTER_NAV 와 같은 이유) 대문 슬랩에서만 열리는 방도
  * 여기 실린다 — 슬랩을 지나쳐 내려온 사람에게 남는 유일한 입구다.
+ *
+ * ⚠️ **깃허브는 푸터에서 뺐다** (2026-09-16, 본인 요청). SOCIAL_LINKS 에는 남아 있어서
+ * sameAs 와 /about 의 채널 버튼에는 그대로 나간다. 그래서 SOCIAL_LINKS 를 펼치지
+ * 않고 하나씩 집는다 — 라벨로 filter 하면 이름을 고칠 때 조용히 다시 살아난다.
  */
 export const FOOTER_CHANNELS = [
-  ...SOCIAL_LINKS,
+  INSTAGRAM,
+  PERPLZ,
   { label: KAKAO_OPENCHAT.label, href: KAKAO_OPENCHAT.href },
 ] as const;
 

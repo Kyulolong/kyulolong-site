@@ -43,7 +43,7 @@ export const SITE_TITLE = `${SITE_NAME} — 사람과 AI, 일하는 방식을 �
  * 여기서는 무엇을 주장하는지가 다음에 온다. 뒤는 그 주장의 근거(실물)다.
  */
 export const SITE_DESCRIPTION =
-  "회사는 사람과 일하는 방식으로 만들어집니다. 인사담당 출신이 AI와 함께 매주 서비스를 하나씩 만들며, 조직과 일하는 방식에 대해 생각한 것을 기록합니다. 소스코드와 프롬프트까지 전부 열어뒀습니다.";
+  "회사는 사람과 일하는 방식으로 만들어집니다. 인사팀에서 일하다 창업한 규로롱이 사람과 조직을 해석하고, 회사에서 다음 일을 준비하는 방법을 기록합니다. 직접 만든 서비스의 소스코드와 프롬프트도 열어뒀습니다.";
 
 /**
  * 기본 공유 카드. public/og.png 는 scripts/make-og.tsx 가 만들어 커밋한 정적 파일이다.
@@ -190,8 +190,9 @@ export function siteJsonLd(social: readonly string[]): Record<string, unknown> {
         "@id": `${SITE_URL}/#person`,
         name: SITE_NAME,
         url: SITE_URL,
+        // 사실만 (이 함수 위 주석). 2026-09-16 본인 확인: 삼성SDS 인사팀 5년 → 스타트업 2년 → 창업.
         description:
-          "삼성SDS에서 5년간 글로벌 인사담당자로 일하다가, 지금은 AI에게 시켜서 매주 서비스를 하나씩 만듭니다.",
+          "삼성SDS 인사팀에서 5년, 스타트업에서 2년 일한 뒤 창업해 회사를 운영하고 있습니다. 사람과 조직, 일하는 방식에 대해 쓰고 AI로 서비스를 만듭니다.",
         sameAs: [...social],
       },
     ],

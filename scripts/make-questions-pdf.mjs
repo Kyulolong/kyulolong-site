@@ -39,6 +39,13 @@ import path from "node:path";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "public/founder-questions.pdf");
+/**
+ * 대문 타일(components/hero-links.tsx)에 서는 표지 미리보기. 종이와 **같은 판에서
+ * 같은 순간에** 찍는다 — 따로 그리면 표지를 고쳤을 때 타일만 옛 표지로 남는다.
+ * 폭 240px 은 타일의 표지 칸(72px)을 3배 화면에서도 선명하게 채우는 값이다.
+ */
+const COVER_OUT = path.join(ROOT, "public/founder-questions-cover.png");
+const COVER_WIDTH = 240;
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
 /** docs/DESIGN.md §3 의 라이트 대응 토큰. 값이 어긋나면 종이만 다른 사이트가 된다. */
@@ -499,6 +506,21 @@ try {
       );
     }
 
+    // 표지 한 장만 잘라 찍는다. 화면 매체로 찍지만 이 HTML 에는 @media print 가
+    // 없어서 인쇄본과 같은 모양이다 — 인쇄 전용 규칙을 더하면 여기도 볼 것.
+    const cover = await send("Runtime.evaluate", {
+      expression: `JSON.stringify(document.querySelector('.page').getBoundingClientRect())`,
+      returnByValue: true,
+    });
+    const r = JSON.parse(cover.result.result.value);
+    const shot = await send("Page.captureScreenshot", {
+      format: "png",
+      captureBeyondViewport: true,
+      clip: { x: r.x, y: r.y, width: r.width, height: r.height, scale: COVER_WIDTH / r.width },
+    });
+    if (!shot.result?.data) throw new Error(`표지 캡처 실패: ${JSON.stringify(shot).slice(0, 300)}`);
+    fs.writeFileSync(COVER_OUT, Buffer.from(shot.result.data, "base64"));
+
     const pdf = await send("Page.printToPDF", {
       printBackground: true,
       preferCSSPageSize: true,
@@ -519,6 +541,7 @@ try {
   const printed = (buffer.toString("latin1").match(/\/Type\s*\/Page[^s]/g) ?? []).length;
   console.log(
     `✓ ${path.relative(ROOT, OUT)} — ${printed}장, ${(buffer.length / 1024).toFixed(0)} KB` +
+      `\n✓ ${path.relative(ROOT, COVER_OUT)} — 대문 타일의 표지 미리보기` +
       `\n  질문 ${groups.length}갈래 · 물음 ${groups.length * 2}개 (lib/founder-questions.ts)`,
   );
   const claimed = readClaimedPages();

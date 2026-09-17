@@ -1,10 +1,7 @@
-import Link from "next/link";
-import { INTERNAL_LINKS } from "@/lib/site-links";
-
 /**
  * 랜딩 히어로 (DESIGN.md §8).
  *
- * 이 화면의 형광 한 점은 "생각들 읽기" 버튼 하나다. 그래서 헤더에도, 하단
+ * 이 화면의 형광 한 점은 제목 끝의 커서 하나다. 그래서 헤더에도, 하단
  * 네비에도, 보조 링크에도 형광이 없다. 눈이 갈 곳을 하나만 남긴다.
  *
  * ⚠️ **여기서 누구를 위한 사이트인지 말하지 않는다.**
@@ -40,7 +37,7 @@ export function Hero() {
             고치면 거기도 고치고 `npm run og` 와 `npm run questions` 를 다시 돌릴 것.
 
             알약을 씌우지 않는다 (§6) — 못 누르는 라벨에 상자를 씌우면 버튼으로
-            보이고, 이 화면에서 누를 것은 아래 하나여야 한다.
+            보인다.
 
             **이 줄이 사이트 등뼈(기록 줄)의 첫 등장이다.** 아래 목록의 작업
             번호·걸린 시간·날짜가 전부 같은 얼굴로 나와서, 페이지가 진열장이
@@ -185,29 +182,10 @@ export function Hero() {
           </span>
         </p>
 
-        {/* 버튼은 하나다 (§8).
-
-            ⚠️ **형광이 아니라 보라다.** 이 화면의 형광 한 점은 위의 커서가
-            가져갔다. 어두운 바탕에서 형광 알약은 제목보다 크게 울려서, 대문이
-            하려는 말("왜 이걸 하나")보다 이동 버튼이 먼저 읽히게 만든다.
-            보라는 면으로 쓰면 충분히 단단하고(글자 대비 6.01:1), 무엇보다
-            이 층이 30%를 실제로 채워야 화면이 검정+형광 두 겹으로 안 떨어진다.
-
-            소개는 하단 바에서 뺐으므로 아래 밑줄 링크가 그 창구다. */}
-        <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
-          <Link
-            href={INTERNAL_LINKS.thoughts}
-            className="bg-iris text-on-iris hover:bg-iris-press inline-flex items-center rounded-full px-6 py-3 text-[0.9375rem] font-bold transition-colors duration-200"
-          >
-            생각들 읽기
-          </Link>
-          <Link
-            href={INTERNAL_LINKS.about}
-            className="text-ink-soft hover:text-ink decoration-line-strong hover:decoration-ink inline-flex min-h-11 items-center text-[0.9375rem] font-medium underline underline-offset-[6px] transition-colors"
-          >
-            소개 더 보기
-          </Link>
-        </div>
+        {/* 버튼 줄(보라 "생각들 읽기" + 밑줄 "소개 더 보기")을 2026-09-17 에 뺐다.
+            [생각들]은 바로 아래 목록이 받고, 소개는 헤더·하단 바·푸터가 가리킨다.
+            같은 날 타일 둘(hero-links.tsx)도 [만든 것] 아래로 내려서, 히어로 바로
+            아래는 [생각들]이다. */}
       </div>
     </section>
   );

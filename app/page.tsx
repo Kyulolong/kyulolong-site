@@ -42,7 +42,7 @@ const DAY = 86400;
 /**
  * 대문의 순서가 이 사이트의 논지다.
  *
- *   히어로(왜 이걸 하나) → 타일 둘 → 생각들 → 만든 것 → 말 거는 곳
+ *   히어로(왜 이걸 하나) → 생각들 → 만든 것 → 타일 둘(가져갈 것) → 말 거는 곳
  *
  * 글이 서비스보다 **위**에 온다. 이 채널이 쌓아가는 건 글이고, 만든 것은
  * 그 글이 탁상공론이 아니라는 증거로 뒤를 받친다. 반대로 놓으면 진열장이 된다.
@@ -70,11 +70,6 @@ export default async function Home() {
       <JsonLd data={siteJsonLd(SOCIAL_LINKS.map((link) => link.href))} />
 
       <Hero />
-
-      {/* 종이와 방으로 가는 타일 둘. 아래 보라 슬랩에 같은 쌍이 있는데도 위에
-          두는 이유는 components/hero-links.tsx 에 적어뒀다 — 인스타에서 온
-          사람 상당수가 슬랩까지 안 내려간다. */}
-      <HeroLinks />
 
       {/*
         인사이트가 착지하는 자리.
@@ -169,6 +164,10 @@ export default async function Home() {
           가 따로 있습니다.
         </p>
       </section>
+
+      {/* 종이와 방으로 가는 타일 둘. 2026-09-17 에 히어로 바로 아래에서 여기로
+          내렸다 — 이유와 치른 값은 components/hero-links.tsx 에 적어뒀다. */}
+      <HeroLinks />
 
       {/*
         말 거는 곳. 이 채널의 유일한 쌍방향 장치라 /about 배너보다 위에 둔다.

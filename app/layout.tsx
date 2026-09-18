@@ -4,6 +4,7 @@ import { MobileNav } from "@/components/mobile-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
+  FEED_ALTERNATE,
   OG_IMAGE,
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -43,6 +44,9 @@ export const metadata: Metadata = {
     template: `%s · ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
+  // RSS 링크만 둔다 (canonical 은 위 주석대로 두지 않는다). pageMetadata() 를 쓰는
+  // 페이지는 alternates 를 통째로 새로 쓰므로 거기서도 같은 값을 싣는다 (lib/seo.ts FEED).
+  alternates: { types: FEED_ALTERNATE },
   // 페이지가 openGraph 를 정의하지 않았을 때의 최소한. 실제로는 각 페이지가 채운다.
   openGraph: {
     type: "website",

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/json-ld";
 import { PageHeader } from "@/components/page-header";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, profilePageJsonLd } from "@/lib/seo";
 import { INSTAGRAM_URL, INTERNAL_LINKS, SOCIAL_LINKS } from "@/lib/site-links";
 
 export const metadata: Metadata = pageMetadata({
@@ -36,6 +37,8 @@ export const metadata: Metadata = pageMetadata({
 export default function AboutPage() {
   return (
     <div className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
+      {/* 글마다 걸린 저자(lib/seo.ts PERSON_REF)가 모이는 곳. 대문과 같은 사람 정보를 싣는다. */}
+      <JsonLd data={profilePageJsonLd(SOCIAL_LINKS.map((link) => link.href))} />
       <div className="mx-auto max-w-[46rem]">
         <PageHeader eyebrow="about" title="안녕하세요. 규로롱입니다." />
 

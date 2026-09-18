@@ -11,7 +11,8 @@
     "lint:copy": "node scripts/lint-copy.mjs",
     "thumbs": "tsx scripts/fetch-thumbnails.ts",
     "og": "tsx scripts/make-og.tsx",
-    "questions": "node scripts/make-questions-pdf.mjs"
+    "questions": "node scripts/make-questions-pdf.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.2",

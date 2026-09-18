@@ -8,7 +8,13 @@ import { ThoughtComments } from "@/components/thought-comments";
 import { ThoughtViews } from "@/components/thought-views";
 import { formatDate } from "@/components/video-card";
 import { getThought, getThoughts, readingMinutes } from "@/lib/content";
-import { pageMetadata, shareableImage, summarize, thoughtJsonLd } from "@/lib/seo";
+import {
+  breadcrumbJsonLd,
+  pageMetadata,
+  shareableImage,
+  summarize,
+  thoughtJsonLd,
+} from "@/lib/seo";
 
 export function generateStaticParams() {
   return getThoughts().map((thought) => ({ slug: thought.slug }));
@@ -39,6 +45,12 @@ export default async function ThoughtPage({ params }: PageProps<"/thoughts/[slug
   return (
     <article className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
       <JsonLd data={thoughtJsonLd(thought)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "생각들", path: "/thoughts" },
+          { name: thought.title, path: `/thoughts/${thought.slug}` },
+        ])}
+      />
 
       <div className="mx-auto max-w-[46rem]">
         {/* 화살표를 쓰는 유일한 예외 (DESIGN.md §6) — 문서 맨 위의 뒤로 가기다 */}

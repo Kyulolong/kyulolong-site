@@ -8,7 +8,7 @@ import { PromptBlock } from "@/components/prompt-block";
 import { Prose } from "@/components/prose";
 import { VideoCard } from "@/components/video-card";
 import { getRelatedVideos, getService, getServices } from "@/lib/content";
-import { pageMetadata, serviceJsonLd, shareableImage } from "@/lib/seo";
+import { breadcrumbJsonLd, pageMetadata, serviceJsonLd, shareableImage } from "@/lib/seo";
 
 export function generateStaticParams() {
   return getServices().map((service) => ({ slug: service.slug }));
@@ -65,6 +65,12 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
       {/* 아직 주소가 없는 것(status: soon)은 "쓸 수 있는 소프트웨어"가 아니라서 빼둔다.
           구조화 데이터에는 페이지에 실제로 있는 사실만 적는다 (lib/seo.ts). */}
       {service.status === "live" ? <JsonLd data={serviceJsonLd(service)} /> : null}
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "만든 서비스", path: "/services" },
+          { name: service.title, path: `/services/${service.slug}` },
+        ])}
+      />
 
       <div className="pt-10">
         <Link

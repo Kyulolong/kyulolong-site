@@ -59,6 +59,17 @@ export const OG_IMAGE = {
 } as const;
 
 /**
+ * 글 목록의 RSS. 네이버 서치어드바이저가 새 글을 빨리 긁어가는 입구다 (사이트맵은
+ * 전체 목록, RSS 는 "방금 올라온 것"). 경로는 app/feed.xml/route.ts.
+ *
+ * <head> 의 `<link rel="alternate">` 로도 내보낸다. 이 값을 layout 과
+ * pageMetadata() 양쪽에 싣는 이유는 openGraph 와 같다 — `alternates` 도 얕게
+ * 상속돼서, 페이지가 canonical 을 적는 순간 layout 의 RSS 링크가 통째로 사라진다.
+ */
+export const FEED = { url: "/feed.xml", title: `${SITE_NAME} · 생각들` } as const;
+export const FEED_ALTERNATE = { "application/rss+xml": [FEED] };
+
+/**
  * 공유 카드에 쓸 수 있는 이미지인지.
  *
  * 서비스 썸네일은 SVG 다 (public/services/*.svg). 카톡·슬랙·X 는 SVG 를 og:image 로
@@ -146,7 +157,7 @@ export function pageMetadata({
   return {
     ...(title ? { title } : {}),
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: path, types: FEED_ALTERNATE },
     ...(noIndex ? { robots: { index: false, follow: true } } : {}),
     openGraph: publishedAt
       ? { ...shared, type: "article", publishedTime: publishedAt }
@@ -172,30 +183,87 @@ export function absoluteUrl(path: string): string {
  * (aggregateRating)은 받은 적이 없으므로 넣지 않는다 — 없는 평가를 적는 건
  * 구조화 데이터 정책 위반이고, 적발되면 리치 결과가 사이트 단위로 막힌다.
  */
+const WEBSITE_ID = `${SITE_URL}/#website`;
+const PERSON_ID = `${SITE_URL}/#person`;
+
+/**
+ * 글·서비스·영상의 저자 자리에 넣는 참조.
+ *
+ * 예전엔 페이지마다 `{ "@type": "Person", name, url }` 을 새로 적었다. 그러면
+ * 검색엔진에게는 대문의 규로롱과 글 18편의 규로롱이 서로 다른 사람 19명이다.
+ * @id 로 대문에 선언한 한 사람을 가리키게 한다. name·url 을 같이 두는 건
+ * @id 를 페이지 밖까지 따라가지 않는 파서가 있어서다.
+ */
+const PERSON_REF = { "@type": "Person", "@id": PERSON_ID, name: SITE_NAME, url: SITE_URL };
+
+/**
+ * 대문(WebSite 옆)과 /about(ProfilePage 의 주인공)이 같은 사람을 싣는다.
+ * 한 곳에서 만들어야 두 페이지의 서술이 갈라지지 않는다.
+ */
+function personNode(social: readonly string[]): Record<string, unknown> {
+  return {
+    ...PERSON_REF,
+    // 도메인 · 인스타 · 깃허브가 전부 이 로마자 이름이다. 한글 이름과 같은 실체라고 묶어둔다.
+    alternateName: "kyulolong",
+    // 사실만 (이 파일 위 주석). 2026-09-16 본인 확인: 삼성SDS 인사팀 5년 → 스타트업 2년 → 창업.
+    description:
+      "삼성SDS 인사팀에서 5년, 스타트업에서 2년 일한 뒤 창업해 회사를 운영하고 있습니다. 사람과 조직, 일하는 방식에 대해 쓰고 AI로 서비스를 만듭니다.",
+    // 글의 네 시리즈(THOUGHT_SERIES)와 인사 경력. 화면에 이미 있는 말만 적는다.
+    knowsAbout: ["인사", "조직과 사람", "일과 성장", "AX", "창업"],
+    sameAs: [...social],
+  };
+}
+
 export function siteJsonLd(social: readonly string[]): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": `${SITE_URL}/#website`,
+        "@id": WEBSITE_ID,
         url: SITE_URL,
         name: SITE_NAME,
+        alternateName: "kyulolong",
         description: SITE_DESCRIPTION,
         inLanguage: "ko-KR",
-        publisher: { "@id": `${SITE_URL}/#person` },
+        publisher: { "@id": PERSON_ID },
       },
-      {
-        "@type": "Person",
-        "@id": `${SITE_URL}/#person`,
-        name: SITE_NAME,
-        url: SITE_URL,
-        // 사실만 (이 함수 위 주석). 2026-09-16 본인 확인: 삼성SDS 인사팀 5년 → 스타트업 2년 → 창업.
-        description:
-          "삼성SDS 인사팀에서 5년, 스타트업에서 2년 일한 뒤 창업해 회사를 운영하고 있습니다. 사람과 조직, 일하는 방식에 대해 쓰고 AI로 서비스를 만듭니다.",
-        sameAs: [...social],
-      },
+      personNode(social),
     ],
+  };
+}
+
+/**
+ * /about — 이 페이지가 한 사람에 대한 문서라고 밝힌다. 검색엔진은 저자 페이지를
+ * 찾을 때 ProfilePage 를 본다. 글마다 걸린 저자(PERSON_REF)가 여기로 모인다.
+ */
+export function profilePageJsonLd(social: readonly string[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    url: absoluteUrl("/about"),
+    inLanguage: "ko-KR",
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: personNode(social),
+  };
+}
+
+/**
+ * 상세 페이지의 자리 — 대문 › 목록 › 이 페이지. 세 상세 페이지 모두 화면 맨 위에
+ * 목록으로 돌아가는 링크가 있어서, 여기 적는 경로는 화면에 이미 있는 길이다.
+ */
+export function breadcrumbJsonLd(
+  items: readonly { name: string; path: string }[],
+): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [{ name: SITE_NAME, path: "/" }, ...items].map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: absoluteUrl(item.path),
+    })),
   };
 }
 
@@ -232,7 +300,7 @@ export function serviceJsonLd(service: Service): Record<string, unknown> {
      * 않는 이유(CLAUDE.md 4번)가 구조화 데이터에서 뒤집히면 안 된다 —
      * 여기서 한 사람을 저자로 박으면 검색엔진에는 그게 사실로 남는다.
      */
-    ...(service.team ? {} : { author: { "@type": "Person", name: SITE_NAME, url: SITE_URL } }),
+    ...(service.team ? {} : { author: PERSON_REF }),
     ...(service.stack.length ? { keywords: service.stack.join(", ") } : {}),
     /**
      * 우리가 올린 것은 전부 무료이고 로그인도 요구하지 않는다 (CLAUDE.md 3번).
@@ -268,16 +336,17 @@ export function thoughtJsonLd(thought: Thought): Record<string, unknown> {
     inLanguage: "ko-KR",
     url: absoluteUrl(`/thoughts/${thought.slug}`),
     mainEntityOfPage: absoluteUrl(`/thoughts/${thought.slug}`),
-    ...(() => {
-      const image = shareableImage(thought.ogImage);
-      return image ? { image: absoluteUrl(image) } : {};
-    })(),
+    isPartOf: { "@id": WEBSITE_ID },
+    // 글 전용 카드가 없으면 og:image 로 나가는 기본 카드를 그대로 적는다 — 공유 카드와
+    // 같은 그림이라 사실이고, 이미지가 빠진 BlogPosting 은 기사 결과에서 밀린다.
+    image: absoluteUrl(shareableImage(thought.ogImage) ?? OG_IMAGE.url),
     // 시리즈가 곧 이 글이 속한 갈래다. 태그는 그 아래 결이라 같이 싣는다.
+    articleSection: thought.series,
     ...(thought.tags.length
       ? { keywords: [thought.series, ...thought.tags].join(", ") }
       : { keywords: thought.series }),
-    author: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
-    publisher: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
+    author: PERSON_REF,
+    publisher: PERSON_REF,
   };
 }
 
@@ -298,7 +367,7 @@ export function videoJsonLd(video: Video): Record<string, unknown> {
      */
     url: absoluteUrl(`/videos/${video.slug}`),
     ...(video.externalUrl ? { sameAs: video.externalUrl } : {}),
-    author: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
-    publisher: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
+    author: PERSON_REF,
+    publisher: PERSON_REF,
   };
 }

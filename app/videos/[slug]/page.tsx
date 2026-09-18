@@ -7,7 +7,13 @@ import { Prose } from "@/components/prose";
 import { ServiceCard } from "@/components/service-card";
 import { formatDate } from "@/components/video-card";
 import { getRelatedServices, getVideo, getVideos } from "@/lib/content";
-import { pageMetadata, shareableImage, summarize, videoJsonLd } from "@/lib/seo";
+import {
+  breadcrumbJsonLd,
+  pageMetadata,
+  shareableImage,
+  summarize,
+  videoJsonLd,
+} from "@/lib/seo";
 
 export function generateStaticParams() {
   return getVideos().map((video) => ({ slug: video.slug }));
@@ -69,6 +75,12 @@ export default async function VideoPage({ params }: PageProps<"/videos/[slug]">)
           않고 public/videos 에 받아두는 이유가 여기서도 산다 — 인스타 CDN 주소는
           며칠 뒤 만료돼서 구조화 데이터가 조용히 깨진 주소를 가리키게 된다. */}
       <JsonLd data={videoJsonLd(video)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "만드는 과정", path: "/videos" },
+          { name: video.title, path: `/videos/${video.slug}` },
+        ])}
+      />
 
       <div className="pt-10">
         <Link

@@ -16,6 +16,31 @@ import { useEffect, useState } from "react";
  * 옆의 하트는 눌리니까 테두리 알약이고, 이건 안 눌리니까 맨 글자다.
  * 같은 모양으로 맞추면 누를 수 있는 것처럼 보인다.
  */
+
+/**
+ * 이 아래로는 안 그린다 (2026-09-19). 푸터의 방문자 수를 뺀 것과 같은 판단이다 —
+ * "조회 2" 는 읽는 사람에게 "아무도 안 읽는 글"이라고 말한다. 값이 커야 뜻이 있는
+ * 숫자는 뜻이 생길 때부터 보여준다.
+ */
+const MIN_VIEWS = 30;
+
+/**
+ * 조회수를 "100+" 꼴로 묶는다. 계단은 1 · 2 · 3 · 5 × 10ⁿ 이다
+ * (30+ · 50+ · 100+ · 200+ · 300+ · 500+ · 1,000+ …).
+ *
+ * ⚠️ **늘 내림이다. 올림으로 바꾸지 말 것.** "100+" 는 100 을 넘겼을 때만 뜬다 —
+ * 97 을 "100+" 로 적는 순간 이 사이트의 다른 숫자들(buildTime · 읽는 시간)까지
+ * 의심받는다. 묶는 이유는 부풀리기가 아니라, 137 과 142 의 차이가 읽는 사람에게
+ * 아무 뜻이 없어서다.
+ */
+export function viewsBucket(views: number): string | null {
+  if (views < MIN_VIEWS) return null;
+  const magnitude = 10 ** Math.floor(Math.log10(views));
+  const lead = views / magnitude;
+  const step = lead >= 5 ? 5 : lead >= 3 ? 3 : lead >= 2 ? 2 : 1;
+  return `${(step * magnitude).toLocaleString("ko-KR")}+`;
+}
+
 export function ThoughtViews({ slug }: { slug: string }) {
   const [views, setViews] = useState<number | null>(null);
 
@@ -39,17 +64,15 @@ export function ThoughtViews({ slug }: { slug: string }) {
   }, [slug]);
 
   /*
-   * 모르는 동안에도, 0 일 때도 아무것도 안 그린다.
-   *
-   * 0 을 그리지 않는 이유가 따로 있다: 지금 이 사람이 읽고 있는데 "조회 0" 이
-   * 뜨면 숫자가 고장 난 것처럼 보인다. 라우트가 5분 캐시라 갓 올린 글은 실제로
-   * 잠깐 그 상태가 된다 (하트가 "0" 대신 하트만 남는 것과 같은 판단).
+   * 모르는 동안에도, MIN_VIEWS 아래일 때도 아무것도 안 그린다 (하트가 "0" 대신
+   * 하트만 남는 것과 같은 판단).
    */
-  if (views === null || views < 1) return null;
+  const bucket = views === null ? null : viewsBucket(views);
+  if (!bucket) return null;
 
   return (
     <p className="text-ink-faint text-sm">
-      조회 <span className="font-mono tabular-nums">{views.toLocaleString("ko-KR")}</span>
+      조회 <span className="font-mono tabular-nums">{bucket}</span>
     </p>
   );
 }

@@ -88,9 +88,12 @@ async function authedFetch(path: string, retry = true): Promise<unknown | null> 
        * 던지지 않는다는 원칙(파일 머리)은 그대로 지키되, 컨테이너 로그에는
        * 남긴다. 이게 없으면 "설정이 없다"와 "설정은 맞는데 요청이 거부된다"를
        * 부르는 쪽에서 구분할 수가 없다 — 둘 다 그냥 null 이라서다. 라우트가
-       * 5분 캐시라 재배포 사이에 로그가 쌓이지 않는다.
+       * 5분 캐시라 재배포 사이에 로그가 쌓이지 않는다. 본문도 같이 남긴다 —
+       * Umami 가 4xx 에 이유를 담아 보내는 경우가 많아서(예: 잘못된 쿼리 파라미터
+       * 이름), 상태 코드만으로는 원인을 못 좁힐 때가 있다.
        */
-      console.error(`[analytics] Umami ${path} → ${res.status}`);
+      const body = await res.text().catch(() => "");
+      console.error(`[analytics] Umami ${path} → ${res.status} ${body.slice(0, 300)}`);
       return null;
     }
     return await res.json();

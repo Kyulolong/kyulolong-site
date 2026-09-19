@@ -137,15 +137,20 @@ const SITE_EPOCH = Date.UTC(2026, 5, 1); // 2026-06-01
 export async function getThoughtViews(): Promise<Record<string, number> | null> {
   if (!isAnalyticsReadConfigured) return null;
 
-  const data = await authedFetch(
-    `/api/websites/${websiteId}/metrics` +
-      `?startAt=${SITE_EPOCH}&endAt=${Date.now()}&type=url&limit=500`,
-  );
   /*
-   * 2026-09-19: 이 라우트가 계속 null 을 주는 걸 보고 여기부터 의심했다.
-   * `/stats` 는 최상위 객체({visitors: …})라 형태가 안정적인데, `/metrics` 는
-   * 목록형 엔드포인트라 페이지네이션이 붙은 버전에서 배열이 아니라
-   * `{ data: [...] }` 로 감싸서 올 수 있다. 둘 다 받는다.
+   * ⚠️ **Umami v3 에서 `type=url` 이 `type=path` 로 이름이 바뀌었다** (2026-09-19 확인,
+   * 운영은 3.0.3). v3 의 허용 목록(src/lib/constants.ts EVENT_COLUMNS)에 `url` 이 없어서
+   * 옛 이름을 보내면 400 이 온다 — 이 라우트가 한동안 null 만 낸 원인이 이것이었다.
+   * `path` 를 먼저 보내고, 안 되면 옛 이름으로 한 번 더 묻는다 (v2 로 되돌릴 일이
+   * 생겨도 숫자가 조용히 사라지지 않게).
+   */
+  const query = (type: string) =>
+    `/api/websites/${websiteId}/metrics` +
+    `?startAt=${SITE_EPOCH}&endAt=${Date.now()}&type=${type}&limit=500`;
+  const data = (await authedFetch(query("path"))) ?? (await authedFetch(query("url")));
+  /*
+   * 목록형 엔드포인트라 버전에 따라 배열이 아니라 `{ data: [...] }` 로 감싸서 올 수
+   * 있다. 둘 다 받는다.
    */
   const rows = Array.isArray(data)
     ? data

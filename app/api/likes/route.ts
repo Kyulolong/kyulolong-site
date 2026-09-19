@@ -3,7 +3,7 @@ import { emptyCounts, getLikeCounts, type LikeCounts } from "@/lib/likes";
 /**
  * 카드에 붙는 좋아요 숫자가 읽는 곳.
  *
- * app/api/visitors 와 같은 이유로 라우트를 따로 둔다 (CLAUDE.md 11번):
+ * app/api/views 와 같은 이유로 라우트를 따로 둔다 (CLAUDE.md 11번):
  * 서비스 카드는 랜딩·목록·상세에 다 있어서 서버 렌더에 숫자를 물리면 사이트
  * 전체가 Supabase 에 묶인다. 페이지는 정적으로 나가고, 숫자만 여기서 받아간다.
  *

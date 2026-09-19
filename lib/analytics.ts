@@ -83,7 +83,16 @@ async function authedFetch(path: string, retry = true): Promise<unknown | null> 
       token = null;
       return authedFetch(path, false);
     }
-    if (!res.ok) return null;
+    if (!res.ok) {
+      /*
+       * 던지지 않는다는 원칙(파일 머리)은 그대로 지키되, 컨테이너 로그에는
+       * 남긴다. 이게 없으면 "설정이 없다"와 "설정은 맞는데 요청이 거부된다"를
+       * 부르는 쪽에서 구분할 수가 없다 — 둘 다 그냥 null 이라서다. 라우트가
+       * 5분 캐시라 재배포 사이에 로그가 쌓이지 않는다.
+       */
+      console.error(`[analytics] Umami ${path} → ${res.status}`);
+      return null;
+    }
     return await res.json();
   } catch {
     return null;
@@ -92,37 +101,13 @@ async function authedFetch(path: string, retry = true): Promise<unknown | null> 
 
 /**
  * Umami 버전에 따라 지표가 숫자로 오기도 하고 `{ value, prev }` 로 오기도 한다.
- * 둘 다 받아준다 — 업그레이드 한 번에 푸터 숫자가 조용히 사라지지 않도록.
+ * `getThoughtViews` 의 개별 행(`y`)에도 같은 차이가 날 수 있어 둘 다 여기서 받는다
+ * — 업그레이드 한 번에 숫자가 조용히 사라지지 않도록.
  */
 function readMetric(raw: unknown): number | null {
   if (typeof raw === "number") return raw;
   const value = (raw as { value?: unknown } | null)?.value;
   return typeof value === "number" ? value : null;
-}
-
-/**
- * 한국 시간 기준 오늘 자정(ms).
- *
- * 컨테이너 타임존은 보통 UTC 라 그대로 쓰면 한국 시간 오전 9시에 날짜가 바뀐다.
- * 한국은 1988년 이후 서머타임이 없어서 고정 +9 로 계산해도 어긋나지 않는다.
- */
-function startOfTodayKST(now: number): number {
-  const KST_OFFSET = 9 * 60 * 60 * 1000;
-  const DAY = 24 * 60 * 60 * 1000;
-  return Math.floor((now + KST_OFFSET) / DAY) * DAY - KST_OFFSET;
-}
-
-/** 오늘(KST) 순 방문자 수. 설정이 없거나 Umami 가 안 되면 null. */
-export async function getTodayVisitors(): Promise<number | null> {
-  if (!isAnalyticsReadConfigured) return null;
-
-  const now = Date.now();
-  const startAt = startOfTodayKST(now);
-  const data = await authedFetch(
-    `/api/websites/${websiteId}/stats?startAt=${startAt}&endAt=${now}`,
-  );
-
-  return readMetric((data as { visitors?: unknown } | null)?.visitors);
 }
 
 /**
@@ -153,12 +138,24 @@ export async function getThoughtViews(): Promise<Record<string, number> | null> 
     `/api/websites/${websiteId}/metrics` +
       `?startAt=${SITE_EPOCH}&endAt=${Date.now()}&type=url&limit=500`,
   );
-  if (!Array.isArray(data)) return null;
+  /*
+   * 2026-09-19: 이 라우트가 계속 null 을 주는 걸 보고 여기부터 의심했다.
+   * `/stats` 는 최상위 객체({visitors: …})라 형태가 안정적인데, `/metrics` 는
+   * 목록형 엔드포인트라 페이지네이션이 붙은 버전에서 배열이 아니라
+   * `{ data: [...] }` 로 감싸서 올 수 있다. 둘 다 받는다.
+   */
+  const rows = Array.isArray(data)
+    ? data
+    : Array.isArray((data as { data?: unknown } | null)?.data)
+      ? (data as { data: unknown[] }).data
+      : null;
+  if (!rows) return null;
 
   const views: Record<string, number> = {};
-  for (const row of data) {
-    const { x, y } = (row ?? {}) as { x?: unknown; y?: unknown };
-    if (typeof x !== "string" || typeof y !== "number") continue;
+  for (const row of rows) {
+    const { x, y: rawY } = (row ?? {}) as { x?: unknown; y?: unknown };
+    const y = readMetric(rawY);
+    if (typeof x !== "string" || y === null) continue;
 
     /*
      * `/thoughts/foo?ref=insta` 나 `/thoughts/foo/` 가 각각 다른 줄로 올 수 있다.

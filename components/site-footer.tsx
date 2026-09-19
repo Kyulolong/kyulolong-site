@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Brand } from "@/components/brand";
-import { VisitorCount } from "@/components/visitor-count";
 import { BUSINESS_EMAIL, FOOTER_CHANNELS, FOOTER_NAV } from "@/lib/site-links";
 
 /**
@@ -87,13 +86,15 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* 방문자 수는 없을 수도 있다. 없으면 이 줄은 예전 그대로 보인다. */}
-        <div className="mt-14 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-          <p className="text-ink-soft font-mono text-xs tracking-[0.08em]">
-            kyulolong.com
-          </p>
-          <VisitorCount />
-        </div>
+        {/*
+          "오늘 N명" 방문자 수를 2026-09-19 에 뺐다. 하루 방문자가 한 자리 수인
+          날이 많아서, 사회적 증거로 쓰려던 숫자가 오히려 신뢰를 깎았다 — 작은
+          숫자는 안 보여주는 게 낫다는 판단이다 (CLAUDE.md 12번). 값이 클 때만
+          뜻이 있는 숫자를 항상 뜨게 해두면, 뜻이 없는 날에도 계속 뜬다.
+        */}
+        <p className="text-ink-soft mt-14 font-mono text-xs tracking-[0.08em]">
+          kyulolong.com
+        </p>
       </div>
     </footer>
   );

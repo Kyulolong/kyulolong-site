@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getServices, getThoughts, getVideos } from "@/lib/content";
+import { getServices, getThoughts } from "@/lib/content";
 import { absoluteUrl } from "@/lib/seo";
 
 /**
@@ -21,21 +21,21 @@ import { absoluteUrl } from "@/lib/seo";
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const services = getServices();
-  const videos = getVideos();
   const thoughts = getThoughts();
 
   // 목록·랜딩의 lastmod 는 "가장 최근에 올린 콘텐츠" 날짜다. 새 서비스를 올리면
   // 목록 페이지도 실제로 바뀌므로, 크롤러에게 다시 와야 할 이유를 알려주는 값이다.
   const latest = (dates: string[]) => dates.slice().sort().at(-1);
   const lastService = latest(services.map((s) => s.publishedAt));
-  const lastVideo = latest(videos.map((v) => v.publishedAt));
   const lastThought = latest(thoughts.map((t) => t.publishedAt));
   const lastAny = latest(
-    [lastService, lastVideo, lastThought].filter((d): d is string => Boolean(d)),
+    [lastService, lastThought].filter((d): d is string => Boolean(d)),
   );
 
   return [
     { url: absoluteUrl("/"), lastModified: lastAny, changeFrequency: "weekly", priority: 1 },
+    { url: absoluteUrl("/resources"), changeFrequency: "monthly", priority: 0.9 },
+    { url: absoluteUrl("/proof"), changeFrequency: "monthly", priority: 0.9 },
     {
       url: absoluteUrl("/services"),
       lastModified: lastService,
@@ -49,12 +49,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: lastThought,
       changeFrequency: "weekly",
       priority: 0.9,
-    },
-    {
-      url: absoluteUrl("/videos"),
-      lastModified: lastVideo,
-      changeFrequency: "weekly",
-      priority: 0.7,
     },
     { url: absoluteUrl("/start"), changeFrequency: "monthly", priority: 0.7 },
     { url: absoluteUrl("/about"), changeFrequency: "monthly", priority: 0.6 },
@@ -86,11 +80,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     })),
 
-    ...videos.map((video) => ({
-      url: absoluteUrl(`/videos/${video.slug}`),
-      lastModified: video.publishedAt,
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    })),
   ];
 }

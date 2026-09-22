@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PRIMARY_NAV } from "@/lib/site-links";
+import { MOBILE_NAV } from "@/lib/site-links";
 
 /**
  * 하단 고정 네비 — 모바일 전용 (md 미만).
@@ -42,7 +42,7 @@ export function MobileNav() {
     >
       {/* max-w 는 md 직전(767px)의 태블릿에서 칸 하나가 250px 로 벌어지는 걸 막는다 */}
       <ul className="mx-auto flex h-14 max-w-[30rem] items-stretch">
-        {PRIMARY_NAV.map((item) => {
+        {MOBILE_NAV.map((item) => {
           /* 상세 페이지에서도 그 목록이 켜져 있어야 한다 —
              /thoughts/ax 는 "생각들", /services/navigator 는 "만든 것".
              `/` 와 /start·/login 에서는 아무것도 안 켜진다. 홈은 브랜드 마크가 맡는다. */

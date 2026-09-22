@@ -6,8 +6,7 @@ import { JsonLd } from "@/components/json-ld";
 import { LikeButton } from "@/components/like-button";
 import { PromptBlock } from "@/components/prompt-block";
 import { Prose } from "@/components/prose";
-import { VideoCard } from "@/components/video-card";
-import { getRelatedVideos, getService, getServices } from "@/lib/content";
+import { getService, getServices } from "@/lib/content";
 import { breadcrumbJsonLd, pageMetadata, serviceJsonLd, shareableImage } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -57,8 +56,6 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
   const { slug } = await params;
   const service = getService(slug);
   if (!service) notFound();
-
-  const relatedVideos = getRelatedVideos(service);
 
   return (
     <article className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
@@ -351,18 +348,6 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         </aside>
       </div>
 
-      {relatedVideos.length > 0 ? (
-        <section className="border-line mt-16 border-t pt-14">
-          <h2 className="mb-8 text-xl font-bold tracking-[-0.02em]">만드는 과정</h2>
-          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {relatedVideos.map((video) => (
-              <li key={video.slug}>
-                <VideoCard video={video} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
     </article>
   );
 }

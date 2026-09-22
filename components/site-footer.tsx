@@ -3,8 +3,8 @@ import { Brand } from "@/components/brand";
 import { BUSINESS_EMAIL, FOOTER_CHANNELS, FOOTER_NAV } from "@/lib/site-links";
 
 /**
- * 푸터는 전체 지도다 — 네비 셋에서 빠진 시작하기·영상이 여기서는 다 나온다.
- * ⚠️ 영상은 이제 **여기가 사이트 안의 유일한 입구**다 (lib/site-links.ts).
+ * 푸터는 전체 지도다 — 헤더·하단 바에서 빠진 만든 것·직접 만들기 안내가 여기서는 다 나온다.
+ * 영상은 여기에도 없다 (2026-09-22 — `/videos` 는 주소만 보존, CLAUDE.md 1번).
  */
 const NAV = FOOTER_NAV;
 

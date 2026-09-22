@@ -6,6 +6,7 @@ import { LikeButton } from "@/components/like-button";
 import { Prose } from "@/components/prose";
 import { ThoughtComments } from "@/components/thought-comments";
 import { ThoughtViews } from "@/components/thought-views";
+import { ThoughtNextStep } from "@/components/thought-next-step";
 import { formatDate } from "@/components/video-card";
 import { getThought, getThoughts, readingMinutes } from "@/lib/content";
 import {
@@ -89,6 +90,7 @@ export default async function ThoughtPage({ params }: PageProps<"/thoughts/[slug
         </header>
 
         <Prose body={thought.body} className="mt-12" />
+        <ThoughtNextStep thought={thought} />
 
         {/* 다 읽고 누르는 자리라 본문 바로 아래다. 서비스 상세의 CTA 옆 하트와
             같은 테두리 버튼 — 형광도 보라 면도 아니다 (DESIGN.md §2).

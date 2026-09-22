@@ -28,7 +28,7 @@ function escapeHtml(value: string) {
 export async function POST(request: Request) {
   const parsed = requestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
-    return Response.json({ message: "성함과 이메일을 확인해 주세요." }, { status: 400 });
+    return Response.json({ message: "이름과 이메일을 확인해 주세요." }, { status: 400 });
   }
 
   if (parsed.data.company) return Response.json({ message: "입력한 이메일로 가이드를 보냈습니다." });

@@ -54,6 +54,13 @@ function Marked({ text, terms }: { text: string; terms?: string[] }) {
  * (DESIGN.md §6). 글 줄에 뱃지가 이것 하나뿐이라 알갱이로 보이지 않는다. 여기에
  * 태그나 시리즈까지 뱃지로 올리기 시작하면 그때는 목록이 뒤덮인다.
  *
+ * ── 홈에서는 뱃지를 감춘다 (`badge={false}`, 2026-09-23)
+ *
+ * 홈의 세 줄은 전부 `featured` 라 뱃지가 셋 다 붙는데, 그 절의 제목("처음이라면,
+ * 이 세 편부터")이 이미 같은 말을 한다. 남는 건 보라 알갱이 셋뿐이고, 그건 DESIGN.md
+ * §7 이 뱃지에 경고한 "격자 전체에 보라가 흩뿌려진다"다. `/thoughts` 에서는 그대로
+ * 선다 — 거기서는 위의 "날짜가 어긋난 이유를 대는 줄" 역할이 살아 있다.
+ *
  * ── 검색 결과일 때 (`terms` · `excerpt`)
  *
  * 둘 다 `/thoughts?q=…` 만 넘긴다. 대문은 안 넘기므로 그대로다.
@@ -64,10 +71,13 @@ export function ThoughtRow({
   thought,
   terms,
   excerpt,
+  badge = true,
 }: {
   thought: Thought;
   terms?: string[];
   excerpt?: string;
+  /** 「추천」 뱃지. 홈처럼 절 제목이 이미 추천이라고 말하는 자리에서만 끈다 */
+  badge?: boolean;
 }) {
   const summary = excerpt ?? rowSummary(thought);
 
@@ -79,7 +89,7 @@ export function ThoughtRow({
       {/* 메타가 제목 위에 온다. 훑는 사람이 시리즈로 먼저 걸러 읽기 때문에,
           제목 아래로 내리면 그 판단이 한 박자 늦는다. */}
       <p className="text-ink-faint flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs tracking-[0.04em] tabular-nums">
-        {thought.featured ? (
+        {badge && thought.featured ? (
           <span className="bg-iris text-on-iris rounded-badge shrink-0 px-1.5 py-0.5 font-sans text-[11px] font-medium tracking-normal">
             추천
           </span>

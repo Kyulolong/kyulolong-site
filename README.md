@@ -11,10 +11,13 @@
 
 ## 사이트에 있는 것
 
+현재 홈페이지 구조와 Proof 공개 범위는 [사이트 방향](docs/SITE-DIRECTION.md)을 따릅니다.
+
 - [생각들](https://kyulolong.com/thoughts): 글. 조직과 사람 · 일과 성장 · AX · 창업 네 시리즈
+- [자료실](https://kyulolong.com/resources): 무료 목표 설계 가이드와 창업 질문지
+- [Proof 코칭](https://kyulolong.com/proof): 업무 기록을 바탕으로 진단·코칭·변화 확인을 잇는 팀 과정. 파일럿 준비 중이며 이메일 참여 문의를 받습니다
 - [만든 서비스](https://kyulolong.com/services): AI와 함께 만든 서비스. 서비스마다 AI에게 준
   프롬프트 전문과 걸린 시간, 소스코드를 같이 적어뒀습니다
-- [만드는 과정](https://kyulolong.com/videos): 서비스를 만든 과정을 담은 영상 아카이브
 - [소개](https://kyulolong.com/about) · [시작하기](https://kyulolong.com/start)
 
 이 저장소도 그 서비스 가운데 하나입니다:
@@ -27,7 +30,9 @@
   (`content/thoughts/` · `content/services/` · `content/videos/`)
 - 서비스들은 별도 저장소·별도 컨테이너로, 같은 도메인의 경로(`kyulolong.com/navigator` 등)에
   붙습니다. 이 저장소는 그 경로들을 쓰지 않습니다
-- 로그인 없이 모든 페이지가 열립니다. Supabase 는 로그인 창구(`/login`)와 좋아요·댓글에만 씁니다
+- 로그인 없이 모든 페이지가 열립니다. Supabase는 로그인·좋아요·댓글과 가이드 신청 기록에 씁니다. 홈은 DB 조회 없이 정적으로 생성합니다
+- 헤더에는 로그인 대신 글·자료실·소개·Proof 코칭을 둡니다. 기존 로그인 경로는 유지합니다
+- 홈은 `featured: true`인 추천 글 세 편을 보여줍니다. 추천 교체 시 기존 글의 표시도 해제합니다
 - 검색: `app/sitemap.ts` · `app/robots.ts` · `app/feed.xml` (RSS) · `app/llms.txt` · `lib/seo.ts` (메타데이터와 구조화 데이터)
 
 ## 로컬에서 띄우기

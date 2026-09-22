@@ -28,7 +28,7 @@ export default function PrivacyPage() {
             <dt className="font-bold">필수 이용 목적</dt><dd className="text-ink-soft">요청한 가이드 발송과 발송 오류 대응</dd>
           </div>
           <div className="border-line grid gap-2 border-b py-5 sm:grid-cols-[10rem_1fr]">
-            <dt className="font-bold">선택 이용 목적</dt><dd className="text-ink-soft">Proof 컨설팅 및 새로운 가이드 안내</dd>
+            <dt className="font-bold">선택 이용 목적</dt><dd className="text-ink-soft">Proof 코칭 및 새로운 가이드 안내</dd>
           </div>
           <div className="border-line grid gap-2 border-b py-5 sm:grid-cols-[10rem_1fr]">
             <dt className="font-bold">보유 기간</dt><dd className="text-ink-soft">필수 정보는 발송일로부터 1년, 선택 동의 정보는 동의 철회 또는 마지막 안내 후 2년까지</dd>

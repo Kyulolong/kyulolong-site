@@ -218,17 +218,12 @@ export function validateContent(): void {
     checkFakeUrl(thoughtFile, "ogImage", thought.ogImage, problems);
   }
 
-  // 6. 핀은 하나다.
-  //
-  // `featured: true` 인 글은 날짜를 무시하고 맨 위로 올라오고, 그 줄에 「추천」
-  // 뱃지가 붙는다 (components/thought-row.tsx). 둘이 되면 대문 세 줄 중 둘이
-  // 날짜 순서 밖으로 나가서 목록이 고장 난 것처럼 보이고, 무엇보다 **추천이
-  // 둘이면 추천이 아니다.** 새 글을 올릴 때 옛 핀을 안 빼는 실수가 나기 쉬운데
-  // 화면에서는 뱃지 두 개로만 드러나서 눈에 잘 안 띈다 — 그래서 빌드에서 세운다.
+  // 홈의 ‘처음이라면, 이 세 편부터’는 편집한 추천 글 세 편으로 고정한다.
+  // 추천을 바꿀 때 기존 글의 표시를 빠뜨리거나 입구가 비는 일을 빌드에서 잡는다.
   const pinned = thoughts.filter((t) => t.featured);
-  if (pinned.length > 1) {
+  if (pinned.length !== 3) {
     problems.push(
-      `글의 featured 는 하나만 둘 수 있습니다 (${pinned.length}개): ` +
+      `홈의 추천 글은 featured: true 세 편이어야 합니다 (현재 ${pinned.length}개): ` +
         pinned.map((t) => `thoughts/${t.publishedAt}-${t.slug}.mdx`).join(", ") +
         ` — 새로 추천할 글에 붙였으면 옛 글에서는 빼세요.`,
     );

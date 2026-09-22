@@ -7,7 +7,7 @@ import { applyTheme, effectiveTheme, setChoice, subscribe } from "@/lib/theme";
  * 헤더의 테마 토글 (CLAUDE.md 7번, lib/theme.ts).
  *
  * **아이콘은 테마와 무관하게 같은 마크업이다.** 그래서 서버 렌더 그대로 첫 페인트에
- * 나오고(AuthStatus 처럼 늦게 뜨지 않는다), 하이드레이션 뒤에는 aria-label 과
+ * 나오고(클라이언트에서 늦게 뜨지 않는다), 하이드레이션 뒤에는 aria-label 과
  * title 만 실제 상태로 바뀐다 — 눈에 보이는 변화가 없다. 서버 스냅샷을 null 로
  * 두는 이유가 그것이다: 서버와 첫 클라이언트 렌더가 같아야 하이드레이션이 안 깨진다
  * (components/like-button.tsx 와 같은 방식).

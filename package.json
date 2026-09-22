@@ -12,6 +12,7 @@
     "thumbs": "tsx scripts/fetch-thumbnails.ts",
     "og": "tsx scripts/make-og.tsx",
     "questions": "node scripts/make-questions-pdf.mjs",
+    "guide:cover": "node scripts/make-guide-cover.mjs",
     "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {

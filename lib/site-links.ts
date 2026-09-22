@@ -30,8 +30,8 @@ export const PERPLZ_PROFILE_URL =
 export const BUSINESS_EMAIL = "kyulolong@teaminpact.com";
 
 /**
- * 카카오톡 오픈채팅. 질문지(public/founder-questions.pdf)의 질문들을 **같이 적는
- * 방**이다. 사이트 안의 입구는 히어로 타일(components/hero-links.tsx)과 푸터 둘이다.
+ * 카카오톡 오픈채팅. 글과 자료를 적용하며 생긴 질문과 경험을 나누는 방이다.
+ * 홈·자료실·관련 글·가이드 신청 완료 화면·푸터에서 같은 주소와 코드를 쓴다.
  *
  * **입장코드를 숨기지 않는다.** 코드는 봇을 거르는 문턱이지 사람을 거르는
  * 장치가 아니라, 감춰서 얻는 게 없다. 채널 추가나 DM 을 조건으로 걸지 않는
@@ -44,12 +44,7 @@ export const BUSINESS_EMAIL = "kyulolong@teaminpact.com";
 export const KAKAO_OPENCHAT = {
   /** 푸터 '채널' 줄에 서는 이름. 그 칸은 플랫폼 목록이라 플랫폼 이름으로 적는다 */
   label: "오픈채팅",
-  /**
-   * ⚠️ **화면에 보이는 문구는 여기 없다.** 히어로 타일(components/hero-links.tsx)이
-   * 유일한 자리라 거기 인라인으로 두고, 이 파일은 **주소와 숫자**만 갖는다.
-   * 두 번째 자리가 생기면 그때 문구를 이리로 올릴 것 — 아래 "목적지 하나에 이름
-   * 하나"가 그때부터 걸린다.
-   */
+  /** 홈·자료실의 공통 소개는 components/community-invitation.tsx. 화면 문구도 거기 있다 */
   href: "https://open.kakao.com/o/gygwZpMi",
   /** 입장할 때 치는 숫자. 고정폭으로 적는다 — 눈으로 옮겨 적는 문자열이다 */
   code: "2609",
@@ -62,14 +57,38 @@ export const KAKAO_OPENCHAT = {
  * 페이지가 아니라 정적 파일이라 INTERNAL_LINKS 에 넣지 않는다 — 저쪽은 예약
  * 경로 목록(CLAUDE.md 2번)이고 이건 그 규칙과 무관한 자산이다.
  *
- * ⚠️ **`pages` 는 화면에 그대로 나가는 숫자다** (히어로 타일의 "무료 · 12장").
+ * ⚠️ **`pages` 는 화면에 그대로 나가는 숫자다** (자료실의 "PDF 12장").
  * 갈래를 더하면 종이가 늘어나는데 이 숫자는 안 따라오므로, `npm run questions` 가
  * 굽고 나서 이 값과 대조해 어긋나면 세운다. 크기를 정직하게 적는 게 이 절의
  * 전제라(CLAUDE.md 3번), 틀린 장 수는 오탈자가 아니라 그 전제를 깨는 일이다.
+ *
+ * 사이트 안의 입구는 자료실(app/resources/page.tsx) 하나다 — 2026-09-22 에 대문
+ * 타일에서 내려왔다. 새 방향(3~15년차 직장인·작은 팀의 리더)에서는 보조 자료다.
  */
 export const FOUNDER_QUESTIONS = {
   href: "/founder-questions.pdf",
   pages: 12,
+} as const;
+
+/**
+ * 목표 설계 가이드 — 「작은 팀을 위한 인사」 다섯 권 중 첫째. 이메일로 보낸다
+ * (app/api/guides/goal-design). 홈의 가이드 절(components/guide-paper.tsx)과
+ * 자료실(components/guide-download.tsx)이 표지·파일명·장 수로 이 종이를 세운다.
+ *
+ * `cover` 는 `npm run guide:cover` 가 PDF 첫 장에서 찍어 커밋한 PNG 다 — 손으로
+ * 만들지 않는다. `pages` 는 그 스크립트가 PDF 와 대조해 어긋나면 세운다
+ * (FOUNDER_QUESTIONS 와 같은 규칙).
+ *
+ * `href` 는 화면에서 직접 열지 않는다 — 메일로 보내는 주소다. 페이지가 아니라 정적
+ * 파일이라 INTERNAL_LINKS 에 넣지 않는다.
+ */
+export const GOAL_GUIDE = {
+  href: "/guides/01-goal-design-guide.pdf",
+  cover: "/guides/01-goal-design-guide-cover.png",
+  pages: 30,
+  /** 표지에 박힌 시리즈 이름과 권 번호. 홈·자료실 눈썹 줄이 그대로 읽는다 */
+  series: "작은 팀을 위한 인사",
+  volume: "01",
 } as const;
 
 /**
@@ -102,46 +121,24 @@ export const FOOTER_CHANNELS = [
 
 /** 홈페이지 내부 경로. 스펙 2번의 예약 경로 안에서만 쓴다. */
 export const INTERNAL_LINKS = {
-  /** 글. 이 채널이 쌓아가는 축이라 네비의 첫 자리다. */
   thoughts: "/thoughts",
-  /**
-   * 설치부터 첫 화면까지의 안내. 서비스 상세의 접힘 상자가 여기로 넘긴다.
-   * 새 예약 경로라 CLAUDE.md 2번 목록에도 `start` 를 같이 적어뒀다 —
-   * 안 적어두면 언젠가 `start` 슬러그 서비스를 만들 때 이 경로와 부딪힌다.
-   */
+  resources: "/resources",
+  proof: "/proof",
   start: "/start",
   services: "/services",
-  videos: "/videos",
   about: "/about",
 } as const;
 
-/**
- * 목적지 하나에 이름 하나.
- *
- * ⚠️ 예전엔 헤더·푸터가 "서비스", 히어로 CTA 가 "만든 것" 이었다. 같은 곳을 두
- * 이름으로 부르면 처음 온 사람은 그게 다른 곳인 줄 안다. 아래 배열들이 전부 이
- * 상수를 집어다 쓰므로, 라벨을 고칠 자리는 늘 여기 한 곳이다.
- */
-const START = { label: "시작하기", href: INTERNAL_LINKS.start } as const;
 const THOUGHTS = { label: "생각들", href: INTERNAL_LINKS.thoughts } as const;
-const SERVICES = { label: "만든 것", href: INTERNAL_LINKS.services } as const;
-const VIDEOS = { label: "영상", href: INTERNAL_LINKS.videos } as const;
+const RESOURCES = { label: "자료실", href: INTERNAL_LINKS.resources } as const;
+const PROOF = { label: "Proof 코칭", href: INTERNAL_LINKS.proof } as const;
 const ABOUT = { label: "소개", href: INTERNAL_LINKS.about } as const;
+export const PRIMARY_NAV = [THOUGHTS, RESOURCES, ABOUT] as const;
+export const MOBILE_NAV = [THOUGHTS, RESOURCES, PROOF] as const;
+export const FOOTER_NAV = [
+  THOUGHTS, RESOURCES, PROOF, ABOUT,
+  { label: "만든 것", href: INTERNAL_LINKS.services },
+  { label: "직접 만들기 안내", href: INTERNAL_LINKS.start },
+] as const;
 
-/**
- * 네비게이션 셋. 하단 바(md 미만)가 그대로 펴고, 헤더(md 이상)는 여기에 퍼플즈
- * 한 칸을 더한다.
- *
- * ⚠️ **"영상"이 여기에 없다** (2026-08-28). 칸이 셋인데(하단 바의 상한) 소개가
- * 그 자리를 가져갔다 — 이 채널은 "왜 이걸 하나"를 묻는 사람이 먼저 오는 곳이라
- * 소개가 상시 입구여야 하고, 영상은 인스타·유튜브가 이미 가진 채널이라 이
- * 사이트가 유일한 입구가 아니다. `/videos` 는 그대로 살아서 **푸터**로 들어간다
- * (FOOTER_NAV). 네 칸으로 늘리지 말 것 — 375px 하단 바에서 라벨이 붙는다.
- */
-export const PRIMARY_NAV = [THOUGHTS, SERVICES, ABOUT] as const;
-
-/**
- * 푸터는 **전체 지도**다. 네비에서 빠진 것(시작하기·영상)까지 전부 싣는다 —
- * 영상은 이제 사이트 안에서 여기가 유일한 입구다.
- */
-export const FOOTER_NAV = [START, THOUGHTS, SERVICES, VIDEOS, ABOUT] as const;
+export const PROOF_INQUIRY_HREF = `mailto:${BUSINESS_EMAIL}?subject=${encodeURIComponent("[Proof 참여 문의]")}&body=${encodeURIComponent("안녕하세요. Proof 과정에 관해 문의드립니다.\n\n1. 팀 또는 기관 소개와 인원:\n2. 지금 겪고 있는 어려움:\n3. 참여를 생각하는 시기:\n")}`;

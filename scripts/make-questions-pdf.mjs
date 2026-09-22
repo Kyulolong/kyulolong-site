@@ -40,7 +40,7 @@ import path from "node:path";
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "public/founder-questions.pdf");
 /**
- * 대문 타일(components/hero-links.tsx)에 서는 표지 미리보기. 종이와 **같은 판에서
+ * 대문 타일(components/app/resources/page.tsx 의 질문지 절)에 서는 표지 미리보기. 종이와 **같은 판에서
  * 같은 순간에** 찍는다 — 따로 그리면 표지를 고쳤을 때 타일만 옛 표지로 남는다.
  * 폭 240px 은 타일의 표지 칸(72px)을 3배 화면에서도 선명하게 채우는 값이다.
  */

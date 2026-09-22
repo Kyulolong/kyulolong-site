@@ -46,6 +46,9 @@ export type ServiceStatus = (typeof SERVICE_STATUS)[number];
  * 이 목록과 겹치면 실제 배포에서 경로가 충돌한다. 빌드 타임에 잡는다.
  */
 export const RESERVED_PATHS = [
+  "resources",
+  "proof",
+  "privacy",
   "services",
   "videos",
   "thoughts",

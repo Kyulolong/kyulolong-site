@@ -93,7 +93,8 @@ export function SiteFooter() {
           뜻이 있는 숫자를 항상 뜨게 해두면, 뜻이 없는 날에도 계속 뜬다.
         */}
         <p className="text-ink-soft mt-14 font-mono text-xs tracking-[0.08em]">
-          kyulolong.com
+          kyulolong.com · {" "}
+          <Link href="/privacy" className="underline underline-offset-4">개인정보 처리 안내</Link>
         </p>
       </div>
     </footer>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/hero";
 import { HeroLinks } from "@/components/hero-links";
+import { GuideDownload } from "@/components/guide-download";
 import { JsonLd } from "@/components/json-ld";
 import { SectionHeading } from "@/components/section-heading";
 import { ServiceCard } from "@/components/service-card";
@@ -98,6 +99,8 @@ export default async function Home() {
           )}
         </div>
       </section>
+
+      <GuideDownload />
 
       {/*
         만든 것 — 가로 한 줄.

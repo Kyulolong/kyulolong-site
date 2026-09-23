@@ -3,6 +3,7 @@ import { Analytics } from "@/components/analytics";
 import { MobileNav } from "@/components/mobile-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   FEED_ALTERNATE,
   OG_IMAGE,
@@ -134,6 +135,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             main·footer 와 나란한 최상위 랜드마크가 된다. /login 에서도 남긴다:
             나갈 길이 없는 화면을 만들지 않는다. */}
         <MobileNav />
+        {/* 화면 우측 아래의 작은 테마 토글. 헤더에서 내려왔다 (components/theme-toggle.tsx). */}
+        <ThemeToggle />
         <Analytics />
       </body>
     </html>

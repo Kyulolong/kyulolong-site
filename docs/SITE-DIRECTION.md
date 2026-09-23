@@ -14,7 +14,7 @@
 ## 정보 구조
 
 - 홈: 기존 캐치프레이즈와 도움 설명 → 짧은 이력 → 추천 글 3편 → 목표 가이드 → Proof → 오픈채팅 → 실험 기록.
-- 데스크톱: 생각들 / 자료실 / 소개 / Proof 코칭. 로그인과 퍼플즈는 GNB에서 제외.
+- 데스크톱: 생각들 / 자료실 / 소개 / Proof 코칭 / 오픈채팅(맨 오른쪽, 새 탭). 로그인과 퍼플즈는 GNB에서 제외. 테마 토글은 화면 우측 아래 (2026-09-23).
 - 모바일: 하단 생각들 / 자료실 / Proof 코칭. 소개는 상단에 제공.
 - `/resources`: 목표 설계 가이드 신청, 기존 창업 질문지, 오픈채팅.
 - `/proof`: 보라 띠 첫 화면(개요표), 대상과 문제, 준비 중인 5단계 흐름, 예시 결과물, 검토 원칙, 진행하는 사람, FAQ, 참여 신청 폼(웨이팅리스트). 2026-09-23 개정.
@@ -46,7 +46,7 @@ AI 분석은 코치 검토, 당사자 정정, 사람의 최종 판단을 포함�
 - 가이드 발송 완료 → 오픈채팅 안내.
 
 Umami 링크 이벤트는 `home-guide-open`, `proof-introduction-open`, `community-open`,
-`proof-apply-open`, `proof-apply-submit`, `founder-questions-open`, `article-guide-open`, `article-community-open`,
+`proof-apply-open`, `proof-apply-submit`, `header-community-open`, `founder-questions-open`, `article-guide-open`, `article-community-open`,
 `article-proof-open`, `guide-community-open`이다. 모두 클릭이며 실제 접수·입장·계약 완료를 의미하지 않는다 — 접수 수는 `proof_leads` 표에서 센다.
 
 ## 시각 원칙

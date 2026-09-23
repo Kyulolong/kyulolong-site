@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Brand } from "@/components/brand";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { INTERNAL_LINKS, PRIMARY_NAV } from "@/lib/site-links";
+import { INTERNAL_LINKS, KAKAO_OPENCHAT, PRIMARY_NAV } from "@/lib/site-links";
 
 export function SiteHeader() {
   return (
@@ -16,7 +15,10 @@ export function SiteHeader() {
           </nav>
           <Link href={INTERNAL_LINKS.proof} className="border-line-strong text-ink hover:bg-surface-2 hidden min-h-11 items-center rounded-full border px-5 text-sm font-semibold transition-colors md:inline-flex">Proof 코칭</Link>
           <Link href={INTERNAL_LINKS.about} className="text-ink-soft hover:text-ink inline-flex min-h-11 items-center text-sm md:hidden">소개</Link>
-          <ThemeToggle />
+          {/* 맨 오른쪽은 오픈채팅 (2026-09-23). 예전엔 테마 토글 자리였는데 토글은 화면 우측 아래로
+              내려갔다 (components/theme-toggle.tsx). 모양은 네비 링크와 같다 — 헤더의 알약은 Proof 하나다
+              (DESIGN.md §8 의 예외). 밖으로 나가는 링크라 새 탭. */}
+          <a href={KAKAO_OPENCHAT.href} target="_blank" rel="noreferrer noopener" className="text-ink-soft hover:text-ink inline-flex min-h-11 items-center text-sm font-medium transition-colors" data-umami-event="header-community-open">{KAKAO_OPENCHAT.label}</a>
         </div>
       </div>
     </header>

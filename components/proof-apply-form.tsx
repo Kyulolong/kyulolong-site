@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { CONCERNS, PROOF_APPLY_LIMITS, TEAM_SIZES, TEAM_TYPES, TIMINGS } from "@/lib/proof-apply";
-import { INTERNAL_LINKS, PROOF_INBOX_EMAIL } from "@/lib/site-links";
+import { GOAL_GUIDE, PROOF_INBOX_EMAIL } from "@/lib/site-links";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -73,9 +73,7 @@ export function ProofApplyForm() {
         <p className="text-ink-soft mt-4 leading-relaxed">{message}</p>
         <p className="text-ink-soft mt-2 leading-relaxed">남겨주신 팀 상황을 읽고 며칠 안에 이메일로 연락드립니다. 신청만으로 참여나 비용이 확정되지는 않습니다.</p>
         <p className="text-ink-soft mt-6 text-sm leading-relaxed">
-          그동안 팀에서 먼저 써볼 자료는{" "}
-          <Link href={INTERNAL_LINKS.resources} className="text-ink inline-flex min-h-11 items-center underline underline-offset-4">자료실</Link>
-          에 있습니다.
+          확인 메일에 {GOAL_GUIDE.series} {GOAL_GUIDE.volume} · 목표 설계 가이드(PDF {GOAL_GUIDE.pages}장)를 함께 넣었습니다. 자료실에서 따로 신청하지 않아도 됩니다.
         </p>
         <button type="button" onClick={() => setStatus("idle")} className="text-ink-soft hover:text-ink mt-4 min-h-11 text-sm underline underline-offset-4">
           다른 팀으로 한 번 더 신청하기

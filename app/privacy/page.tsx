@@ -46,7 +46,7 @@ export default function PrivacyPage() {
             <dt className="font-bold">수집 항목</dt><dd className="text-ink-soft">성함, 이메일, 팀·기관 이름(선택), 팀 유형, 인원, 지금 막힌 장면, 희망 시기, 메모(선택)</dd>
           </div>
           <div className="border-line grid gap-2 border-b py-5 sm:grid-cols-[10rem_1fr]">
-            <dt className="font-bold">이용 목적</dt><dd className="text-ink-soft">Proof 파일럿 참여 가능 여부 확인과 안내, 연락</dd>
+            <dt className="font-bold">이용 목적</dt><dd className="text-ink-soft">Proof 파일럿 참여 가능 여부 확인과 안내, 연락. 접수 확인 메일에 목표 설계 가이드 링크를 함께 보냅니다.</dd>
           </div>
           <div className="border-line grid gap-2 border-b py-5 sm:grid-cols-[10rem_1fr]">
             <dt className="font-bold">받지 않는 것</dt><dd className="text-ink-soft">업무 기록, 회의 자료, 개인별 평가 정보. 신청 폼에 그런 칸을 두지 않습니다.</dd>

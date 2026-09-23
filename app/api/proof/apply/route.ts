@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { CONCERNS, labelOf, PROOF_APPLY_LIMITS, TEAM_SIZES, TEAM_TYPES, TIMINGS } from "@/lib/proof-apply";
 import { SITE_URL } from "@/lib/seo";
-import { PROOF_INBOX_EMAIL } from "@/lib/site-links";
+import { GOAL_GUIDE, PROOF_INBOX_EMAIL } from "@/lib/site-links";
 
 /**
  * Proof 파일럿 참여 신청 (웨이팅리스트). app/api/guides/goal-design/route.ts 와 같은 구조 —
@@ -34,7 +34,9 @@ const requestSchema = z.object({
 
 /** 동의 문구를 바꾸면 날짜를 올린다 (app/privacy/page.tsx 의 시행일과 같이). */
 const CONSENT_VERSION = "2026-09-23";
-const RESOURCES_URL = `${SITE_URL}/resources`;
+/** 접수 확인 메일에 목표 설계 가이드를 같이 넣는다 — 신청자가 자료실에서 이메일을 한 번 더 남기게 하지 않는다 (2026-09-23). */
+const GUIDE_URL = `${SITE_URL}${GOAL_GUIDE.href}`;
+const GUIDE_TITLE = `${GOAL_GUIDE.series} ${GOAL_GUIDE.volume} · 목표 설계 가이드`;
 const RECEIVED_MESSAGE = "접수했습니다. 확인 메일을 보냈으니 메일함을 확인해 주세요.";
 
 function escapeHtml(value: string) {
@@ -135,8 +137,8 @@ export async function POST(request: Request) {
     from,
     to: [lead.email],
     subject: "[규로롱] Proof 파일럿 참여 신청을 접수했습니다",
-    text: `${lead.name}님, Proof 파일럿 참여 신청을 접수했습니다.\n\n남겨주신 팀 상황을 읽고 며칠 안에 이메일로 연락드립니다. 신청만으로 참여나 비용이 확정되지는 않습니다.\n\n그동안 팀에서 먼저 써볼 자료는 자료실에 있습니다: ${RESOURCES_URL}\n\n규로롱`,
-    html: `<div style="font-family:Arial,'Apple SD Gothic Neo',sans-serif;line-height:1.7;color:#24222a;max-width:560px;margin:auto;padding:32px 20px"><p>${safeName}님, 안녕하세요.</p><p><strong>Proof 파일럿 참여 신청</strong>을 접수했습니다.</p><p>남겨주신 팀 상황을 읽고 며칠 안에 이메일로 연락드립니다. 신청만으로 참여나 비용이 확정되지는 않습니다.</p><p>그동안 팀에서 먼저 써볼 자료는 <a href="${RESOURCES_URL}" style="color:#4a1fc0">자료실</a>에 있습니다.</p><p style="margin-top:32px">규로롱 드림</p></div>`,
+    text: `${lead.name}님, Proof 파일럿 참여 신청을 접수했습니다.\n\n남겨주신 팀 상황을 읽고 며칠 안에 이메일로 연락드립니다. 신청만으로 참여나 비용이 확정되지는 않습니다.\n\n그동안 팀에서 먼저 써볼 자료를 함께 보냅니다.\n${GUIDE_TITLE} (PDF ${GOAL_GUIDE.pages}장): ${GUIDE_URL}\n\n규로롱`,
+    html: `<div style="font-family:Arial,'Apple SD Gothic Neo',sans-serif;line-height:1.7;color:#24222a;max-width:560px;margin:auto;padding:32px 20px"><p>${safeName}님, 안녕하세요.</p><p><strong>Proof 파일럿 참여 신청</strong>을 접수했습니다.</p><p>남겨주신 팀 상황을 읽고 며칠 안에 이메일로 연락드립니다. 신청만으로 참여나 비용이 확정되지는 않습니다.</p><p>그동안 팀에서 먼저 써볼 자료를 함께 보냅니다. <strong>${GUIDE_TITLE}</strong> (PDF ${GOAL_GUIDE.pages}장)</p><p style="margin:24px 0"><a href="${GUIDE_URL}" style="display:inline-block;background:#24222a;color:#fff;text-decoration:none;padding:14px 22px;border-radius:999px;font-weight:700">가이드 열기</a></p><p style="margin-top:32px">규로롱 드림</p></div>`,
   });
 
   if (!receipt.ok) {

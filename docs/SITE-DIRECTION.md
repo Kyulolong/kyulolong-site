@@ -17,7 +17,7 @@
 - 데스크톱: 생각들 / 자료실 / 소개 / Proof 코칭. 로그인과 퍼플즈는 GNB에서 제외.
 - 모바일: 하단 생각들 / 자료실 / Proof 코칭. 소개는 상단에 제공.
 - `/resources`: 목표 설계 가이드 신청, 기존 창업 질문지, 오픈채팅.
-- `/proof`: 대상과 문제, 준비 중인 과정, 예시 결과물, 검토 원칙, FAQ, 이메일 문의.
+- `/proof`: 보라 띠 첫 화면(개요표), 대상과 문제, 준비 중인 5단계 흐름, 예시 결과물, 검토 원칙, 진행하는 사람, FAQ, 참여 신청 폼(웨이팅리스트). 2026-09-23 개정.
 - 신규 경로는 `RESERVED_PATHS`, sitemap, llms.txt에도 등록한다.
 - 기존 `/#goal-guide` 진입점은 가이드 소개 섹션으로 유지한다.
 
@@ -34,7 +34,7 @@ MDX `featured: true` 세 편을 홈과 글 목록에서 함께 표시한다. 검
 ## 서비스 공개 범위
 
 현재는 ‘파일럿 준비 중’으로 안내한다. 계획서의 가격·할인·모집 수·협업 후보·매출 목표는 확정된 판매 조건이나 실적으로 공개하지 않는다.
-홈페이지에서 업무 기록이나 개인 평가 정보를 수집하지 않는다. 문의는 기존 업무 이메일로 연결하며 팀 소개·고민·희망 시기를 제안한다.
+홈페이지에서 업무 기록이나 개인 평가 정보를 수집하지 않는다. 참여 신청은 `/proof#apply` 폼으로 받아 `proof_leads` 표에 남기고 incu@kyulolong.com 으로 전달한다 — 항목은 팀 소개(이름·이메일·팀 유형·인원)·고민(막힌 장면)·희망 시기·선택 메모뿐이다. 도식 초안의 스펙 숫자(모델명·역량 축 수·과업 기준 개수)는 싣지 않는다.
 계획서 원문이나 내부 화면은 공개 자산에 복사하지 않는다. 서비스 예시는 가상임을 표시한다.
 AI 분석은 코치 검토, 당사자 정정, 사람의 최종 판단을 포함하는 서비스 설계로 설명한다.
 
@@ -46,8 +46,8 @@ AI 분석은 코치 검토, 당사자 정정, 사람의 최종 판단을 포함�
 - 가이드 발송 완료 → 오픈채팅 안내.
 
 Umami 링크 이벤트는 `home-guide-open`, `proof-introduction-open`, `community-open`,
-`proof-email-open`, `founder-questions-open`, `article-guide-open`, `article-community-open`,
-`article-proof-open`, `guide-community-open`이다. 모두 클릭이며 실제 메일 발송·입장·계약 완료를 의미하지 않는다.
+`proof-apply-open`, `proof-apply-submit`, `founder-questions-open`, `article-guide-open`, `article-community-open`,
+`article-proof-open`, `guide-community-open`이다. 모두 클릭이며 실제 접수·입장·계약 완료를 의미하지 않는다 — 접수 수는 `proof_leads` 표에서 센다.
 
 ## 시각 원칙
 

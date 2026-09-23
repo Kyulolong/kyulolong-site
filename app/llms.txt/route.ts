@@ -53,7 +53,7 @@ export function GET() {
     `- [소개](${absoluteUrl("/about")}): 운영자가 누구이고 왜 이 사이트를 하는지`,
     `- [생각들](${absoluteUrl("/thoughts")}): 글 목록. 조직과 사람 · 일과 성장 · AX · 창업 네 시리즈`,
     `- [자료실](${absoluteUrl("/resources")}): 무료 목표 설계 가이드와 창업 질문지`,
-    `- [Proof 코칭](${absoluteUrl("/proof")}): 5~20인 팀의 업무 기록에 기반한 진단·코칭·변화 확인 과정. 파일럿 준비 중이며 참여 문의 가능`,
+    `- [Proof 코칭](${absoluteUrl("/proof")}): 5~20인 팀의 업무 기록에 기반한 진단·코칭·변화 확인 과정. 파일럿 준비 중이며 참여 신청 가능`,
     `- [만든 서비스](${absoluteUrl("/services")}): AI와 함께 만든 서비스. 서비스마다 AI에게 준 프롬프트 전문과 걸린 시간을 적고, 소스코드도 대부분 공개`,
     `- [RSS](${absoluteUrl("/feed.xml")}): 글 피드`,
     "",

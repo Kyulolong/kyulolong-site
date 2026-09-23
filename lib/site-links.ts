@@ -141,4 +141,9 @@ export const FOOTER_NAV = [
   { label: "직접 만들기 안내", href: INTERNAL_LINKS.start },
 ] as const;
 
-export const PROOF_INQUIRY_HREF = `mailto:${BUSINESS_EMAIL}?subject=${encodeURIComponent("[Proof 참여 문의]")}&body=${encodeURIComponent("안녕하세요. Proof 과정에 관해 문의드립니다.\n\n1. 팀 또는 기관 소개와 인원:\n2. 지금 겪고 있는 어려움:\n3. 참여를 생각하는 시기:\n")}`;
+/**
+ * Proof 파일럿 참여 신청이 도착하는 곳 (app/api/proof/apply/route.ts). 웨이팅리스트 수신함이라
+ * BUSINESS_EMAIL 과 다르다 — 저쪽은 사람이 답하는 일반 창구, 이쪽은 신청서만 쌓이는 함.
+ * 폼이 안 열릴 때의 안내 줄에도 이 주소를 적어 명단이 한 곳에 모이게 한다.
+ */
+export const PROOF_INBOX_EMAIL = "incu@kyulolong.com";

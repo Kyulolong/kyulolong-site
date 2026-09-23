@@ -28,14 +28,56 @@ const BANNED = [
 // 발행본과 초고를 같이 본다 — drafts/ 는 gitignore 라 없을 수도 있다.
 const DIRS = ["content/thoughts", "drafts/thoughts"];
 
+// 닫는 `**` 가 안 닫히는 자리 (drafts/STYLE.md 2번).
+//
+// CommonMark 에서 닫는 `**` 는 **앞이 구두점이면 뒤가 공백이나 구두점이어야** 닫힌다.
+// 한국어는 볼드 뒤에 조사가 바로 붙으므로 `)` · `"` · `?` 로 끝나는 볼드에서 늘 걸리고,
+// 실패하면 별표 넷이 그대로 화면에 찍힌다. 눈으로는 잘 안 잡힌다 — 원고에서는 볼드로
+// 보이고 화면에서만 깨지기 때문이다. 실제로 20편이 그렇게 배포됐다 (2026-09-23 발견).
+const PUNCT = /[\p{P}\p{S}]/u;
+const LETTER = /[\p{L}\p{N}]/u;
+
+/** 한 줄에서 닫히지 못하는 `**` 를 찾는다. 별표는 짝으로 세어 홀수 번째를 여는 자리로 본다. */
+function brokenBold(line) {
+  // 인라인 코드 안의 별표는 글자다. 자리를 유지하려고 공백으로 덮는다.
+  const text = line.replace(/`[^`]*`/g, (m) => " ".repeat(m.length));
+  const marks = [];
+  for (let i = 0; i < text.length - 1; i += 1) {
+    if (text[i] === "*" && text[i + 1] === "*") {
+      marks.push(i);
+      i += 1;
+    }
+  }
+  const broken = [];
+  for (let n = 1; n < marks.length; n += 2) {
+    const at = marks[n];
+    const before = text[at - 1] ?? " ";
+    const after = text[at + 2] ?? " ";
+    if (PUNCT.test(before) && LETTER.test(after)) broken.push(`${before}**${after}`);
+  }
+  return broken;
+}
+
 let hits = 0;
 let dashes = 0;
+let bolds = 0;
 for (const dir of DIRS) {
   if (!fs.existsSync(dir)) continue;
   const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
   for (const file of files) {
     const lines = fs.readFileSync(path.join(dir, file), "utf8").split("\n");
+    let inFence = false;
     lines.forEach((line, i) => {
+      if (line.trimStart().startsWith("```")) {
+        inFence = !inFence;
+        return;
+      }
+      if (!inFence) {
+        for (const mark of brokenBold(line)) {
+          console.log(`${dir}/${file}:${i + 1}  「${mark}」  ${line.trim().slice(0, 72)}`);
+          bolds += 1;
+        }
+      }
       for (const word of BANNED) {
         if (line.includes(word)) {
           console.log(`${dir}/${file}:${i + 1}  「${word}」  ${line.trim().slice(0, 72)}`);
@@ -60,5 +102,11 @@ if (dashes > 0) {
 if (hits > 0) {
   console.error(`\n${hits}곳 — 정체성 호명이면 지우고, 인용이면 알고 둡니다 (drafts/STYLE.md 1번).`);
 }
-if (hits > 0 || dashes > 0) process.exit(1);
-console.log("호명 금지어 없음 — 문은 둘 다 열려 있습니다. 엠대시도 없습니다.");
+if (bolds > 0) {
+  console.error(
+    `\n안 닫히는 볼드 ${bolds}곳. 화면에 별표가 그대로 찍힙니다 — 구두점을 볼드 밖으로 빼거나` +
+      ` 조사를 볼드 안으로 넣으세요 (drafts/STYLE.md 2번).`,
+  );
+}
+if (hits > 0 || dashes > 0 || bolds > 0) process.exit(1);
+console.log("호명 금지어 없음 — 문은 둘 다 열려 있습니다. 엠대시도, 깨진 볼드도 없습니다.");

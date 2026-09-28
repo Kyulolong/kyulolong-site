@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({ description: SITE_DESCRIPTION, 
 
 /**
  * 대문. 순서가 논지다 (docs/SITE-DIRECTION.md):
- *   히어로(주장 + 하는 일 + 짧은 이력) → 추천 글 셋 → 목표 가이드(종이) → Proof(보라 슬랩)
+ *   히어로(주장 + 하는 일 + 짧은 이력) → 추천 글 셋(+ 가장 최근 글) → 목표 가이드(종이) → Proof(보라 슬랩)
  *   → 오픈채팅 → 만든 것(실험 기록).
  *
  * 글 → 자료 → Proof 로 이어지는 행동이 이 페이지가 하려는 말이고, 만든 것은 그 뒤에서
@@ -34,6 +34,10 @@ export const metadata: Metadata = pageMetadata({ description: SITE_DESCRIPTION, 
 export default function Home() {
   validateContent();
   const thoughts = filterThoughts().filter((thought) => thought.featured).slice(0, 3);
+  // 추천 셋 아래에 서는 가장 최근 글. 유입이 인스타 하나라, 새 글을 보고 들어온 사람이
+  // 대문에서 그 글을 못 찾으면 안 된다. 최신 글이 추천이면 이미 위에 서 있으니 안 그린다.
+  const [latest] = filterThoughts({ sort: "recent" });
+  const latestExtra = latest && !latest.featured ? latest : undefined;
 
   return (
     <>
@@ -55,6 +59,16 @@ export default function Home() {
               </li>
             ))}
           </ul>
+
+          {/* 「새 글」이 아니라 「가장 최근 글」이다. 한동안 글이 없으면 "새 글"은 거짓말이
+              되지만 "가장 최근"은 어느 날에도 참이다 (thought-row.tsx 의 「고정」 대신
+              「추천」과 같은 판단). 뱃지·형광 없이 눈썹 줄 하나로만 세 편과 가른다. */}
+          {latestExtra ? (
+            <div className="mt-12">
+              <p className="text-ink-faint text-sm">가장 최근 글</p>
+              <ThoughtRow thought={latestExtra} />
+            </div>
+          ) : null}
         </div>
       </section>
 

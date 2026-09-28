@@ -52,3 +52,7 @@ CLAUDE.md
 
 # 아이콘 세트 다운로드 압축본 — 풀린 파일만 두면 된다
 kyulolongicon.zip
+
+# 가이드 PDF 작업본·검토본·인쇄본 — 공개 repo 에 올리지 않음 (로컬 전용)
+# 사이트가 실제로 내보내는 01권은 public/guides/ 에 있다
+/output

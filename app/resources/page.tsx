@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GuideDownload } from "@/components/guide-download";
 import { PageHeader } from "@/components/page-header";
-import { CommunityInvitation } from "@/components/community-invitation";
 import { pageMetadata } from "@/lib/seo";
 import { FOUNDER_QUESTIONS, INTERNAL_LINKS } from "@/lib/site-links";
 
@@ -27,7 +26,6 @@ export default function ResourcesPage() {
             <p className="text-ink-faint mt-3 text-sm">이메일 입력 없이 PDF가 열립니다.</p>
           </div>
         </section>
-        <div className="mt-16 sm:mt-20"><CommunityInvitation /></div>
         <p className="text-ink-soft mt-10 text-sm">우리 팀의 일한 기록을 함께 살펴보고 싶다면 <Link href={INTERNAL_LINKS.proof} className="inline-flex min-h-11 items-center underline underline-offset-4">Proof 코칭 알아보기</Link></p>
       </div>
     </>

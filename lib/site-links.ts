@@ -30,27 +30,6 @@ export const PERPLZ_PROFILE_URL =
 export const BUSINESS_EMAIL = "kyulolong@teaminpact.com";
 
 /**
- * 카카오톡 오픈채팅. 글과 자료를 적용하며 생긴 질문과 경험을 나누는 방이다.
- * 홈·자료실·관련 글·가이드 신청 완료 화면·푸터에서 같은 주소와 코드를 쓴다.
- *
- * **입장코드를 숨기지 않는다.** 코드는 봇을 거르는 문턱이지 사람을 거르는
- * 장치가 아니라, 감춰서 얻는 게 없다. 채널 추가나 DM 을 조건으로 걸지 않는
- * 것도 같은 이유다 — 11번의 "로그인은 문이 아니라 덤"이 여기까지 이어진다.
- *
- * ⚠️ 방 제목·설명에서는 상대를 불러도 된다. 카카오 안의 문패는 그 방을 찾는
- * 사람이 읽는 것이고, 이 사이트의 목소리(CLAUDE.md 1번 "쓰지 않을 말")는
- * 여기 적히는 라벨과 슬랩의 문장까지다.
- */
-export const KAKAO_OPENCHAT = {
-  /** 푸터 '채널' 줄에 서는 이름. 그 칸은 플랫폼 목록이라 플랫폼 이름으로 적는다 */
-  label: "오픈채팅",
-  /** 홈·자료실의 공통 소개는 components/community-invitation.tsx. 화면 문구도 거기 있다 */
-  href: "https://open.kakao.com/o/gygwZpMi",
-  /** 입장할 때 치는 숫자. 고정폭으로 적는다 — 눈으로 옮겨 적는 문자열이다 */
-  code: "2609",
-} as const;
-
-/**
  * 질문 열 개를 적어 넣을 수 있게 묶은 종이. scripts/make-questions-pdf.mjs 가
  * lib/founder-questions.ts 에서 구워 public/ 에 커밋해둔다 (og.png 와 같은 방식).
  *
@@ -94,8 +73,8 @@ export const GOAL_GUIDE = {
 /**
  * ⚠️ **이 배열은 구조화 데이터의 `sameAs` 로도 나간다** (app/page.tsx → siteJsonLd).
  * `sameAs` 는 "이 사람이 누구인지 가리키는 프로필 주소"라, 프로필이 아닌 것을
- * 여기 넣으면 12번의 "구조화 데이터에는 사실만 적는다"가 흐려진다. 오픈채팅방은
- * 프로필이 아니라 장소라서 아래 FOOTER_CHANNELS 에서만 합류한다.
+ * 여기 넣으면 12번의 "구조화 데이터에는 사실만 적는다"가 흐려진다. 프로필이 아닌
+ * 장소(예전의 오픈채팅방)는 아래 FOOTER_CHANNELS 에서만 합류한다.
  */
 const INSTAGRAM = { label: "인스타그램", href: INSTAGRAM_URL } as const;
 const GITHUB = { label: "깃허브", href: "https://github.com/Kyulolong" } as const;
@@ -104,20 +83,15 @@ const PERPLZ = { label: "퍼플즈", href: PERPLZ_PROFILE_URL } as const;
 export const SOCIAL_LINKS = [INSTAGRAM, GITHUB, PERPLZ] as const;
 
 /**
- * 푸터의 '채널' 줄. 인스타그램·퍼플즈에 오픈채팅을 더한 것이다.
+ * 푸터의 '채널' 줄. 인스타그램·퍼플즈.
  *
- * 푸터는 전체 지도라(FOOTER_NAV 와 같은 이유) 대문 슬랩에서만 열리는 방도
- * 여기 실린다 — 슬랩을 지나쳐 내려온 사람에게 남는 유일한 입구다.
+ * 오픈채팅이 셋째 칸이었는데 2026-11-03 에 뺐다 — 방을 운영하지 않는다.
  *
  * ⚠️ **깃허브는 푸터에서 뺐다** (2026-09-16, 본인 요청). SOCIAL_LINKS 에는 남아 있어서
  * sameAs 와 /about 의 채널 버튼에는 그대로 나간다. 그래서 SOCIAL_LINKS 를 펼치지
  * 않고 하나씩 집는다 — 라벨로 filter 하면 이름을 고칠 때 조용히 다시 살아난다.
  */
-export const FOOTER_CHANNELS = [
-  INSTAGRAM,
-  PERPLZ,
-  { label: KAKAO_OPENCHAT.label, href: KAKAO_OPENCHAT.href },
-] as const;
+export const FOOTER_CHANNELS = [INSTAGRAM, PERPLZ] as const;
 
 /** 홈페이지 내부 경로. 스펙 2번의 예약 경로 안에서만 쓴다. */
 export const INTERNAL_LINKS = {

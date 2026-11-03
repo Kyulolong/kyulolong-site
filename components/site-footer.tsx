@@ -68,7 +68,7 @@ export function SiteFooter() {
               ))}
             </nav>
 
-            {/* 소셜 셋 + 오픈채팅. SOCIAL_LINKS 를 그대로 쓰지 않는 이유는
+            {/* 인스타그램 · 퍼플즈. SOCIAL_LINKS 를 그대로 쓰지 않는 이유는
                 lib/site-links.ts 에 적어뒀다 — 저 배열은 sameAs 로도 나간다. */}
             <nav aria-label="채널" className="flex flex-col md:gap-2.5">
               {FOOTER_CHANNELS.map((link) => (

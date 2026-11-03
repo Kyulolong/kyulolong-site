@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { GuideCover } from "@/components/guide-paper";
-import { GOAL_GUIDE, INTERNAL_LINKS, KAKAO_OPENCHAT } from "@/lib/site-links";
+import { GOAL_GUIDE, INTERNAL_LINKS } from "@/lib/site-links";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -81,8 +81,6 @@ export function GuideDownload() {
             <div className="border-line bg-surface-2 mt-8 rounded-2xl border p-6" role="status">
               <p className="font-bold">발송을 마쳤습니다.</p>
               <p className="text-ink-soft mt-2 text-sm leading-relaxed">{message}</p>
-              <p className="text-ink-soft mt-5 text-sm leading-relaxed">읽다가 생긴 질문은 오픈채팅에서 나눠주세요. 입장코드는 {KAKAO_OPENCHAT.code}입니다.</p>
-              <a href={KAKAO_OPENCHAT.href} target="_blank" rel="noreferrer noopener" className="text-ink mt-2 inline-flex min-h-11 items-center text-sm font-medium underline underline-offset-4" data-umami-event="guide-community-open">가이드에 관해 이야기 나누기</a>
               <button
                 type="button"
                 onClick={() => setStatus("idle")}

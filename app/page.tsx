@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Hero } from "@/components/hero";
-import { CommunityInvitation } from "@/components/community-invitation";
 import { GuidePaper } from "@/components/guide-paper";
 import { ProofInvitation } from "@/components/proof-invitation";
 import { JsonLd } from "@/components/json-ld";
@@ -16,7 +15,9 @@ export const metadata: Metadata = pageMetadata({ description: SITE_DESCRIPTION, 
 /**
  * 대문. 순서가 논지다 (docs/SITE-DIRECTION.md):
  *   히어로(주장 + 하는 일 + 짧은 이력) → 추천 글 셋(+ 가장 최근 글) → 목표 가이드(종이) → Proof(보라 슬랩)
- *   → 오픈채팅 → 만든 것(실험 기록).
+ *   → 만든 것(실험 기록).
+ *
+ * 오픈채팅 절은 2026-11-03 에 뺐다 — 방을 운영하지 않는다. 사이트 어디에도 입구가 없다.
  *
  * 글 → 자료 → Proof 로 이어지는 행동이 이 페이지가 하려는 말이고, 만든 것은 그 뒤에서
  * "직접 만들어보기도 한다"는 근거로 받친다.
@@ -25,7 +26,7 @@ export const metadata: Metadata = pageMetadata({ description: SITE_DESCRIPTION, 
  * 빠졌다 — 완전 정적이다 (CLAUDE.md 11번).
  *
  * 절마다 판형을 다르게 둔다: 추천 글은 줄, 가이드는 종이(GuidePaper), Proof 는 보라
- * 슬랩, 오픈채팅은 한 칼럼 글. 09-22 개편 직후엔 "왼쪽 글 + 오른쪽 인용 카드"가 세 절
+ * 슬랩, 만든 것은 한 칼럼 글. 09-22 개편 직후엔 "왼쪽 글 + 오른쪽 인용 카드"가 세 절
  * 연달아 서서 페이지가 템플릿으로 읽혔다 (09-23 에 고쳤다).
  *
  * 형광은 히어로 커서 하나. 첫 보라 면은 Proof 슬랩이다 (DESIGN.md §8 — 큰 보라는 한 번).
@@ -109,12 +110,8 @@ export default function Home() {
         <ProofInvitation />
       </div>
 
-      <div className="mx-auto mt-20 w-full max-w-[1120px] px-6 sm:mt-24 sm:px-8">
-        <CommunityInvitation />
-      </div>
-
       {/* 실험 기록. 다른 절과 같은 리듬(눈썹 + h2)으로 서되 가장 조용하다 —
-          페이지의 마지막 말은 Proof·오픈채팅이고, 이건 그 뒤의 각주다. */}
+          페이지의 마지막 말은 Proof 이고, 이건 그 뒤의 각주다. */}
       <section className="mx-auto mt-20 w-full max-w-[1120px] px-6 sm:mt-24 sm:px-8">
         <div className="border-line max-w-[46rem] border-t pt-10 sm:pt-12">
           <p className="text-ink-faint text-sm">실험 기록</p>

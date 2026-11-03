@@ -8,15 +8,15 @@
 - 규로롱: 사람과 조직, AI와 일하며 배운 것을 글과 자료로 나누는 개인 브랜드.
 - Proof: 5~20인 팀의 실제 업무 기록을 읽고 진단·코칭·실무 과제·변화 확인을 운영하는 과정.
 - 퍼플즈: 업무와 회의 기록을 모으는 협업 도구. Proof 자체와 구분한다.
-- 오픈채팅: 글과 자료를 적용하며 생긴 질문과 경험을 나누는 곳. 컨설팅 문의의 필수 경유지가 아니다.
+- 오픈채팅: **2026-11-03 에 운영을 접었다.** 홈·자료실 절, 헤더·푸터 링크, 글 끝과 가이드 발송 완료 화면의 안내를 전부 뺐다.
 - 만든 것: 실험과 제작 기록. 촬영 계획이 없는 영상은 홈·푸터·서비스 상세·사이트맵·llms.txt에서 진입 링크를 제거하고 기존 주소와 콘텐츠만 보존한다.
 
 ## 정보 구조
 
-- 홈: 기존 캐치프레이즈와 도움 설명 → 짧은 이력 → 추천 글 3편(+ 가장 최근 글 1편) → 목표 가이드 → Proof → 오픈채팅 → 실험 기록.
-- 데스크톱: 생각들 / 자료실 / 소개 / Proof 코칭 / 오픈채팅(맨 오른쪽, 새 탭). 로그인과 퍼플즈는 GNB에서 제외. 테마 토글은 화면 우측 아래 (2026-09-23).
+- 홈: 기존 캐치프레이즈와 도움 설명 → 짧은 이력 → 추천 글 3편(+ 가장 최근 글 1편) → 목표 가이드 → Proof → 실험 기록.
+- 데스크톱: 생각들 / 자료실 / 소개 / Proof 코칭(맨 오른쪽). 로그인과 퍼플즈는 GNB에서 제외. 테마 토글은 화면 우측 아래 (2026-09-23).
 - 모바일: 하단 생각들 / 자료실 / Proof 코칭. 소개는 상단에 제공.
-- `/resources`: 목표 설계 가이드 신청, 기존 창업 질문지, 오픈채팅.
+- `/resources`: 목표 설계 가이드 신청, 기존 창업 질문지, Proof 보조 링크.
 - `/proof`: 보라 띠 첫 화면(개요표), 대상과 문제, 준비 중인 5단계 흐름, 예시 결과물, 검토 원칙, 진행하는 사람, FAQ, 참여 신청 폼(웨이팅리스트). 2026-09-23 개정.
 - 신규 경로는 `RESERVED_PATHS`, sitemap, llms.txt에도 등록한다.
 - 기존 `/#goal-guide` 진입점은 가이드 소개 섹션으로 유지한다.
@@ -44,13 +44,13 @@ AI 분석은 코치 검토, 당사자 정정, 사람의 최종 판단을 포함�
 ## 이어지는 행동
 
 - 목표 태그 글 → 목표 설계 가이드 → Proof 보조 링크.
-- 일과 성장 글 → 오픈채팅 → Proof 보조 링크.
-- 그 밖의 조직·AX·창업 글 → Proof 안내.
-- 가이드 발송 완료 → 오픈채팅 안내.
+- 그 밖의 글(일과 성장·조직·AX·창업) → Proof 안내. 일과 성장 글은 제목만 다르다("지금 하는 일에서, 다음에 배울 것을 찾고 싶다면").
+- 가이드 발송 완료 → 안내 없이 끝난다 (예전엔 오픈채팅, 2026-11-03 에 뺐다).
 
-Umami 링크 이벤트는 `home-guide-open`, `proof-introduction-open`, `community-open`,
-`proof-apply-open`, `proof-apply-submit`, `header-community-open`, `founder-questions-open`, `article-guide-open`, `article-community-open`,
-`article-proof-open`, `guide-community-open`이다. 모두 클릭이며 실제 접수·입장·계약 완료를 의미하지 않는다 — 접수 수는 `proof_leads` 표에서 센다.
+Umami 링크 이벤트는 `home-guide-open`, `proof-introduction-open`, `proof-apply-open`, `proof-apply-submit`,
+`founder-questions-open`, `article-guide-open`, `article-proof-open`이다. 모두 클릭이며 실제 접수·계약 완료를 의미하지
+않는다 — 접수 수는 `proof_leads` 표에서 센다. 오픈채팅 이벤트 넷(`community-open` · `header-community-open` ·
+`article-community-open` · `guide-community-open`)은 2026-11-03 에 링크와 함께 사라졌다.
 
 ## 시각 원칙
 

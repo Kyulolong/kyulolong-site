@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { GuideDownload } from "@/components/guide-download";
 import { PageHeader } from "@/components/page-header";
 import { pageMetadata } from "@/lib/seo";
-import { FOUNDER_QUESTIONS, INTERNAL_LINKS } from "@/lib/site-links";
+import { FOUNDER_QUESTIONS } from "@/lib/site-links";
 
 export const metadata: Metadata = pageMetadata({ title: "자료실 · 내 일에 적용하는 질문과 가이드", description: "목표 설계 가이드와 창업 전에 생각할 질문을 무료로 나눕니다. 읽고, 적어보고, 실제 일에 적용해보세요.", path: "/resources" });
 
@@ -26,7 +25,6 @@ export default function ResourcesPage() {
             <p className="text-ink-faint mt-3 text-sm">이메일 입력 없이 PDF가 열립니다.</p>
           </div>
         </section>
-        <p className="text-ink-soft mt-10 text-sm">우리 팀의 일한 기록을 함께 살펴보고 싶다면 <Link href={INTERNAL_LINKS.proof} className="inline-flex min-h-11 items-center underline underline-offset-4">Proof 코칭 알아보기</Link></p>
       </div>
     </>
   );

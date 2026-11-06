@@ -12,7 +12,8 @@ const requestSchema = z.object({
   company: z.string().max(0).optional().default(""),
 });
 
-const CONSENT_VERSION = "2026-09-22";
+// 2026-11-06: 선택 동의 문구에서 Proof 코칭을 뺐다 ("다음 가이드 소식"만).
+const CONSENT_VERSION = "2026-11-06";
 const GUIDE_URL = `${SITE_URL}/guides/01-goal-design-guide.pdf`;
 
 function escapeHtml(value: string) {

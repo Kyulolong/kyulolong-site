@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Brand } from "@/components/brand";
-import { INTERNAL_LINKS, PRIMARY_NAV } from "@/lib/site-links";
+import { PRIMARY_NAV } from "@/lib/site-links";
 
 export function SiteHeader() {
   return (
@@ -13,9 +13,8 @@ export function SiteHeader() {
               <Link key={item.href} href={item.href} className="text-ink-soft hover:text-ink text-sm font-medium transition-colors">{item.label}</Link>
             ))}
           </nav>
-          <Link href={INTERNAL_LINKS.proof} className="border-line-strong text-ink hover:bg-surface-2 hidden min-h-11 items-center rounded-full border px-5 text-sm font-semibold transition-colors md:inline-flex">Proof 코칭</Link>
-          <Link href={INTERNAL_LINKS.about} className="text-ink-soft hover:text-ink inline-flex min-h-11 items-center text-sm md:hidden">소개</Link>
-          {/* 맨 오른쪽에 있던 오픈채팅 링크는 2026-11-03 에 뺐다 — 방을 운영하지 않는다.
+          {/* 맨 오른쪽에 있던 오픈채팅 링크는 2026-11-03 에, Proof 코칭 테두리 버튼은 11-06 에 뺐다.
+              모바일 전용 소개 글자 링크도 그때 하단 바로 내려갔다 (MOBILE_NAV).
               테마 토글은 그대로 화면 우측 아래다 (components/theme-toggle.tsx). */}
         </div>
       </div>

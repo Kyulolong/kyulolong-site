@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { GuideCover } from "@/components/guide-paper";
-import { GOAL_GUIDE, INTERNAL_LINKS } from "@/lib/site-links";
+import { GOAL_GUIDE } from "@/lib/site-links";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -140,8 +140,7 @@ export function GuideDownload() {
                 <label className="flex items-start gap-3">
                   <input name="marketingConsent" type="checkbox" className="mt-1 size-4 shrink-0 accent-[var(--color-iris)]" />
                   <span>
-                    <strong className="text-ink">[선택]</strong> Proof 코칭과 다음 가이드 소식을
-                    이메일로 받겠습니다.
+                    <strong className="text-ink">[선택]</strong> 다음 가이드 소식을 이메일로 받겠습니다.
                   </span>
                 </label>
               </div>
@@ -160,7 +159,6 @@ export function GuideDownload() {
                 {status === "submitting" ? "보내는 중…" : "이메일로 받기"}
               </button>
               <p className="text-ink-faint mt-3 text-center text-xs">광고성 안내는 선택 동의한 경우에만 보냅니다.</p>
-              <p className="text-ink-faint mt-4 text-center text-xs leading-relaxed">Proof는 일한 기록을 함께 살펴보는 팀 코칭입니다. <Link href={INTERNAL_LINKS.proof} className="inline-flex min-h-11 items-center underline underline-offset-4">진행 방식 알아보기</Link></p>
             </form>
           )}
         </div>

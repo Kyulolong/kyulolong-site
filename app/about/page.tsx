@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { ProofInvitation } from "@/components/proof-invitation";
 import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
@@ -18,6 +17,9 @@ export const metadata: Metadata = pageMetadata({
  * 2026-09-01 전면 개정 — 본인이 직접 쓴 원고를 그대로 실었다 (담백한 문체).
  * 구조: 인사 → 질문(함께 일하기) → AI 시대의 차별화 → 두 번의 창업 → 기록의 이유
  * → 존재의 가치 → 맺음("빈 화면 앞에서…").
+ *
+ * 2026-11-06 — 본문 아래 섰던 Proof 보라 슬랩을 뺐다. Proof 를 사이트에서 내려놓았다
+ * (docs/SITE-DIRECTION.md). 본문은 안 건드렸다.
  *
  * 2026-09-16 부분 개정 — 교육·코칭 쪽으로 방향을 잡으며 사실과 호명을 맞췄다.
  *   - 첫 문단: 청중 호명(창업을 고민하는 분 · 주니어)을 브랜드 핵심 질문으로 교체
@@ -161,8 +163,6 @@ export default function AboutPage() {
           <p>규로롱 소개였습니다.</p>
           
         </div>
-
-        <div className="mt-14"><ProofInvitation /></div>
 
         <section className="mt-14 pb-4">
           <h2 className="text-xl font-bold tracking-[-0.02em]">어디서 볼 수 있나</h2>

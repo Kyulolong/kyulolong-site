@@ -97,7 +97,6 @@ export const FOOTER_CHANNELS = [INSTAGRAM, PERPLZ] as const;
 export const INTERNAL_LINKS = {
   thoughts: "/thoughts",
   resources: "/resources",
-  proof: "/proof",
   start: "/start",
   services: "/services",
   about: "/about",
@@ -105,19 +104,12 @@ export const INTERNAL_LINKS = {
 
 const THOUGHTS = { label: "생각들", href: INTERNAL_LINKS.thoughts } as const;
 const RESOURCES = { label: "자료실", href: INTERNAL_LINKS.resources } as const;
-const PROOF = { label: "Proof 코칭", href: INTERNAL_LINKS.proof } as const;
 const ABOUT = { label: "소개", href: INTERNAL_LINKS.about } as const;
 export const PRIMARY_NAV = [THOUGHTS, RESOURCES, ABOUT] as const;
-export const MOBILE_NAV = [THOUGHTS, RESOURCES, PROOF] as const;
+/** Proof 코칭이 셋째 칸이었다 — 2026-11-06 에 내려놓으면서 소개가 헤더 글자 링크에서 여기로 내려왔다. */
+export const MOBILE_NAV = [THOUGHTS, RESOURCES, ABOUT] as const;
 export const FOOTER_NAV = [
-  THOUGHTS, RESOURCES, PROOF, ABOUT,
+  THOUGHTS, RESOURCES, ABOUT,
   { label: "만든 것", href: INTERNAL_LINKS.services },
   { label: "직접 만들기 안내", href: INTERNAL_LINKS.start },
 ] as const;
-
-/**
- * Proof 파일럿 참여 신청이 도착하는 곳 (app/api/proof/apply/route.ts). 웨이팅리스트 수신함이라
- * BUSINESS_EMAIL 과 다르다 — 저쪽은 사람이 답하는 일반 창구, 이쪽은 신청서만 쌓이는 함.
- * 폼이 안 열릴 때의 안내 줄에도 이 주소를 적어 명단이 한 곳에 모이게 한다.
- */
-export const PROOF_INBOX_EMAIL = "incu@kyulolong.com";

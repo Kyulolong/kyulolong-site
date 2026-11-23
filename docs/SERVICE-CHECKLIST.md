@@ -229,13 +229,17 @@ GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED=true
 
 ## 6. 컨테이너 — Dockerfile 과 nginx
 
-Coolify 빌드팩을 **Dockerfile** 로 바꾸고 포트는 **80**.
+2026-11-23 부터 서버는 Coolify 가 아니라 **docker compose** 다 (홈페이지 레포의 `CLAUDE.md` 9번).
+새 서비스는 서버의 `compose.yml` 에 블록 하나로 선다 — 빌드 컨텍스트(이 레포 폴더), 포트 **80**, 그리고
+Traefik 라벨 넷: 규칙 ``Host(`kyulolong.com`) && PathPrefix(`/<slug>`)`` · `stripprefix` · `gzip` · 포트.
+먼저 나간 서비스의 블록을 복사해 슬러그만 바꾸면 된다. 배포 스크립트의 서비스 목록에도 한 줄 더한다.
 
-`Use Docker Build Secrets` 는 **켜지 말 것.** 켜면 빌드 변수가 `--build-arg` 가 아니라
-BuildKit 시크릿으로 넘어가서 `ARG` 로 받는 값이 안 들어온다.
+빌드 타임에 박히는 값(`VITE_*`)은 **Dockerfile 에 `ARG` 로 선언**하고 compose 의 `build.args` 로 넘긴다.
+선언이 없으면 값을 넘겨도 빌드가 못 본다 (Coolify 는 그 줄을 알아서 끼워 넣었지만 compose 는 안 한다).
+정적 앱이라 런타임 env 는 아무도 읽지 않는다.
 
-빌드 타임에 박히는 값(`VITE_*`)은 Coolify 환경변수에서 **`Available at Buildtime`**
-(구버전 표기: `Build Variable`)을 켜야 한다. 정적 앱이라 런타임 env 는 아무도 읽지 않는다.
+빌드가 아예 없는 앱(HTML 파일 묶음)은 Dockerfile 도 필요 없다 — 서버가 nginx 이미지에 폴더를 읽기 전용으로
+물린다 (`navigator` · `wave-sound`). 이때 **깃이 추적하는 파일이 전부 웹에 나간다.** 올리면 안 되는 것을 커밋하지 말 것.
 
 ```dockerfile
 ARG VITE_SUPABASE_URL=""
@@ -283,8 +287,8 @@ location = /manifest.webmanifest {
 `SharedArrayBuffer` 를 쓰는 앱(WASM 스레드)은 COOP/COEP 가 필요하다. supabase-js 는 CORS 모드
 fetch 라 `require-corp` 와 충돌하지 않는다.
 
-- [ ] Coolify 빌드팩 = Dockerfile, 포트 80
-- [ ] `Available at Buildtime` 체크, `Use Docker Build Secrets` 해제
+- [ ] 서버 `compose.yml` 에 서비스 블록과 Traefik 라벨, 포트 80
+- [ ] 빌드 타임 값은 Dockerfile 의 `ARG` + compose 의 `build.args`
 - [ ] 정적 자산은 SPA fallback 에서 뺐다
 
 ---
@@ -298,6 +302,9 @@ fetch 라 `require-corp` 와 충돌하지 않는다.
 반대로 하면 그 사이 공유 카드가 빈칸이 된다.
 
 환경변수를 바꿨으면 **재시작이 아니라 재빌드**여야 한다. 빌드 타임에 박히는 값이다.
+
+⚠️ **푸시해도 배포되지 않는다 (2026-11-23 부터).** 배포 스크립트를 따로 돌려야 한다. 스크립트는 깃이 추적하는
+파일을 지금 작업 폴더 상태 그대로 보내므로, 커밋 안 한 변경도 같이 나간다 — 먼저 커밋·푸시하고 배포할 것.
 
 ---
 

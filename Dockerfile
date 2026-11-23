@@ -16,6 +16,18 @@ ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# 브라우저 번들에 구워지는 값. 빌드할 때 --build-arg 로 받는다 (compose 의 build.args).
+# 선언이 없으면 값을 넘겨도 빌드가 못 본다 — Coolify 는 이 줄들을 알아서 끼워 넣었지만 compose 는 안 한다.
+# 비어 있어도 빌드는 된다: 좋아요·댓글·수집 스크립트가 꺼진 채로 나갈 뿐이다.
+ARG NEXT_PUBLIC_SUPABASE_URL=""
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY=""
+ARG NEXT_PUBLIC_ANALYTICS_SRC=""
+ARG NEXT_PUBLIC_ANALYTICS_WEBSITE_ID=""
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY \
+    NEXT_PUBLIC_ANALYTICS_SRC=$NEXT_PUBLIC_ANALYTICS_SRC \
+    NEXT_PUBLIC_ANALYTICS_WEBSITE_ID=$NEXT_PUBLIC_ANALYTICS_WEBSITE_ID
+
 RUN npm run build
 
 # ---------- runner: 빌드 산출물만 담은 실행 이미지 ----------
